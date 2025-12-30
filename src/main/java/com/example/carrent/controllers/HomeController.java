@@ -6,12 +6,40 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/front")
 public class HomeController {
 
 
-    @GetMapping("/index")
+    @GetMapping()
     public String home() {
-        return "index";
+        return "front/index";
     }
+
+    @GetMapping("/listing")
+    public String listing() {
+        return "front/listing";
+    }
+
+    @GetMapping("/testimonials")
+    public String testimonials() {
+        return "front/testimonials";
+    }
+
+
+    @GetMapping("/blog")
+    public String blog(){
+        return "front/blog";
+    }
+
+    @GetMapping("/about")
+    public String about(){
+        return "front/about";
+    }
+
+    @GetMapping("/contact")
+    public String contact(){
+        return "front/contact";
+    }
+
+
+
 }
