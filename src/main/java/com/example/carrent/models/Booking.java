@@ -1,13 +1,11 @@
 package com.example.carrent.models;
 
-import com.example.carrent.enums.Rental;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Getter
@@ -39,6 +37,5 @@ public class Booking {
     private String pickupLocation;
     //* Double totalPrice (Cəmi məbləğ)
     private Double totalPrice;
-    //* String status (Pending, Confirmed, Cancelled
-    private Rental status;
+
 }

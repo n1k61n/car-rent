@@ -19,7 +19,8 @@ public class TestimonialController {
 
     @GetMapping("/testimonials")
     public String testimonials(Model model) {
-        List<TestimonialDto> list = testimonialService.getLastTestimonials();
+        int count = 9;
+        List<TestimonialDto> list = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", list);
         return "front/testimonials";
     }

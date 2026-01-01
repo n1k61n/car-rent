@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TestimonialService {
 
-    List<TestimonialDto> getLastTestimonials();
+    List<TestimonialDto> getLastTestimonials(int size);
 }

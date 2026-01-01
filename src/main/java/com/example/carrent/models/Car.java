@@ -53,6 +53,9 @@ public class Car {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "car")
+    private List<Rental> rentals;
+
     @ElementCollection
     @CollectionTable(name = "car_features", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "feature_name")

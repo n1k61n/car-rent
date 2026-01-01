@@ -6,6 +6,8 @@ import com.example.carrent.repositories.TestimonialRepository;
 import com.example.carrent.services.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,9 @@ public class TestimonialServiceImpl  implements TestimonialService {
 
 
     @Override
-    public List<TestimonialDto> getLastTestimonials() {
-        List<Testimonial> list = testimonialRepository.findTop9ByOrderByCreateAtDesc();
+    public List<TestimonialDto> getLastTestimonials(int size) {
+        Pageable limit = PageRequest.of(0, size);
+        List<Testimonial> list = testimonialRepository.findByOrderByCreatedAtDesc(limit);
         if(!list.isEmpty()){
             return list.stream().map(testimonial -> modelMapper.map(testimonial, TestimonialDto.class)).toList();
         }

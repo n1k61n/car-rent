@@ -1,6 +1,7 @@
 package com.example.carrent.repositories;
 
 import com.example.carrent.models.Testimonial;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface TestimonialRepository extends JpaRepository<Testimonial, Long> {
-    List<Testimonial> findTop9ByOrderByCreateAtDesc();
+    List<Testimonial> findByOrderByCreatedAtDesc(Pageable limit);
 }

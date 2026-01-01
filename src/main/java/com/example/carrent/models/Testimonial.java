@@ -35,6 +35,6 @@ public class Testimonial {
 
     private String imageUrl;
     @CreationTimestamp
-    @Column(name = "create_at", updatable = false)
-    private LocalDate createAt;
+    @Column(name = "created_at")
+    private LocalDate createdAt;
 }

@@ -85,16 +85,16 @@
                       <div class="col-5">
                           <div class="custom-pagination">
                               <a th:if="${carPage.hasPrevious()}"
-                                 th:href="@{/listing(page=${currentPage - 1})}">&lt;</a>
+                                 th:href="@{/listing(page=${currentPage - 1}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}">&lt;</a>
 
-                              <span th:each="i : ${#numbers.sequence(0, carPage.totalPages - 1)}">
-                                    <a th:href="@{/listing(page=${i})}"
-                                       th:text="${i + 1}"
-                                       th:classappend="${currentPage == i} ? 'active' : ''">1</a>
+                              <span th:each="i : ${#numbers.sequence(0, (carPage.totalPages > 0 ? carPage.totalPages - 1 : 0))}">
+                                      <a th:href="@{/listing(page=${i}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}"
+                                         th:text="${i + 1}"
+                                         th:classappend="${currentPage == i} ? 'active' : ''">1</a>
                                 </span>
 
                               <a th:if="${carPage.hasNext()}"
-                                 th:href="@{/listing(page=${currentPage + 1})}">&gt;</a>
+                                 th:href="@{/listing(page=${currentPage + 1}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}">&gt;</a>
                           </div>
                       </div>
                   </div>
