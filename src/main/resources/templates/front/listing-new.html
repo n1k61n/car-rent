@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarRental - Maşın Siyahısı</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Şəkildəki xüsusi kart dizaynı üçün əlavələr */
+        .listing-item {
+            background: #fff;
+            padding: 0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px -10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: .3s all ease;
+        }
+        .listing-item:hover {
+            box-shadow: 0 10px 30px -15px rgba(0,0,0,0.2);
+        }
+        .listing-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .listing-contents {
+            padding: 20px;
+        }
+        .listing-contents h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .rent-price {
+            color: #0779e4;
+            font-size: 20px;
+        }
+        .listing-feature {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f2f2f2;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #b8b8b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="site-section-cover inner-page overlay" style="background-image: url('hero_bg.jpg'); background-color: #333;">
+    <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-lg-10">
+                <h1 class="mb-2">Listings</h1>
+                <p>Home / <strong>Listings</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-7">
+                <h2 class="text-black h1">Car Listings</h2>
+                <p class="font-gray-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+                <div class="listing-item">
+                    <img src="car_1.jpg" alt="Maserati">
+                    <div class="listing-contents">
+                        <h3>Maserati Quattroporte</h3>
+                        <div class="rent-price mb-3">
+                            <strong>$450.0</strong><span class="font-size-14"> /day</span>
+                        </div>
+                        <div class="listing-feature">
+                            <span>Luggage: 5</span>
+                            <span>Doors: 4</span>
+                            <span>Passenger: 5</span>
+                        </div>
+                        <p class="font-size-14 font-gray-5">İstənilən vaxt sifariş verə bilərsiniz.</p>
+                        <p><a href="#" class="btn btn-primary primary-black--hover px-4">Rent Now</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="listing-item">
+                    <img src="car_2.jpg" alt="Bentley">
+                    <div class="listing-contents">
+                        <h3>Bentley Flying Spur</h3>
+                        <div class="rent-price mb-3">
+                            <strong>$800.0</strong><span class="font-size-14"> /day</span>
+                        </div>
+                        <div class="listing-feature">
+                            <span>Luggage: 5</span>
+                            <span>Doors: 4</span>
+                            <span>Passenger: 5</span>
+                        </div>
+                        <p class="font-size-14 font-gray-5">Yüksək komfort və sürət.</p>
+                        <p><a href="#" class="btn btn-primary primary-black--hover px-4">Rent Now</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="listing-item">
+                    <img src="car_3.jpg" alt="Rolls-Royce">
+                    <div class="listing-contents">
+                        <h3>Rolls-Royce Ghost</h3>
+                        <div class="rent-price mb-3">
+                            <strong>$1200.0</strong><span class="font-size-14"> /day</span>
+                        </div>
+                        <div class="listing-feature">
+                            <span>Luggage: 4</span>
+                            <span>Doors: 4</span>
+                            <span>Passenger: 4</span>
+                        </div>
+                        <p class="font-size-14 font-gray-5">Lüksün zirvəsini hiss edin.</p>
+                        <p><a href="#" class="btn btn-primary primary-black--hover px-4">Rent Now</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div class="custom-pagination">
+                    <span class="btn btn-primary m-1">1</span>
+                    <a href="#" class="btn btn-outline-primary m-1">2</a>
+                    <a href="#" class="btn btn-outline-primary m-1">3</a>
+                    <a href="#" class="btn btn-outline-primary m-1">4</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-7">
+                <h2 class="text-black h1">Testimonials</h2>
+                <p class="font-gray-5">Müştərilərimiz nə deyir?</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="block-testimony-1 shadow-sm border p-4">
+                    <blockquote class="mb-4">"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam, ducimus."</blockquote>
+                    <div class="d-flex align-items-center">
+                        <img src="user_1.jpg" alt="User" class="rounded-circle mr-3" style="width: 50px;">
+                        <div>
+                            <h3 class="m-0 font-size-16">Mike Fisher</h3>
+                            <span class="font-size-12 font-gray-5">Owner, Ford</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-primary py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 text-white">
+                <h2 class="h3 font-weight-bold">What are you waiting for?</h2>
+                <p>İndi rezervasiya edin və endirimlərdən yararlanın.</p>
+            </div>
+            <div class="col-md-4 text-md-right">
+                <a href="#" class="btn btn-white btn-outline-white px-5 py-3">Rent a car now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

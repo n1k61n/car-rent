@@ -1,4 +1,4 @@
-package com.example.carrent.dtos;
+package com.example.carrent.dtos.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,13 +1,12 @@
-package com.example.carrent.dtos;
+package com.example.carrent.dtos.car;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CarDto {
+    private Long id;
     private String imageUrl;
     private String brand;
     private String model;
@@ -16,5 +15,8 @@ public class CarDto {
     private Integer passengerCount;
     private Integer luggageCapacity;
     private String description;
+    private String transmission;
+    private String fuelType;
+    private List<String> features;
 
 }

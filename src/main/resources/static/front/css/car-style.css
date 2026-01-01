@@ -1,0 +1,37 @@
+.car-detail-header {
+    padding: 80px 0 40px 0;
+    background: #f8f9fa;
+}
+.car-image-main {
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.spec-label {
+    color: #b8b8b8;
+    font-size: 14px;
+    display: block;
+    text-transform: uppercase;
+}
+.spec-value {
+    font-weight: 600;
+    color: #353535;
+    font-size: 18px;
+}
+.price-tag {
+    font-size: 32px;
+    color: #0779e4;
+    font-weight: 700;
+}
+.booking-card {
+    border: 1px solid #e9ecef;
+    padding: 30px;
+    border-radius: 10px;
+    background: #fff;
+    position: sticky;
+    top: 20px;
+}
+.font-gray-5 { color: #adb5bd; }
+.font-gray-7 { color: #495057; }
