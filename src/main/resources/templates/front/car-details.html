@@ -20,8 +20,9 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="display-4 font-weight-bold" th:text="${car.brand + ' ' + car.model}">Maserati Quattroporte</h1>
-                    <p class="font-gray-7">
-                        Ana Səhifə / Maşınlar / <span class="text-primary" th:text="${car.model}">Model</span>
+                    <p class="font-gray-7"><a href="/" class="text-primary">Home</a>
+                        <a href="/listing" class="text-primary">Listing</a>
+                        <span class="text-primary" th:text="${car.model}">Model</span>
                     </p>
                 </div>
                 <div class="col-md-4 text-md-right">

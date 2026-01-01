@@ -16,11 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class HomeController {
 
+
     private final CarService carService;
 
 
     @GetMapping()
-    public String home() {
+    public String home(Model model,  @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 6);
+        Page<Car> carPage = carService.findAll(pageable);
+
+        model.addAttribute("carPage", carPage);
         return "front/index";
     }
 
@@ -35,10 +40,7 @@ public class HomeController {
         return "front/listing";
     }
 
-    @GetMapping("/testimonials")
-    public String testimonials() {
-        return "front/testimonials";
-    }
+
 
 
     @GetMapping("/blog")
