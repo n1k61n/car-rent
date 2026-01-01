@@ -20,9 +20,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//* String name
+
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Car> cars = new ArrayList<>();
 }

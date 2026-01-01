@@ -30,7 +30,7 @@ public class User {
     private String password;
 //* String phone
     private String phone;
-//* @ElementCollection roles (ADMIN, USER)
+//  @ElementCollection roles (ADMIN, USER)
     private Role role;
 //* @OneToMany List<Booking> bookings
     @OneToMany

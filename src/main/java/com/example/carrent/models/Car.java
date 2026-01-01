@@ -23,28 +23,31 @@ public class Car {
 
     private String model;
 
+    @Column(name = "daily_price")
     private Double dailyPrice;
 
-//* String transmission (Ötürücü - Manual/Automatic)
     private String transmission;
 
-    //* String fuelType (Yanacaq növü)
+    @Column(name = "fuel_type")
     private String fuelType;
 
-//* Integer doorCount
+    @Column(name = "door_count")
     private Integer doorCount;
-//* Integer passengerCount
+
+    @Column(name = "passenger_count")
     private Integer passengerCount;
 
-
-//* String imagePath (Şəkil yolu)
+    @Column(name = "image_url")
     private String imageUrl;
+    @Column(name = "luggage_capacity")
+    private Integer luggageCapacity;
 
-
-//* Boolean available (Hal-hazırda boşdadır?)
     private Boolean available;
-//* @ManyToOne Category category (Hər maşın bir kateqoriyaya aid olur)
+
+    private String description;
+
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
 }
