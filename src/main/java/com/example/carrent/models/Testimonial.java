@@ -16,10 +16,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "testimonials")
 public class Testimonial {
-    //
-//### 5. *Testimonial* (Rəylər)
-//    Saytın aşağı hissəsində müştərilərin yazdığı rəylər üçün.
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +27,6 @@ public class Testimonial {
     private Integer rating;
 
     private String authorRole;
-
 
     private String imageUrl;
     @CreationTimestamp
