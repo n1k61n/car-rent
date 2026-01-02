@@ -20,19 +20,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//* String firstName
     private String firstName;
-//* String lastName
+
     private String lastName;
-//* String email
+
     private String email;
-//* String password
+
     private String password;
-//* String phone
+
     private String phone;
-//  @ElementCollection roles (ADMIN, USER)
+    @Enumerated(EnumType.STRING)
     private Role role;
-//* @OneToMany List<Booking> bookings
+
     @OneToMany
     List<Booking> bookings;
 }

@@ -50,10 +50,6 @@ public class HomeController {
     }
 
 
-    @GetMapping("/blog")
-    public String blog(){
-        return "front/blog";
-    }
 
     @GetMapping("/about")
     public String about(){

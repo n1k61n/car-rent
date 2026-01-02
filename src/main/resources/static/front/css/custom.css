@@ -1,0 +1,22 @@
+/* Aktiv səhifə rəqəminin rəngi */
+.custom-pagination a.active {
+    background: #f89d13 !important;
+    color: #fff !important;
+    border: 1px solid #f89d13;
+}
+
+/* Rəqəmlərin ümumi görünüşü */
+.custom-pagination a, .custom-pagination span {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    margin: 2px;
+    text-align: center;
+}
+
+.custom-pagination a:hover {
+    background: #f89d13;
+    color: #fff;
+}
