@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -18,11 +20,14 @@ public class MessageServiceImpl implements MessageService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Override
     public boolean createUserMessage(MessageDto messageDto) {
-        User existUser = userRepository.findByEmail(messageDto.getEmail());
         if(messageDto != null){
             Message message = modelMapper.map(messageDto, Message.class);
+
+            // Tarixi burada set edirik
+            message.setCreatedAt(LocalDateTime.now());
+
+            User existUser = userRepository.findByEmail(messageDto.getEmail());
             if(existUser != null){
                 message.setUser(existUser);
             }

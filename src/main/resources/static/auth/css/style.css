@@ -1,0 +1,105 @@
+body {
+    background-color: #f8f9fb;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Səhifədə hamısını görmək üçün ara məsafəsi */
+}
+
+.auth-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Yumşaq kölgə */
+    text-align: center;
+}
+
+.auth-title {
+    color: #007bff; /* Mavi başlıq */
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.auth-title.black {
+    color: #000; /* Qeydiyyat və Bərpa üçün qara başlıq */
+}
+
+.auth-subtitle {
+    color: #8a8a8a;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-field {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.input-field label {
+    display: block;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.input-field input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #ecf2f8; /* Şəkildəki boz-mavi input fonu */
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.input-field input::placeholder {
+    color: #333; /* Placeholder rəngi daha tünddür */
+}
+
+.text-right { text-align: right; margin-bottom: 25px; }
+
+.link-blue {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.link-blue.bold { font-weight: 600; }
+.link-blue.extra-bold { font-weight: 800; }
+.underline { text-decoration: underline; }
+
+.btn-main {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-footer {
+    margin-top: 25px;
+}
+
+.auth-footer p {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+}

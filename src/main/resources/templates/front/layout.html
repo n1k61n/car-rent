@@ -65,6 +65,8 @@
                             <li><a th:text="#{nav.blog}" th:href="@{/blog}" class="nav-link">Bloq</a></li>
                             <li><a th:text="#{nav.about}" th:href="@{/about}" class="nav-link">Haqqımızda</a></li>
                             <li><a th:text="#{nav.contact}" th:href="@{/contact}" class="nav-link">Əlaqə</a></li>
+                            <li><a th:text="#{nav.login}" th:href="@{/login}" class="nav-link">Daxil ol</a></li>
+
                             <li class="has-children">
                                 <a href="#" class="nav-link">
                                     <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Dil</span>
@@ -92,6 +94,7 @@
 
 
     </div>
+
     <div class="site-section bg-primary py-5">
         <div class="container">
             <div class="row align-items-center">
