@@ -59,26 +59,24 @@
 
                     <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                         <ul class="site-menu main-menu js-clone-nav ml-auto">
-                            <li class="active"><a th:href="@{/}" class="nav-link">Ana Səhifə</a></li>
-                            <li><a th:href="@{/listing}" class="nav-link">Maşınlar</a></li>
-                            <li><a th:href="@{/testimonials}" class="nav-link">Rəylər</a></li>
-                            <li><a th:href="@{/blog}" class="nav-link">Bloq</a></li>
-                            <li><a th:href="@{/about}" class="nav-link">Haqqımızda</a></li>
-                            <li><a th:href="@{/contact}" class="nav-link">Əlaqə</a></li>
+                            <li class="active"><a th:text="#{nav.home}" th:href="@{/}" class="nav-link">Ana Səhifə</a></li>
+                            <li><a th:text="#{nav.cars}" th:href="@{/listing}" class="nav-link">Maşınlar</a></li>
+                            <li><a th:text="#{nav.reviews}" th:href="@{/testimonials}" class="nav-link">Rəylər</a></li>
+                            <li><a th:text="#{nav.blog}" th:href="@{/blog}" class="nav-link">Bloq</a></li>
+                            <li><a th:text="#{nav.about}" th:href="@{/about}" class="nav-link">Haqqımızda</a></li>
+                            <li><a th:text="#{nav.contact}" th:href="@{/contact}" class="nav-link">Əlaqə</a></li>
                             <li class="has-children">
                                 <a href="#" class="nav-link">
                                     <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Dil</span>
                                 </a>
                                 <ul class="dropdown">
                                     <li>
-                                        <a th:href="@{/(lang='az')}">
-                                            <img src="https://flagcdn.com/w20/az.png" style="margin-right: 5px;"> Azərbaycan
-                                        </a>
+                                        <a th:href="@{${currentUri}(lang='az')}">AZ
+                                            <img src="https://flagcdn.com/w20/az.png" style="margin-right: 5px;"></a>
                                     </li>
                                     <li>
-                                        <a th:href="@{/(lang='en')}">
-                                            <img src="https://flagcdn.com/w20/gb.png" style="margin-right: 5px;"> English
-                                        </a>
+                                        <a th:href="@{${currentUri}(lang='en')}">EN
+                                        <img src="https://flagcdn.com/w20/gb.png" style="margin-right: 5px;"></a>
                                     </li>
                                 </ul>
                             </li>

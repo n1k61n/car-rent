@@ -51,10 +51,6 @@ public class HomeController {
 
 
 
-    @GetMapping("/about")
-    public String about(){
-        return "front/about";
-    }
 
     @GetMapping("/contact")
     public String contact(){
