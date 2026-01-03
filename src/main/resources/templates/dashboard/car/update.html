@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">Yeni Avtomobil Qeydiyyatı</h1>
 
-        <form th:action="@{/dashboard/car/create}" th:object="${carCreateDto}"  method="post">
+        <form method="post">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Texniki Məlumatlar</h6>
@@ -19,79 +19,116 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Brend</label>
-                            <input type="text" name="brand"  th:field="*{brand}" class="form-control" placeholder="Məs: Mercedes" required>
+                            <input type="text" name="brand" th:value="${car.brand}" class="form-control" placeholder="Məs: Mercedes" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Model</label>
-                            <input type="text" name="brand"  th:field="*{model}" class="form-control" placeholder="Məs: E-Class" required>
+                            <input type="text" name="model" th:value="${car.model}" class="form-control" placeholder="Məs: E-Class" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">İl</label>
-                            <input type="number" name="brand" th:field="*{year}" class="form-control" placeholder="2024">
+                            <input type="number" name="year"  th:value="${car.year}" class="form-control" placeholder="2025">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Gündəlik Qiymət ($)</label>
-                            <input type="number" step="0.01" name="brand"  th:field="*{dailyPrice}" class="form-control" required>
+                            <input type="number" step="0.01" name="dailyPrice"  th:value="${car.dailyPrice}" class="form-control" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Sürət Qutusu</label>
-                            <select name="brand"  th:field="*{transmission}" class="form-control">
+                            <select name="transmission"  th:value="${car.transmission}" class="form-control">
                                 <option value="Automatic">Avtomat</option>
                                 <option value="Manual">Mexanika</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Yanacaq Növü</label>
-                            <input type="text" name="brand"  th:field="*{fuelType}" class="form-control" placeholder="Məs: Benzin">
+                            <input type="text" name="fuelType" th:value="${car.fuelType}" class="form-control" placeholder="Məs: Benzin">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Qapı Sayı</label>
-                            <input type="number" name="brand"  th:field="*{doorCount}" class="form-control">
+                            <input type="number" name="doorCount" th:value="${car.doorCount}" class="form-control">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Sərnişin Sayı</label>
-                            <input type="number" name="brand"  th:field="*{passengerCount}" class="form-control">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Baqaj Tutumu</label>
-                            <input type="number" name="brand"  th:field="*{luggageCapacity}" class="form-control">
+                            <input type="number" name="passengerCount"  th:value="${car.passengerCount}" class="form-control">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Yürüş (Mileage)</label>
-                            <input type="text" name="brand"  th:field="*{mileage}" class="form-control">
+                            <input type="text" name="mileage"  th:value="${car.mileage}" class="form-control">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Şəkil URL</label>
-                            <input type="text" name="brand"  th:field="*{imageUrl}" class="form-control">
+                            <input type="text" name="imageUrl" th:value="${car.imageUrl}" class="form-control">
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Yanacaq Siyasəti</label>
-                            <input type="text" name="brand" th:field="*{fuelPolicy}" class="form-control" placeholder="Full to Full">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Çanta Sayı (Suitcases)</label>
-                            <input type="text" name="brand"  th:field="*{suitcases}" class="form-control">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label font-weight-bold">Baqaj Tutumu (Litr)</label>
+                                <input type="number" name="luggageCapacity" th:value="${car.luggageCapacity}" class="form-control" placeholder="Məs: 450">
+                                <small class="text-muted">Litr cinsindən ümumi həcm.</small>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label font-weight-bold">Çanta Tutumu (Suitcases)</label>
+                                <input type="text" name="suitcases" th:value="${car.suitcases}" class="form-control" placeholder="Məs: 2 Böyük, 1 Kiçik">
+                                <small class="text-muted">Baqaja sığan çamadanların təxmini sayı.</small>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Yanacaq Siyasəti (Fuel Policy)</label>
+                            <select name="fuelPolicy" th:value="${car.fuelPolicy}" class="form-control">
+                                <option value="Full to Full">Dolu-Dolu (Full to Full)</option>
+                                <option value="Same to Same">Eyni-Eyni (Same to Same)</option>
+                                <option value="Pre-purchase">Öncədən Ödəniş (Full to Empty)</option>
+                                <option value="Free of Charge">Ödənişsiz (Limited Promotion)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Əlavə İmkanlar (Məs: GPS, Wi-Fi)</label>
+                            <input type="text" name="features" th:value="${car.features}" class="form-control" placeholder="Vergüllə ayırın: GPS, Uşaq oturacağı">
+                            <small class="form-text text-muted">Məlumatları vergüllə ayıraraq yazın.</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
                         <div class="col-md-12">
-                            <label class="form-label">Təsvir (Description)</label>
-                            <textarea name="brand"  th:field="*{description}" class="form-control" rows="3"></textarea>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="font-weight-bold mb-3">Əlavə Xidmətlər</h6>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="custom-control custom-switch mr-5">
+                                            <input type="checkbox" name="roadAssistance" th:checked="${car.roadAssistance}" class="custom-control-input" id="roadAssistance">
+                                            <label class="custom-control-label font-weight-bold" for="roadAssistance">Yol Yardımı (Road Assistance)</label>
+                                        </div>
+
+                                        <div class="custom-control custom-switch mr-5">
+                                            <input type="checkbox"  name="insuranceIncluded"  th:checked="${car.insuranceIncluded}" class="custom-control-input" id="insuranceIncluded">
+                                            <label class="custom-control-label font-weight-bold" for="insuranceIncluded">Sığorta Daxildir</label>
+                                        </div>
+
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" name="freeCancellation" th:checked="${car.freeCancellation}" class="custom-control-input" id="freeCancellation">
+                                            <label class="custom-control-label font-weight-bold" for="freeCancellation">Pulsuz İmtina (Free Cancellation)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="text-right mt-4">
-                        <a th:href="@{/dashboard/cars}" class="btn btn-secondary">Ləğv et</a>
+                        <a th:href="@{/dashboard/car/index}" class="btn btn-secondary">Ləğv et</a>
                         <button type="submit" class="btn btn-primary px-5">Yadda Saxla</button>
                     </div>
                 </div>

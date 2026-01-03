@@ -2,17 +2,17 @@ package com.example.carrent.controllers.dashboard;
 
 import com.example.carrent.dtos.car.CarCreateDto;
 import com.example.carrent.dtos.car.CarDto;
+import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.services.CarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/dashboard/car")
@@ -22,9 +22,31 @@ public class DashboardCarController {
     private final CarService carService;
 
     @GetMapping("/index")
-    public String cars(Model model){
-        List<CarDto> carDtoList = carService.getAllCars();
-        model.addAttribute("carList", carDtoList);
+    public String cars(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sort", defaultValue = "id") String sortField,
+            @RequestParam(name = "dir", defaultValue = "asc") String sortDir,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            Model model) {
+
+        // Sıralama və səhifələmə məlumatlarını birləşdiririk
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Axtarış metodu çağırılır
+        Page<CarDto> carPage = carService.searchCars(keyword, pageable);
+
+        // Modelə lazım olan bütün dataları yükləyirik
+        model.addAttribute("carList", carPage.getContent());
+        model.addAttribute("totalPages", carPage.getTotalPages());
+        model.addAttribute("totalItems", carPage.getTotalElements());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("keyword", keyword);
         return "dashboard/car/index";
     }
 
@@ -35,8 +57,29 @@ public class DashboardCarController {
 
     @PostMapping("/create")
     public String createCar(@Valid @ModelAttribute CarCreateDto carCreateDto) {
-        System.out.println(carCreateDto);
-        // carService.save(carDto);
+        boolean result = carService.createCar(carCreateDto);
+        return "redirect:/dashboard/car/index";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        CarUpdateDto carUpdateDto = carService.getUpdateCar(id);
+        System.out.println("DTo detdi: " + carUpdateDto);
+        model.addAttribute("car", carUpdateDto);
+        return "dashboard/car/update";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateCar(@PathVariable Long id, CarUpdateDto carUpdateDto){
+        boolean result = carService.updateCar(id, carUpdateDto);
+        if(result) System.out.println("Car updated successfully");
+        else System.out.println("Car update failed");
+        return "redirect:/dashboard/car/index";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCar(@PathVariable Long id){
+        boolean result = carService.deleteCar(id);
         return "redirect:/dashboard/car/index";
     }
 

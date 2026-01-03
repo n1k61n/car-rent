@@ -39,18 +39,33 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="dataTables_length" id="dataTable_length">
-                                    <label>Show
-                                        <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> entries</label>
+                                    <form th:action="@{/dashboard/car/index}" method="get" id="sizeForm">
+                                        <label>Göstər
+                                            <select name="size"
+                                                    class="custom-select custom-select-sm form-control form-control-sm"
+                                                    onchange="document.getElementById('sizeForm').submit()">
+
+                                                <option value="10" th:selected="${pageSize == 10}">10</option>
+                                                <option value="25" th:selected="${pageSize == 25}">25</option>
+                                                <option value="50" th:selected="${pageSize == 50}">50</option>
+                                                <option value="100" th:selected="${pageSize == 100}">100</option>
+
+                                            </select> qeyd
+                                        </label>
+                                    </form>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <div id="dataTable_filter" class="dataTables_filter">
-                                    <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label>
+                                <div id="dataTable_filter" class="dataTables_filter text-right">
+                                    <form th:action="@{/dashboard/car/index}" method="get">
+                                        <input type="hidden" name="size" th:value="${pageSize}">
+                                        <input type="hidden" name="sort" th:value="${sortField}">
+
+                                        <label>Axtar:
+                                            <input type="search" name="keyword" th:value="${keyword}"
+                                                   class="form-control form-control-sm" placeholder="Brend və ya model...">
+                                        </label>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -59,9 +74,21 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th>Ad (Brend/Model)</th>
-                                        <th>İl</th>
-                                        <th>Gündəlik Qiymət</th>
+                                        <th data-field="brand">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage}, size=${pageSize}, sort='brand', dir=${sortField == 'brand' ? reverseSortDir : 'asc'})}" class="text-decoration-none text-dark">
+                                                Ad (Brend/Model) <i class="fas fa-sort fa-xs text-muted"></i>
+                                            </a>
+                                        </th>
+                                        <th data-field="year">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage}, size=${pageSize}, sort='year', dir=${sortField == 'year' ? reverseSortDir : 'asc'})}" class="text-decoration-none text-dark">
+                                                İl <i class="fas fa-sort fa-xs text-muted"></i>
+                                            </a>
+                                        </th>
+                                        <th data-field="dailyPrice">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage}, size=${pageSize}, sort='dailyPrice', dir=${sortField == 'dailyPrice' ? reverseSortDir : 'asc'})}" class="text-decoration-none text-dark">
+                                                Gündəlik Qiymət <i class="fas fa-sort fa-xs text-muted"></i>
+                                            </a>
+                                        </th>
                                         <th>Sürət qutusu</th>
                                         <th>Yanacaq</th>
                                         <th>Qapı/Sərnişin</th>
@@ -106,10 +133,10 @@
 
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a th:href="@{/cars/edit/{id}(id=${car.id})}" class="btn btn-sm btn-warning">
+                                                <a th:href="@{/dashboard/car/edit/{id}(id=${car.id})}" class="btn btn-sm btn-warning">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a th:href="@{/cars/delete/{id}(id=${car.id})}" class="btn btn-sm btn-danger"
+                                                <a th:href="@{/dashboard/car/delete/{id}(id=${car.id})}" class="btn btn-sm btn-danger"
                                                    onclick="return confirm('Silmək istədiyinizə əminsiniz?')">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
@@ -125,33 +152,33 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries
+                                <div class="dataTables_info" role="status" aria-live="polite">
+                                    <span th:if="${totalItems > 0}">
+                                        [[${totalItems}]] qeyddən [[${currentPage * pageSize + 1}]] -
+                                        [[${(currentPage + 1) * pageSize > totalItems ? totalItems : (currentPage + 1) * pageSize}]] arası göstərilir
+                                    </span>
+                                    <span th:if="${totalItems == 0}">Heç bir məlumat tapılmadı</span>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
                                     <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                                        <li class="paginate_button page-item previous" th:classappend="${currentPage == 0} ? 'disabled'">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage - 1}, size=${pageSize})}" class="page-link">Previous</a>
                                         </li>
-                                        <li class="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+
+                                        <li class="paginate_button page-item"
+                                            th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                            th:classappend="${i == currentPage} ? 'active'">
+                                            <a th:href="@{/dashboard/car/index(page=${i}, size=${pageSize})}"
+                                               th:text="${i + 1}" class="page-link">1</a>
                                         </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                                        </li><li class="paginate_button page-item ">
-                                        <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                                    </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-                                        </li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-                                        </li>
-                                        <li class="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+
+                                        <li class="paginate_button page-item next" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage + 1}, size=${pageSize})}" class="page-link">Next</a>
                                         </li>
                                     </ul>
+                                </div>
                                 </div>
                             </div>
                         </div>

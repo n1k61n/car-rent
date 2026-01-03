@@ -19,7 +19,7 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Brend</label>
-                            <input type="text" name="brand"  class="form-control" placeholder="Məs: Mercedes" required>
+                            <input type="text" name="brand" class="form-control" placeholder="Məs: Mercedes" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Model</label>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">İl</label>
-                            <input type="number" name="year"  class="form-control" placeholder="2025">
+                            <input type="number" name="year"   class="form-control" placeholder="2025">
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Sürət Qutusu</label>
-                            <select name="transmission"   class="form-control">
+                            <select name="transmission"  class="form-control">
                                 <option value="Automatic">Avtomat</option>
                                 <option value="Manual">Mexanika</option>
                             </select>
@@ -52,15 +52,15 @@
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label class="form-label">Qapı Sayı</label>
-                            <input type="number" name="doorCount"  class="form-control">
+                            <input type="number" name="doorCount"   class="form-control">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Sərnişin Sayı</label>
-                            <input type="number" name="passengerCount"   class="form-control">
+                            <input type="number" name="passengerCount"  class="form-control">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Yürüş (Mileage)</label>
-                            <input type="text" name="mileage"   class="form-control">
+                            <input type="text" name="mileage"  class="form-control">
                         </div>
                     </div>
 
@@ -72,13 +72,13 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label font-weight-bold">Baqaj Tutumu (Litr)</label>
-                                <input type="number" th:field="*{luggageCapacity}" class="form-control" placeholder="Məs: 450">
+                                <input type="number" name="luggageCapacity"  class="form-control" placeholder="Məs: 450">
                                 <small class="text-muted">Litr cinsindən ümumi həcm.</small>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label font-weight-bold">Çanta Tutumu (Suitcases)</label>
-                                <input type="text" th:field="*{suitcases}" class="form-control" placeholder="Məs: 2 Böyük, 1 Kiçik">
+                                <input type="text" name="suitcases"  class="form-control" placeholder="Məs: 2 Böyük, 1 Kiçik">
                                 <small class="text-muted">Baqaja sığan çamadanların təxmini sayı.</small>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Əlavə İmkanlar (Məs: GPS, Wi-Fi)</label>
-                            <input type="text" name="features"  class="form-control" placeholder="Vergüllə ayırın: GPS, Uşaq oturacağı">
+                            <input type="text" name="features" class="form-control" placeholder="Vergüllə ayırın: GPS, Uşaq oturacağı">
                             <small class="form-text text-muted">Məlumatları vergüllə ayıraraq yazın.</small>
                         </div>
                     </div>

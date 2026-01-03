@@ -1,6 +1,8 @@
 package com.example.carrent.services.impl;
 
+import com.example.carrent.dtos.car.CarCreateDto;
 import com.example.carrent.dtos.car.CarDto;
+import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.models.Car;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.services.CarService;
@@ -75,6 +77,67 @@ public class CarServiceImpl implements CarService {
             return carList.stream().map(car -> modelMapper.map(car, CarDto.class)).toList();
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean createCar(CarCreateDto carCreateDto) {
+        try {
+            Car car = modelMapper.map(carCreateDto, Car.class);
+            carRepository.save(car);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean deleteCar(Long id) {
+        if(carRepository.existsById(id)){
+            carRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public CarUpdateDto getUpdateCar(Long id) {
+        if(carRepository.existsById(id)){
+            Car car = carRepository.findById(id).get();
+            return modelMapper.map(car, CarUpdateDto.class);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean updateCar(Long id, CarUpdateDto carUpdateDto) {
+        if(carRepository.existsById(id)){
+            Car car = modelMapper.map(carUpdateDto, Car.class);
+            car.setId(id);
+            carRepository.save(car);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Page<CarDto> getAllCarsPageable(Pageable pageable) {
+        Page<Car> carPage = carRepository.findAll(pageable);
+        return carPage.map(car -> modelMapper.map(car, CarDto.class));
+    }
+
+    public Page<CarDto> searchCars(String keyword, Pageable pageable) {
+        Page<Car> carPage;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            carPage = carRepository.findByBrandContainingIgnoreCaseOrModelContainingIgnoreCase(
+                    keyword, keyword, pageable);
+        } else {
+            carPage = carRepository.findAll(pageable);
+        }
+
+        // ModelMapper vasitəsilə Entity-ni DTO-ya çeviririk
+        return carPage.map(car -> modelMapper.map(car, CarDto.class));
     }
 
 

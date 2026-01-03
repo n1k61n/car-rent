@@ -43,6 +43,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
             @Param("pickupDate") LocalDate pickupDate,
             @Param("dropoffDate") LocalDate dropoffDate,
             Pageable pageable);
+
+    Page<Car> findByBrandContainingIgnoreCaseOrModelContainingIgnoreCase(String keyword, String keyword1, Pageable pageable);
 }
 
 
