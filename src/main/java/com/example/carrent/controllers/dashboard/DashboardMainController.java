@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/dashboard")
-public class DashboardController {
+public class DashboardMainController {
 
     @GetMapping()
     public String dashboard(){
@@ -14,8 +14,5 @@ public class DashboardController {
     }
 
 
-    @GetMapping("/cars")
-    public String cars(){
-        return "dashboard/cars";
-    }
+
 }

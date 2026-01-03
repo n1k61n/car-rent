@@ -1,5 +1,6 @@
 package com.example.carrent.services.impl;
 
+
 import com.example.carrent.dtos.blog.BlogDto;
 import com.example.carrent.models.Blog;
 import com.example.carrent.repositories.BlogRepository;
@@ -9,8 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

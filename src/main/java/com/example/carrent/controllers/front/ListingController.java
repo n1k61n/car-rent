@@ -1,4 +1,4 @@
-package com.example.carrent.controllers;
+package com.example.carrent.controllers.front;
 
 import com.example.carrent.models.Car;
 import com.example.carrent.services.CarService;

@@ -1,7 +1,6 @@
-package com.example.carrent.controllers;
+package com.example.carrent.controllers.front;
 
 import com.example.carrent.dtos.about.TeamMemberDto;
-import com.example.carrent.models.TeamMember;
 import com.example.carrent.services.TeamMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

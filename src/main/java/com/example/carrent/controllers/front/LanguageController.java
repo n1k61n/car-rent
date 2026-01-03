@@ -1,4 +1,4 @@
-package com.example.carrent.controllers;
+package com.example.carrent.controllers.front;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CarDto {
-    private Long id;
+public class CarCreateDto {
     private String brand;
     private String model;
     private String imageUrl;
@@ -26,5 +25,4 @@ public class CarDto {
     private Boolean roadAssistance ;
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;
-
 }

@@ -1,4 +1,4 @@
-package com.example.carrent.controllers;
+package com.example.carrent.controllers.front;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

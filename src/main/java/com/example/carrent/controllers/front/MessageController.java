@@ -1,4 +1,4 @@
-package com.example.carrent.controllers;
+package com.example.carrent.controllers.front;
 
 import com.example.carrent.dtos.message.MessageDto;
 import com.example.carrent.services.MessageService;

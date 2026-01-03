@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -65,6 +66,15 @@ public class CarServiceImpl implements CarService {
         }
 
         return carRepository.findAvailableCarsPageable(brandFilter, start, end, pageable);
+    }
+
+    @Override
+    public List<CarDto> getAllCars() {
+        List<Car> carList =  carRepository.findAll();
+        if(!carList.isEmpty()){
+            return carList.stream().map(car -> modelMapper.map(car, CarDto.class)).toList();
+        }
+        return new ArrayList<>();
     }
 
 
