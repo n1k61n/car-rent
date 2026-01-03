@@ -18,4 +18,5 @@ public interface CarService {
     Set<String> getAllCarTypes();
 
     Page<Car> searchCarsPageable(String brand, String pickup, String dropoff, Pageable pageable);
+
 }

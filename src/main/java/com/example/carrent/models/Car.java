@@ -27,6 +27,9 @@ public class Car {
 
     @Column(name = "daily_price")
     private Double dailyPrice;
+    private Integer year;
+
+
 
     private String transmission;
 
@@ -47,6 +50,15 @@ public class Car {
     private Boolean available;
 
     private String description;
+
+    private String suitcases;
+    private String fuelPolicy;
+    private String mileage;
+
+
+    private Boolean roadAssistance = true;
+    private Boolean insuranceIncluded = true;
+    private Boolean freeCancellation = true;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

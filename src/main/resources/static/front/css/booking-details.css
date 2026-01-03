@@ -1,0 +1,141 @@
+/* --- static/css/booking-details.css --- */
+
+/* 1. Avtomobil Məlumat Kartı */
+.car-info-card {
+    background: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.car-header {
+    background: #f8fafd;
+    padding: 15px 25px;
+    border-bottom: 1px solid #edf2f7;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.car-body {
+    display: flex;
+    padding: 30px;
+    gap: 30px;
+}
+
+.car-img {
+    width: 350px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #f1f4f8;
+}
+
+/* 2. Avtomobil Parametrləri */
+.spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    font-size: 14px;
+    color: #4a5568;
+    margin-top: 15px;
+}
+
+/* 3. Qiymət Bölməsi */
+.price-box {
+    background: #f0f7ff;
+    padding: 20px;
+    text-align: right;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #dbeafe;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #94a3b8;
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+.new-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: #007bff;
+}
+
+/* 4. Bölmə Başlıqları (Mavi Vurğu ilə) */
+.section-title {
+    background: #f8fafd;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 20px;
+    margin: 35px 0 15px 0;
+    border-left: 5px solid #007bff; /* Şəkildəki əsas şaquli mavi xətt */
+    border-radius: 0 4px 4px 0;
+}
+
+/* 5. Giriş Sahələri (Inputlar) */
+.form-input-custom {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.form-input-custom:focus {
+    background: #fff;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* 6. Sürücülük Vəsiqəsi Yükləmə Sahəsi */
+.upload-box {
+    background: #f8fafc;
+    border: 2px dashed #007bff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* --- "BOOK NOW" Düyməsi - Saytın Mavi Rənginə Uyğun --- */
+.btn-book-now {
+    background-color: #007bff; /* Saytın əsas mavisidir */
+    color: #ffffff !important; /* Yazı ağ rəngdə */
+    border: none;
+    font-weight: 700;
+    padding: 16px 55px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); /* Mavi kölgə effekti */
+}
+
+.btn-book-now:hover {
+    background-color: #0056b3; /* Üstünə gələndə tündləşən mavi */
+    transform: translateY(-2px); /* Yüngül yuxarı qalxma effekti */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+}
+
+.btn-book-now:active {
+    transform: translateY(0);
+}
+
+/* 8. Mobil Uyğunluq */
+@media (max-width: 768px) {
+    .car-body { flex-direction: column; padding: 20px; }
+    .car-img { width: 100%; }
+    .spec-grid { grid-template-columns: 1fr; }
+    .btn-book-now { width: 100%; }
+}

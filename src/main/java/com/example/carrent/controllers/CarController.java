@@ -17,7 +17,7 @@ public class CarController {
     @GetMapping("/car/{id}")
     public String getCarDetails(@PathVariable Long id, Model model) {
         CarDto car = carService.getCarById(id);
-        System.out.println("Gələn maşın: " + car); // Konsolda yoxlayın
+        System.out.println("Gələn maşın: " + car);
 
         if (car == null) {
             return "error/404"; // Maşın tapılmadıqda

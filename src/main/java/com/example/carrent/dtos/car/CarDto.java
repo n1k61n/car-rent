@@ -18,5 +18,14 @@ public class CarDto {
     private String transmission;
     private String fuelType;
     private List<String> features;
+    private Integer year;
+    private String suitcases;
+    private String fuelPolicy;
+    private String mileage;
+
+
+    private Boolean roadAssistance ;
+    private Boolean insuranceIncluded ;
+    private Boolean freeCancellation;
 
 }

@@ -81,20 +81,23 @@
 
                 </div>
 
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
                 <div class="col-lg-4">
                     <div class="booking-card bg-white shadow-sm">
                         <h3 class="h5 text-black mb-4">İndi Rezerv Et</h3>
-                        <form action="#" th:action="@{/booking/save}" method="post">
+
+                        <form th:action="@{/booking/save}" method="post">
                             <input type="hidden" name="carId" th:value="${car.id}">
 
                             <div class="form-group">
-                                <label class="font-size-14 font-gray-8">Götürmə Tarixi</label>
-                                <input type="date" class="form-control" name="startDate" required>
+                                <label>Götürmə Tarixi</label>
+                                <input type="date" id="startDate" name="startDate" class="form-control" required>
                             </div>
 
                             <div class="form-group">
-                                <label class="font-size-14 font-gray-8">Qaytarma Tarixi</label>
-                                <input type="date" class="form-control" name="endDate" required>
+                                <label>Qaytarma Tarixi</label>
+                                <input type="date" id="endDate" name="endDate" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-4">
