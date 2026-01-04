@@ -30,12 +30,12 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4" th:each="blog : ${blogs.content}">
                     <div class="post-entry-1 h-100">
-                        <a th:href="@{/single}">
-                            <img th:src="${blog.imageUrl != null ? blog.imageUrl : '/front/images/post_1.jpg'}"
+                        <a th:href="@{/car/{id}(id=${blog.car.id})}">
+                            <img th:src="${blog.car.imageUrl != null ? blog.car.imageUrl : '/front/images/post_1.jpg'}"
                                  alt="Image" class="img-fluid">
                         </a>
                         <div class="post-entry-1-contents">
-                            <h2><a href="#" th:text="${blog.title}">Blog Title</a></h2>
+                            <h2><a th:href="@{/blog/single/{id}(id=${blog.id})}" th:text="${blog.title}">Blog Title</a></h2>
                             <span class="meta d-inline-block mb-3">
                                     <span th:text="${#temporals.format(blog.createdAt, 'dd MMMM, yyyy')}">July 17, 2019</span>
                                     <span class="mx-2">by</span>

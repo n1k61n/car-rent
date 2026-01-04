@@ -1,13 +1,13 @@
 package com.example.carrent.dtos.blog;
 
-import jakarta.persistence.Column;
+import com.example.carrent.dtos.car.CarBlogDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 public class BlogDto {
-
+    private Long id;
     private String title;
 
     private String content;
@@ -17,4 +17,5 @@ public class BlogDto {
     private String author;
 
     private LocalDateTime createdAt;
+    private CarBlogDto car;
 }

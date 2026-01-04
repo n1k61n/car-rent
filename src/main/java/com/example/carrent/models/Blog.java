@@ -24,5 +24,12 @@ public class Blog {
     private String imageUrl;
     private String author;
     private LocalDate createdAt;
-
+    private String categoryName;
+    private String authorImageUrl;
+    private String authorBio;
+    private String authorDescription;
+    @Column(columnDefinition = "TEXT")
+    private String post;
+    @ManyToOne
+    private Car car;
 }

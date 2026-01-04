@@ -1,7 +1,9 @@
 package com.example.carrent.controllers.front;
 
+import com.example.carrent.dtos.testimonial.TestimonialDto;
 import com.example.carrent.models.Car;
 import com.example.carrent.services.CarService;
+import com.example.carrent.services.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,11 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class ListingController {
 
     private final CarService carService;
+    private final TestimonialService testimonialService;
+
 
     @GetMapping("/listing")
     public String getListings(Model model,
@@ -37,6 +43,11 @@ public class ListingController {
         model.addAttribute("selectedBrand", brand);
         model.addAttribute("selectedPickup", pickup);
         model.addAttribute("selectedDropoff", dropoff);
+
+
+        int count = 3;
+        List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
+        model.addAttribute("testimonials", testimonialDtoListlist);
 
         return "front/listing";
     }
