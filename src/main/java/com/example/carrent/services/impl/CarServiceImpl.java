@@ -70,14 +70,6 @@ public class CarServiceImpl implements CarService {
         return carRepository.findAvailableCarsPageable(brandFilter, start, end, pageable);
     }
 
-    @Override
-    public List<CarDto> getAllCars() {
-        List<Car> carList =  carRepository.findAll();
-        if(!carList.isEmpty()){
-            return carList.stream().map(car -> modelMapper.map(car, CarDto.class)).toList();
-        }
-        return new ArrayList<>();
-    }
 
     @Override
     public boolean createCar(CarCreateDto carCreateDto) {
@@ -120,11 +112,7 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
-    @Override
-    public Page<CarDto> getAllCarsPageable(Pageable pageable) {
-        Page<Car> carPage = carRepository.findAll(pageable);
-        return carPage.map(car -> modelMapper.map(car, CarDto.class));
-    }
+
 
     public Page<CarDto> searchCars(String keyword, Pageable pageable) {
         Page<Car> carPage;
@@ -135,8 +123,6 @@ public class CarServiceImpl implements CarService {
         } else {
             carPage = carRepository.findAll(pageable);
         }
-
-        // ModelMapper vasitəsilə Entity-ni DTO-ya çeviririk
         return carPage.map(car -> modelMapper.map(car, CarDto.class));
     }
 

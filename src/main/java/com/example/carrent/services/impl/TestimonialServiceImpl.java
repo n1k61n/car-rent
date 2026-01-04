@@ -6,6 +6,7 @@ import com.example.carrent.repositories.TestimonialRepository;
 import com.example.carrent.services.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,23 @@ public class TestimonialServiceImpl  implements TestimonialService {
             return list.stream().map(testimonial -> modelMapper.map(testimonial, TestimonialDto.class)).toList();
         }
         return List.of();
+    }
+
+    @Override
+    public Page<TestimonialDto> getTestimonils(Pageable pageable) {
+        Page<Testimonial> pages = testimonialRepository.findAll(pageable);
+        if(pages.hasContent()){
+            return pages.map(testimonial -> modelMapper.map(testimonial, TestimonialDto.class));
+        }
+        return Page.empty();
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        if(testimonialRepository.existsById(id)){
+            testimonialRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

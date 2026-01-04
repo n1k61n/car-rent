@@ -12,26 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 public interface CarService {
-
     Page<Car> findAll(Pageable pageable);
-
     CarDto getCarById(Long id);
-
     Set<String> getAllCarTypes();
-
     Page<Car> searchCarsPageable(String brand, String pickup, String dropoff, Pageable pageable);
-
-    List<CarDto> getAllCars();
-
     boolean createCar(@Valid CarCreateDto carCreateDto);
-
     boolean deleteCar(Long id);
-
     CarUpdateDto getUpdateCar(Long id);
-
     boolean updateCar(Long id, CarUpdateDto carUpdateDto);
-
-    Page<CarDto> getAllCarsPageable(Pageable pageable);
-
     Page<CarDto> searchCars(String keyword, Pageable pageable);
 }

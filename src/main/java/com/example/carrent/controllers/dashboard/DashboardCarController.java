@@ -64,7 +64,6 @@ public class DashboardCarController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         CarUpdateDto carUpdateDto = carService.getUpdateCar(id);
-        System.out.println("DTo detdi: " + carUpdateDto);
         model.addAttribute("car", carUpdateDto);
         return "dashboard/car/update";
     }
@@ -72,8 +71,6 @@ public class DashboardCarController {
     @PostMapping("/edit/{id}")
     public String updateCar(@PathVariable Long id, CarUpdateDto carUpdateDto){
         boolean result = carService.updateCar(id, carUpdateDto);
-        if(result) System.out.println("Car updated successfully");
-        else System.out.println("Car update failed");
         return "redirect:/dashboard/car/index";
     }
 
