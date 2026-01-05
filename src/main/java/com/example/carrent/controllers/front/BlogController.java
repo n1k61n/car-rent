@@ -13,8 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-
 
 @Controller
 @RequestMapping("/blog")
@@ -32,10 +30,10 @@ public class BlogController {
         return "front/blog";
     }
 
-    @PostMapping("/add-comment")
+    @PostMapping("/single/add-comment")
     public String addComment(@ModelAttribute CommentDto commentDto) {
         boolean result = commentService.saveComment(commentDto);
-        return "redirect:/blog/" + commentDto.getBlogId();
+        return "redirect:/blog/single/" + commentDto.getBlogId();
     }
 
 

@@ -1,17 +1,18 @@
 package com.example.carrent.dtos.blog;
 
 import com.example.carrent.dtos.comment.CommentDto;
-import jdk.jshell.Snippet;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlogSingleDto {
     private Long id;
     private String title;
@@ -25,7 +26,10 @@ public class BlogSingleDto {
     private String authorImageUrl;
     private String authorBio;
     private String authorDescription;
-    private List<CommentDto> comments = new ArrayList<>();
+    private List<CommentDto> comments ;
+
+
+
 }
 
 

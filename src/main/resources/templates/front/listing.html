@@ -3,7 +3,7 @@
       xmlns:th="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CarRental &mdash; Free Website Template by Colorlib</title>
+      <title th:text="#{nav.cars} + ' - CarRental'">Haqqımızda - CarRental</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -17,17 +17,18 @@
 
       <div layout:fragment="content" >
 
-          <div class="hero inner-page" style="background-image: url('images/hero_1_a.jpg');">
-
+          <div class="hero inner-page" style="background-image: url('/front/images/hero_1_a.jpg');">
               <div class="container">
-                  <div class="row align-items-end ">
+                  <div class="row align-items-end">
                       <div class="col-lg-5">
-
                           <div class="intro">
-                              <h1><strong>Avtomobil Siyahısı</strong></h1>
-                              <div class="custom-breadcrumbs"><a href="/">Ana Səhifə</a> <span class="mx-2">/</span> <strong>Maşınlar</strong></div>
+                              <h1 th:text="#{nav.cars}">Haqqımızda</h1>
+                              <div class="custom-breadcrumbs">
+                                  <a th:href="@{/}" th:text="#{nav.home}">Ana Səhifə</a>
+                                  <span class="mx-2">/</span>
+                                  <strong th:text="#{nav.cars}">Haqqımızda</strong>
+                              </div>
                           </div>
-
                       </div>
                   </div>
               </div>

@@ -24,8 +24,6 @@ public class Testimonial {
 
     private String content;
 
-    private Integer rating;
-
     private String authorRole;
 
     private String imageUrl;
