@@ -1,5 +1,6 @@
 package com.example.carrent.dtos.blog;
 
+import com.example.carrent.dtos.car.CarBlogDto;
 import com.example.carrent.dtos.comment.CommentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class BlogSingleDto {
     private String authorBio;
     private String authorDescription;
     private List<CommentDto> comments ;
+    private CarBlogDto car;
 
 
 

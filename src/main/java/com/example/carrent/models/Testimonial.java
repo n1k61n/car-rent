@@ -19,15 +19,14 @@ public class Testimonial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String authorName;
-
-    private String content;
-
     private String authorRole;
-
+    private String content;
     private String imageUrl;
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDate createdAt;
+    private int rating; // 1-5 arası ulduz
+    @Column(name = "is_approved", nullable = false, columnDefinition = "boolean default false")
+    private boolean isApproved = false;
 }

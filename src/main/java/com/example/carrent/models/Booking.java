@@ -17,14 +17,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "bookings")
 public class Booking {
-    //İstifadəçinin maşını icarəyə götürdüyü məlumatlar.
-    //Booking (Rezervasiya): Müştəri sayta girir, maşını seçir və "Bron et" düyməsini sıxır.
-    // Maşın hələ onda deyil, sadəcə onun üçün ayrılıb. (Status: PENDING və ya CONFIRMED)
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
 
     @ManyToOne
     private User user;

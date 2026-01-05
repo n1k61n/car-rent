@@ -16,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 public class Category {
-//    Maşınları qruplaşdırmaq üçün (məsələn: Sedan, SUV, Luxury).
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

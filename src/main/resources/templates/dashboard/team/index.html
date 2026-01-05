@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">SB Admin 2 - Dashboard</title>
+
+
+
+</head>
+
+<body id="page-top">
+
+
+
+
+<div layout:fragment="content">
+
+    <div class="container-fluid">
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Komandamız</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="dataTables_length" id="dataTable_length">
+                                    <form th:action="@{/dashboard/blog/index}" method="get" id="sizeForm">
+                                        <label>Göstər
+                                            <select name="size"
+                                                    class="custom-select custom-select-sm form-control form-control-sm"
+                                                    onchange="document.getElementById('sizeForm').submit()">
+
+                                                <option value="10" th:selected="${pageSize == 10}">10</option>
+                                                <option value="25" th:selected="${pageSize == 25}">25</option>
+                                                <option value="50" th:selected="${pageSize == 50}">50</option>
+                                                <option value="100" th:selected="${pageSize == 100}">100</option>
+
+                                            </select> qeyd
+                                        </label>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Sürət qutusu</th>
+                                        <th>Yanacaq</th>
+                                        <th>Qapı/Sərnişin</th>
+                                        <th>Baqaj</th>
+                                        <th>Statuslar</th>
+                                        <th>Əməliyyatlar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="car, i : ${carList}">
+                                        <td th:text="${i.index + 1}">BMW X5</td>
+                                        <td th:text="${car.brand + ' ' + car.model}">BMW X5</td>
+
+                                        <td th:text="${car.year}">2022</td>
+
+                                        <td th:text="${'$' + car.dailyPrice}">$100.0</td>
+
+                                        <td th:text="${car.transmission}">Automatic</td>
+
+                                        <td th:text="${car.fuelType}">Petrol</td>
+
+                                        <td th:text="${car.doorCount + ' / ' + car.passengerCount}">4 / 5</td>
+
+                                        <td th:text="${car.luggageCapacity}">400L</td>
+
+                                        <td>
+                                            <span th:if="${car.freeCancellation}" class="badge badge-success">Pulsuz İmtina</span>
+                                            <span th:if="${car.insuranceIncluded}" class="badge badge-info">Sığortalı</span>
+                                        </td>
+
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{/dashboard/car/edit/{id}(id=${car.id})}" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a th:href="@{/dashboard/car/delete/{id}(id=${car.id})}" class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('Silmək istədiyinizə əminsiniz?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(carList)}">
+                                        <td colspan="9" class="text-center">Sistemdə heç bir avtomobil tapılmadı.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info" role="status" aria-live="polite">
+                                    <span th:if="${totalItems > 0}">
+                                        [[${totalItems}]] qeyddən [[${currentPage * pageSize + 1}]] -
+                                        [[${(currentPage + 1) * pageSize > totalItems ? totalItems : (currentPage + 1) * pageSize}]] arası göstərilir
+                                    </span>
+                                    <span th:if="${totalItems == 0}">Heç bir məlumat tapılmadı</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                    <ul class="pagination">
+                                        <li class="paginate_button page-item previous" th:classappend="${currentPage == 0} ? 'disabled'">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage - 1}, size=${pageSize})}" class="page-link">Previous</a>
+                                        </li>
+
+                                        <li class="paginate_button page-item"
+                                            th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                            th:classappend="${i == currentPage} ? 'active'">
+                                            <a th:href="@{/dashboard/car/index(page=${i}, size=${pageSize})}"
+                                               th:text="${i + 1}" class="page-link">1</a>
+                                        </li>
+
+                                        <li class="paginate_button page-item next" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                            <a th:href="@{/dashboard/car/index(page=${currentPage + 1}, size=${pageSize})}" class="page-link">Next</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+</body>
+
+</html>
