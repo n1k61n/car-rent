@@ -20,27 +20,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public boolean checkAvailability(BookingDto bookingDto) {
-        // Avtomobilin seçilən tarixlərdə boş olub-olmadığını yoxlayırıq
-//        return !bookingRepository.existsOverlapping(
-//                bookingDto.getCarId(),
-//                bookingDto.getPickUp(),
-//                bookingDto.getDropOff()
-//        );
-        return false;
+        boolean result = bookingRepository.existsOverlapping(
+                bookingDto.getCarId(),
+                bookingDto.getStartDate().atStartOfDay(),
+                bookingDto.getEndDate().atStartOfDay());
+        return !result;
     }
 
     @Override
     public boolean createBooking(BookingDto bookingDto) {
-        // 1. Öncə mövcudluğu yoxla
         if (!checkAvailability(bookingDto)) {
             throw new RuntimeException("Bu tarixlərdə avtomobil artıq rezerv olunub!");
         }
-
-        // 2. DTO-nu Entity-yə çevir (ModelMapper ilə)
         Booking booking = modelMapper.map(bookingDto, Booking.class);
-
-        // 3. Statusu təyin et və yaddaşa yaz
-        booking.setStatus(BookingStatus.PENDING); // Və ya PENDING
+        booking.setStatus(BookingStatus.PENDING);
         bookingRepository.save(booking);
 
         return true;

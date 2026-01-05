@@ -20,25 +20,16 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String brand;
-
     private String model;
-
     @Column(name = "daily_price")
     private Double dailyPrice;
     private Integer year;
-
-
-
     private String transmission;
-
     @Column(name = "fuel_type")
     private String fuelType;
-
     @Column(name = "door_count")
     private Integer doorCount;
-
     @Column(name = "passenger_count")
     private Integer passengerCount;
 
@@ -46,16 +37,11 @@ public class Car {
     private String imageUrl;
     @Column(name = "luggage_capacity")
     private Integer luggageCapacity;
-
     private Boolean available;
-
     private String description;
-
     private String suitcases;
     private String fuelPolicy;
     private String mileage;
-
-
     private Boolean roadAssistance = true;
     private Boolean insuranceIncluded = true;
     private Boolean freeCancellation = true;

@@ -24,13 +24,8 @@ public class DashboardTestimonialController {
             @RequestParam(name = "size", defaultValue = "10") int size,
             Model model) {
 
-        // Sıralama və səhifələmə məlumatlarını birləşdiririk
         Pageable pageable = PageRequest.of(page, size);
-
-        // Axtarış metodu çağırılır
         Page<TestimonialDto> testimonialDtos = testimonialService.getTestimonils(pageable);
-
-        // Modelə lazım olan bütün dataları yükləyirik
         model.addAttribute("testimonials", testimonialDtos.getContent());
         model.addAttribute("totalPages", testimonialDtos.getTotalPages());
         model.addAttribute("totalItems", testimonialDtos.getTotalElements());

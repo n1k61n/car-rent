@@ -22,8 +22,6 @@ public class CarDto {
     private String fuelPolicy;
     private String mileage;
     private String description;
-
-
     private Boolean roadAssistance ;
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;

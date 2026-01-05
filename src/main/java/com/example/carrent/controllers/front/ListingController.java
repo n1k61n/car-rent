@@ -30,25 +30,17 @@ public class ListingController {
                               @RequestParam(required = false) String pickup,
                               @RequestParam(required = false) String dropoff) {
 
-        // Hər səhifədə 6 maşın
         Pageable pageable = PageRequest.of(page, 6);
-
-        // Filtrasiya olunmuş maşınları gətiririk
         Page<Car> carPage = carService.searchCarsPageable(brand, pickup, dropoff, pageable);
 
         model.addAttribute("carPage", carPage);
         model.addAttribute("currentPage", page);
-
-        // Filtr parametrlərini geri göndəririk ki, pagination linklərində istifadə edək
         model.addAttribute("selectedBrand", brand);
         model.addAttribute("selectedPickup", pickup);
         model.addAttribute("selectedDropoff", dropoff);
-
-
         int count = 3;
         List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", testimonialDtoListlist);
-
         return "front/listing";
     }
 }

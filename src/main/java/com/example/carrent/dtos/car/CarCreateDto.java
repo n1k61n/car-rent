@@ -20,8 +20,6 @@ public class CarCreateDto {
     private String suitcases;
     private String fuelPolicy;
     private String mileage;
-
-
     private Boolean roadAssistance ;
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;

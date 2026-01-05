@@ -30,29 +30,17 @@ public class HomeController {
     public String home(Model model,  @RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 6);
         Page<Car> carPage = carService.findAll(pageable);
-
         model.addAttribute("carPage", carPage);
-
         int count = 3;
         List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", testimonialDtoListlist);
-
-
         Set<String> brands = carService.getAllCarTypes();
         model.addAttribute("brands", brands);
-
-
         return "front/index";
     }
-
-
-
 
     @GetMapping("/contact")
     public String contact(){
         return "front/contact";
     }
-
-
-
 }

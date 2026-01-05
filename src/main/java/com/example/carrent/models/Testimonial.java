@@ -26,7 +26,7 @@ public class Testimonial {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDate createdAt;
-    private int rating; // 1-5 arası ulduz
+    private int rating;
     @Column(name = "is_approved", nullable = false, columnDefinition = "boolean default false")
     private boolean isApproved = false;
 }
