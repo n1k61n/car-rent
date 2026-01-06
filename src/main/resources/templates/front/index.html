@@ -23,7 +23,7 @@
 
               <div class="row mb-5">
                 <div class="col-lg-7 intro">
-                    <h1>Avtomobil icarəsi artıq bir addımlığınızda.</h1>
+                    <h1 th:text="#{home.title}">Avtomobil icarəsi artıq bir addımlığınızda.</h1>
                 </div>
               </div>
                 <form action="/listing" method="get" class="trip-form" >
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="mb-3 mb-md-0 col-md-3">
-                            <input type="submit" value="Indi axtar" class="btn btn-primary btn-block py-3">
+                            <input type="submit" th:value="#{btn.search}"  class="btn btn-primary btn-block py-3">
                         </div>
 
                     </div>
@@ -135,8 +135,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <h2 class="section-heading"><strong>Avtomobil Siyahısı</strong></h2>
-            <p class="mb-5">Geniş avtomobil parkımızdan sizə uyğun olanı seçin. Hər büdcəyə və hər zövqə uyğun komfortlu və təhlükəsiz maşınlar burada.</p>
+            <h2 class="section-heading"><strong th:text="#{cars.title}">Avtomobil Siyahısı</strong></h2>
+            <p class="mb-5" th:text="#{cars.description}">Geniş avtomobil parkımızdan sizə uyğun olanı seçin. Hər büdcəyə və hər zövqə uyğun komfortlu və təhlükəsiz maşınlar burada.</p>
           </div>
         </div>
 
@@ -273,8 +273,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <h2 class="section-heading"><strong>Rəylər</strong></h2>
-            <p class="mb-5">Müştərilərimizin bizim haqqımızda düşüncələri. Sizin məmnuniyyətiniz bizim üçün ən böyük mükafatdır.</p>
+            <h2 class="section-heading"><strong th:text="#{reviews.title}">Rəylər</strong></h2>
+            <p class="mb-5" th:text="#{reviews.description}">Müştərilərimizin bizim haqqımızda düşüncələri. Sizin məmnuniyyətiniz bizim üçün ən böyük mükafatdır.</p>
           </div>
         </div>
           <div class="row">

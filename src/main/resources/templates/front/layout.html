@@ -113,8 +113,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <h2 class="footer-heading mb-4">Haqqımızda</h2>
-                    <p>Biz sizə ən rahat və təhlükəsiz səyahəti təmin etmək üçün buradayıq.</p>
+                    <h2 class="footer-heading mb-4" th:text="#{layout.mission}">Misiyamiz</h2>
+                    <p th:text="#{layout.mission_content}">Biz sizə ən rahat və təhlükəsiz səyahəti təmin etmək üçün buradayıq.</p>
                     <ul class="list-unstyled social">
                         <li><a href="https://facebook.com/sizinsehife"><span class="icon-facebook"></span></a></li>
                         <li><a href="#"><span class="icon-instagram"></span></a></li>
@@ -125,19 +125,19 @@
                 <div class="col-lg-8 ml-auto">
                     <div class="row">
                         <div class="col-lg-3">
-                            <h2 class="footer-heading mb-4">Faydalı Linklər</h2>
+                            <h2 class="footer-heading mb-4" th:text="#{nav.link}">Faydalı Linklər</h2>
                             <ul class="list-unstyled">
-                                <li><a href="/about">Haqqımızda</a></li>
-                                <li><a href="/listing">Maşınlar</a></li>
-                                <li><a href="/contact">Əlaqə</a></li>
+                                <li><a href="/about" th:text="#{nav.about}">Haqqımızda</a></li>
+                                <li><a href="/listing" th:text="#{nav.cars}">Maşınlar</a></li>
+                                <li><a href="/contact" th:text="#{nav.contact}">Əlaqə</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-3">
-                            <h2 class="footer-heading mb-4">Dəstək</h2>
+                            <h2 class="footer-heading mb-4" th:text="#{layout.footer}">Dəstək</h2>
                             <ul class="list-unstyled">
-                                <li><a href="#">Yardım Mərkəzi</a></li>
-                                <li><a href="#">Şərtlər</a></li>
-                                <li><a href="#">Məxfilik</a></li>
+                                <li><a href="/help" th:text="#{layout.footer_help}">Yardım Mərkəzi</a></li>
+                                <li><a href="/term" th:text="#{layout.footer_term}">Şərtlər</a></li>
+                                <li><a href="/privacy" th:text="#{layout.footer_priv}">Məxfilik</a></li>
                             </ul>
                         </div>
                     </div>
