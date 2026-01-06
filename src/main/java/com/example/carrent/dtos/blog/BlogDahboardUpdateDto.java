@@ -16,8 +16,8 @@ public class BlogDahboardUpdateDto {
     private String title;
     private String content;
     private String author;
-    private LocalDate createdAt;
     private String categoryName;
     private String authorImageUrl;
+    private String imageUrl;
     private String post;
 }

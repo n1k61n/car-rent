@@ -32,8 +32,8 @@ public class Blog {
     private String authorDescription;
     @Column(columnDefinition = "TEXT")
     private String post;
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
     @ManyToOne
     private Car car;
 }

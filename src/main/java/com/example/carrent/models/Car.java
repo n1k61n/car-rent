@@ -53,7 +53,7 @@ public class Car {
     @OneToMany(mappedBy = "car")
     private List<Rental> rentals;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "car_features", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "feature_name")
     private List<String> features = new ArrayList<>();

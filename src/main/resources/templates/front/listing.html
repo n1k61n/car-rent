@@ -24,7 +24,7 @@
                           <div class="intro">
                               <h1 th:text="#{nav.cars}">Haqqımızda</h1>
                               <div class="custom-breadcrumbs">
-                                  <a th:href="@{/}" th:text="#{nav.home}">Ana Səhifə</a>
+                                  <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
                                   <span class="mx-2">/</span>
                                   <strong th:text="#{nav.cars}">Haqqımızda</strong>
                               </div>
@@ -53,7 +53,7 @@
                       <div class="col-md-6 col-lg-4 mb-4" th:each="car : ${carPage.content}">
                           <div class="listing d-block align-items-stretch">
                               <div class="listing-img h-100 mr-4">
-                                  <a th:href="@{/car/{id}(id=${car.id})}">
+                                  <a th:href="${'/car/' + car.id}" >
                                     <img th:src="${car.imageUrl}" th:alt="${car.brand}" class="img-fluid">
                                   </a>
                               </div>
@@ -78,7 +78,7 @@
                                   </div>
                                   <div>
                                       <p th:text="${car.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                      <p><a th:href="@{/car/{id}(id=${car.id})}" class="btn btn-primary btn-sm">İcarəyə götür</a></p>
+                                      <p><a th:href="${'/car/' + car.id}"  class="btn btn-primary btn-sm">İcarəyə götür</a></p>
                                   </div>
                               </div>
                           </div>
@@ -87,17 +87,19 @@
                   <div class="row">
                       <div class="col-5">
                           <div class="custom-pagination">
+
                               <a th:if="${carPage.hasPrevious()}"
-                                 th:href="@{/listing(page=${currentPage - 1}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}">&lt;</a>
+                                 th:href="'/listing?page=' + ${currentPage - 1} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}">&lt;</a>
 
                               <span th:each="i : ${#numbers.sequence(0, (carPage.totalPages > 0 ? carPage.totalPages - 1 : 0))}">
-                                      <a th:href="@{/listing(page=${i}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}"
-                                         th:text="${i + 1}"
-                                         th:classappend="${currentPage == i} ? 'active' : ''">1</a>
-                                </span>
+                                  <a th:href="'/listing?page=' + ${i} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}"
+                                     th:text="${i + 1}"
+                                     th:classappend="${currentPage == i} ? 'active' : ''">1</a>
+                            </span>
 
                               <a th:if="${carPage.hasNext()}"
-                                 th:href="@{/listing(page=${currentPage + 1}, brand=${selectedBrand}, pickup=${selectedPickup}, dropoff=${selectedDropoff})}">&gt;</a>
+                                 th:href="'/listing?page=' + ${currentPage + 1} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}">&gt;</a>
+
                           </div>
                       </div>
                   </div>
@@ -121,7 +123,7 @@
                                   <p th:text="${t.content}">"Static placeholder text"</p>
                               </blockquote>
                               <div class="d-flex v-card align-items-center">
-                                  <img th:src="@{${t.imageUrl}}" alt="Image" class="img-fluid mr-3">
+                                  <img th:src="${t.imageUrl}" alt="Image" class="img-fluid mr-3">
                                   <div class="author-name">
                                       <span class="d-block" th:text="${t.authorName}">Author Name</span>
                                       <span th:text="${t.authorRole}">Author Role</span>

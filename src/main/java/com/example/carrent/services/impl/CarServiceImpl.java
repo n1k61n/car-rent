@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -28,17 +29,17 @@ public class CarServiceImpl implements CarService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Car> findAll(Pageable pageable) {
         return carRepository.findAll(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CarDto getCarById(Long id) {
-        if(carRepository.existsById(id)){
-            Car car = carRepository.findById(id).get();
-            return modelMapper.map(car, CarDto.class);
-        }
-        return new CarDto();
+        return carRepository.findById(id)
+                .map(car -> modelMapper.map(car, CarDto.class))
+                .orElseGet(CarDto::new);
     }
 
 

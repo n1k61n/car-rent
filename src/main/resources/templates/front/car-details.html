@@ -38,7 +38,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
-                    <img th:src="@{${car.imageUrl}}" alt="Car Image" class="car-image-main mb-5">
+                    <img th:src="${car.imageUrl}" alt="Car Image" class="car-image-main mb-5">
 
                     <div class="row mb-5 text-center">
                         <div class="col-4 border-right">
@@ -87,7 +87,7 @@
                     <div class="booking-card bg-white shadow-sm">
                         <h3 class="h5 text-black mb-4">İndi Rezerv Et</h3>
 
-                        <form th:action="@{/booking/save}" method="post">
+                        <form action="/booking/save" method="post">
                             <input type="hidden" name="carId" th:value="${car.id}">
 
                             <div class="form-group">

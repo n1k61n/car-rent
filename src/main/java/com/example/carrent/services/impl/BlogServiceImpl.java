@@ -15,7 +15,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -42,18 +44,19 @@ public class BlogServiceImpl  implements BlogService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<BlogSingleDto> getAll(Pageable pageable) {
-        Page<Blog> blog =  blogRepository.findAll(pageable);
-        if(blog.hasContent()){
-            return blog.map(b -> modelMapper.map(b, BlogSingleDto.class));
-        }
-        return null;
+        Page<Blog> blogs =  blogRepository.findAll(pageable);
+        return blogs.map(b -> modelMapper.map(b, BlogSingleDto.class));
     }
+
+
 
     @Override
     public boolean createBlog(BlogDahboardCreateDto blogDahboardCreateDto) {
         if(blogDahboardCreateDto != null){
             Blog blog = modelMapper.map(blogDahboardCreateDto, Blog.class);
+            blog.setCreatedAt(LocalDate.now());
             blogRepository.save(blog);
             return true;
         }

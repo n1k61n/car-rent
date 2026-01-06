@@ -59,13 +59,13 @@
 
                     <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                         <ul class="site-menu main-menu js-clone-nav ml-auto">
-                            <li class="active"><a th:text="#{nav.home}" th:href="@{/}" class="nav-link">Ana Səhifə</a></li>
-                            <li><a th:text="#{nav.cars}" th:href="@{/listing}" class="nav-link">Maşınlar</a></li>
-                            <li><a th:text="#{nav.reviews}" th:href="@{/testimonials}" class="nav-link">Rəylər</a></li>
-                            <li><a th:text="#{nav.blog}" th:href="@{/blog}" class="nav-link">Bloq</a></li>
-                            <li><a th:text="#{nav.about}" th:href="@{/about}" class="nav-link">Haqqımızda</a></li>
-                            <li><a th:text="#{nav.contact}" th:href="@{/contact}" class="nav-link">Əlaqə</a></li>
-                            <li><a th:text="#{nav.login}" th:href="@{/login}" class="nav-link">Daxil ol</a></li>
+                            <li class="active"><a th:text="#{nav.home}" href="/" class="nav-link">Ana Səhifə</a></li>
+                            <li><a th:text="#{nav.cars}" href="/listing" class="nav-link">Maşınlar</a></li>
+                            <li><a th:text="#{nav.reviews}" href="/testimonials" class="nav-link">Rəylər</a></li>
+                            <li><a th:text="#{nav.blog}" href="/blog" class="nav-link">Bloq</a></li>
+                            <li><a th:text="#{nav.about}" href="/about" class="nav-link">Haqqımızda</a></li>
+                            <li><a th:text="#{nav.contact}" href="/contact" class="nav-link">Əlaqə</a></li>
+                            <li><a th:text="#{nav.login}" href="/login" class="nav-link">Daxil ol</a></li>
 
                             <li class="has-children">
                                 <a href="#" class="nav-link">
@@ -73,11 +73,11 @@
                                 </a>
                                 <ul class="dropdown">
                                     <li>
-                                        <a th:href="@{${currentUri}(lang='az')}">AZ
+                                        <a th:href="${currentUri + '?lang=az'}">AZ
                                             <img src="https://flagcdn.com/w20/az.png" style="margin-right: 5px;"></a>
                                     </li>
                                     <li>
-                                        <a th:href="@{${currentUri}(lang='en')}">EN
+                                        <a th:href="${currentUri + '?lang=en'}">EN
                                         <img src="https://flagcdn.com/w20/gb.png" style="margin-right: 5px;"></a>
                                     </li>
                                 </ul>
@@ -127,9 +127,9 @@
                         <div class="col-lg-3">
                             <h2 class="footer-heading mb-4">Faydalı Linklər</h2>
                             <ul class="list-unstyled">
-                                <li><a th:href="@{/about}">Haqqımızda</a></li>
-                                <li><a th:href="@{/listing}">Maşınlar</a></li>
-                                <li><a th:href="@{/contact}">Əlaqə</a></li>
+                                <li><a href="/about">Haqqımızda</a></li>
+                                <li><a href="/listing">Maşınlar</a></li>
+                                <li><a href="/contact">Əlaqə</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-3">

@@ -14,7 +14,7 @@
                 <div class="section-title">CAR INFORMATION</div>
                 <div class="car-info-card">
                     <div class="car-body">
-                        <img th:src="@{${car.imageUrl}}" class="car-img" alt="Car Image">
+                        <img th:src="${car.imageUrl}" class="car-img" alt="Car Image">
                         <div class="flex-grow-1">
                             <h4 th:text="${car.brand} + ' ' + ${car.model} + (${car.year} != null ? ' (' + ${car.year} + ')' : '')">
                                 Toyota Camry
@@ -43,7 +43,7 @@
 
                 <div class="section-title">CUSTOMER INFORMATION</div>
                 <div class="bg-white p-4 shadow-sm">
-                    <form th:action="@{/booking/complete}" method="post" enctype="multipart/form-data">
+                    <form action="/booking/complete" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="carId" th:value="${bookingDto.carId}">
                         <input type="hidden" name="startDate" th:value="${bookingDto.startDate}">
                         <input type="hidden" name="endDate" th:value="${bookingDto.endDate}">

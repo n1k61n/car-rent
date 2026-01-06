@@ -26,7 +26,7 @@
                           <div class="intro">
                               <h1 th:text="#{nav.reviews}">Haqqımızda</h1>
                               <div class="custom-breadcrumbs">
-                                  <a th:href="@{/}" th:text="#{nav.home}">Ana Səhifə</a>
+                                  <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
                                   <span class="mx-2">/</span>
                                   <strong th:text="#{nav.reviews}">Haqqımızda</strong>
                               </div>
@@ -54,7 +54,7 @@
                                   <p th:text="${t.content}">"Static placeholder text"</p>
                               </blockquote>
                               <div class="d-flex v-card align-items-center">
-                                  <img th:src="@{${t.imageUrl}}" alt="Image" class="img-fluid mr-3">
+                                  <img th:src="${t.imageUrl}" alt="Image" class="img-fluid mr-3">
                                   <div class="author-name">
                                       <span class="d-block" th:text="${t.authorName}">Author Name</span>
                                       <span th:text="${t.authorRole}">Author Role</span>

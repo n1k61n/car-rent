@@ -26,7 +26,7 @@
                     <h1>Avtomobil icarəsi artıq bir addımlığınızda.</h1>
                 </div>
               </div>
-                <form th:action="@{/listing}" method="get" class="trip-form" >
+                <form action="/listing" method="get" class="trip-form" >
                     <div class="row align-items-center">
 
                         <div class="mb-3 mb-md-0 col-md-3">
@@ -145,8 +145,8 @@
               <div class="col-md-6 col-lg-4 mb-4" th:each="car : ${carPage.content}">
                   <div class="listing d-block align-items-stretch">
                       <div class="listing-img h-100 mr-4">
-                          <a th:href="@{/car/{id}(id=${car.id})}">
-                            <img th:src="${car.imageUrl}" th:alt="${car.brand}" class="img-fluid">
+                          <a th:href="${'/car/' + car.id}">
+                              <img th:src="${car.imageUrl}" th:alt="${car.brand}" class="img-fluid">
                           </a>
                       </div>
                       <div class="listing-contents h-100">
@@ -169,8 +169,10 @@
                               </div>
                           </div>
                           <div>
-                              <p th:text="${car.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                              <p><a th:href="@{/car/{id}(id=${car.id})}" class="btn btn-primary btn-sm" th:text="#{btn.rent_now}">İcarəyə götür</a></p>
+                              <p th:text="${car.description}">Təsvir mətni</p>
+                              <p>
+                                  <a th:href="${'/car/' + car.id}" class="btn btn-primary btn-sm" th:text="#{btn.rent_now}">İcarəyə götür</a>
+                              </p>
                           </div>
                       </div>
                   </div>
@@ -282,7 +284,7 @@
                           <p th:text="${t.content}">"Static placeholder text"</p>
                       </blockquote>
                       <div class="d-flex v-card align-items-center">
-                          <img th:src="@{${t.imageUrl}}" alt="Image" class="img-fluid mr-3">
+                          <img th:src="${t.imageUrl}" alt="Image" class="img-fluid mr-3">
                           <div class="author-name">
                               <span class="d-block" th:text="${t.authorName}">Author Name</span>
                               <span th:text="${t.authorRole}">Author Role</span>

@@ -17,5 +17,6 @@ public class BlogDahboardCreateDto {
     private String author;
     private String categoryName;
     private String authorImageUrl;
+    private String imageUrl;
     private String post;
 }

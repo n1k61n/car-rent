@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -30,17 +31,22 @@ public class ListingController {
                               @RequestParam(required = false) String pickup,
                               @RequestParam(required = false) String dropoff) {
 
+
         Pageable pageable = PageRequest.of(page, 6);
         Page<Car> carPage = carService.searchCarsPageable(brand, pickup, dropoff, pageable);
 
         model.addAttribute("carPage", carPage);
         model.addAttribute("currentPage", page);
-        model.addAttribute("selectedBrand", brand);
-        model.addAttribute("selectedPickup", pickup);
-        model.addAttribute("selectedDropoff", dropoff);
+        model.addAttribute("selectedBrand", brand != null ? brand : "");
+
+        // BURANI DƏYİŞDİK: Linklər üçün String dəyərlərini göndəririk
+        model.addAttribute("selectedPickup", (pickup != null && !pickup.equals("null")) ? pickup : "");
+        model.addAttribute("selectedDropoff", (dropoff != null && !dropoff.equals("null")) ? dropoff : "");
+
         int count = 3;
         List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", testimonialDtoListlist);
+
         return "front/listing";
     }
 }

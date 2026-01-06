@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByBlogIdOrderByCreatedAtDesc(Long blogId);
+
+    void deleteByBlogId(Long id);
 }
