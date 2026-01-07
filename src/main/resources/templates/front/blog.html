@@ -30,8 +30,8 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4" th:each="blog : ${blogs.content}">
                     <div class="post-entry-1 h-100">
-                        <a th:if="${blog.car != null}" th:href="'/car/' + ${blog.car.id}">
-                            <img th:src="${blog.car.imageUrl != null ? blog.car.imageUrl : '/front/images/post_1.jpg'}"
+                        <a th:if="${blog.imageUrl != null}" th:href="@{/car/{id}(id=${blog.car.id})}">
+                            <img th:src="${blog.imageUrl != null} ? ${blog.imageUrl} : @{/front/images/car_1.jpg}"
                                  alt="Image" class="img-fluid">
                         </a>
                         <div class="post-entry-1-contents">

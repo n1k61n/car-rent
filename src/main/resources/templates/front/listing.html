@@ -87,7 +87,6 @@
                   <div class="row">
                       <div class="col-5">
                           <div class="custom-pagination">
-
                               <a th:if="${carPage.hasPrevious()}"
                                  th:href="'/listing?page=' + ${currentPage - 1} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}">&lt;</a>
 
@@ -105,15 +104,12 @@
                   </div>
               </div>
           </div>
-
-
-
           <div class="site-section">
               <div class="container">
                   <div class="row">
                       <div class="col-lg-7">
-                          <h2 class="section-heading"><strong>Rəylər</strong></h2>
-                          <p class="mb-5">Müştərilərimizin bizim haqqımızda düşüncələri. Sizin məmnuniyyətiniz bizim üçün ən böyük mükafatdır.</p>
+                          <h2 class="section-heading"><strong th:text="#{reviews.title}">Rəylər</strong></h2>
+                          <p class="mb-5" th:text="#{reviews.description}">Müştərilərimizin bizim haqqımızda düşüncələri. Sizin məmnuniyyətiniz bizim üçün ən böyük mükafatdır.</p>
                       </div>
                   </div>
                   <div class="row">

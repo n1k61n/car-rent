@@ -11,7 +11,7 @@ public class BlogDto {
     private String title;
 
     private String content;
-
+    private String authorImageUrl;
     private String imageUrl;
 
     private String author;

@@ -23,7 +23,7 @@ public class Blog {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
-    private String imageUrl;
+    private String imageUrl; // car image url
     private String author;
     private LocalDate createdAt;
     private String categoryName;
