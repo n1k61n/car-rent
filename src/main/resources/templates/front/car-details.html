@@ -96,15 +96,17 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Qaytarma Tarixi</label>
+                                  <label>Qaytarma Tarixi</label>
                                 <input type="date" id="endDate" name="endDate" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-4">
                                 <label class="font-size-14 font-gray-8">Götürmə Məkanı</label>
-                                <select class="form-control">
-                                    <option>Bakı Beynəlxalq Hava Limanı</option>
-                                    <option>Şəhər Mərkəzi</option>
+                                <select name="pickupLocation" class="form-control" required>
+                                    <option value="" disabled selected>Select Pickup Location</option>
+                                    <option value="Heydar Aliyev Airport">Heydar Aliyev Airport</option>
+                                    <option value="Baku City Center">Baku City Center</option>
+                                    <option value="Baku Railway Station">Baku Railway Station</option>
                                 </select>
                             </div>
 

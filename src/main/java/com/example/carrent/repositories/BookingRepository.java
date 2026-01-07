@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Repository
 public interface BookingRepository  extends JpaRepository<Booking, Long> {
@@ -15,6 +14,6 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
             "AND b.status <> com.example.carrent.enums.BookingStatus.CANCELLED " +
             "AND (:startDate < b.endDate AND :endDate > b.startDate)")
     boolean existsOverlapping(@Param("carId") Long carId,
-                              @Param("startDate") LocalDateTime startDate,
-                              @Param("endDate") LocalDateTime endDate);
+                              @Param("startDate") LocalDate startDate,
+                              @Param("endDate") LocalDate endDate);
 }

@@ -9,9 +9,6 @@ import java.time.LocalDate;
 @Data
 public class BookingDto {
     private Long carId;
-
-
-
     @FutureOrPresent(message = "Götürmə tarixi keçmiş ola bilməz")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDate;
@@ -19,7 +16,5 @@ public class BookingDto {
     @FutureOrPresent(message = "Qaytarma tarixi keçmiş ola bilməz")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
-
-
-
+    private String pickupLocation;
 }

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{front/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{nav.register}">Qeydiyyat - CarRental</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="hero inner-page" style="background-image: url('/front/images/hero_1_a.jpg');">
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-lg-5">
+                    <div class="intro">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="site-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="bg-white p-5 shadow-sm rounded">
+                        <h2 class="text-black mb-4 font-weight-bold">Hesab Yaradın</h2>
+
+                        <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}"></div>
+
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="text-black">Ad</label>
+                                    <input type="text" name="firstName" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="text-black">Soyad</label>
+                                    <input type="text" name="lastName" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-black">Email Ünvanı</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-black">Şifrə</label>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-black">Şifrənin Təkrarı</label>
+                                <input type="password" name="confirmPassword" class="form-control" required>
+                            </div>
+
+                            <div class="form-group d-flex align-items-center mb-4">
+                                <input type="checkbox" id="terms" name="terms" class="mr-2" required>
+                                <label for="terms" class="mb-0 small text-muted">
+                                    Şərtləri və qaydaları qəbul edirəm
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block text-white py-3">Qeydiyyatdan Keç</button>
+                        </form>
+
+                        <div class="mt-4 text-center">
+                            <p class="small">Artıq hesabınız var? <a href="/login">Giriş edin</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

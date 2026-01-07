@@ -21,4 +21,5 @@ public interface CarService {
     CarUpdateDto getUpdateCar(Long id);
     boolean updateCar(Long id, CarUpdateDto carUpdateDto);
     Page<CarDto> searchCars(String keyword, Pageable pageable);
+
 }

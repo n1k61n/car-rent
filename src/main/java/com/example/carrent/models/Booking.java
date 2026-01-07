@@ -19,16 +19,20 @@ import java.time.LocalDate;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
+    @Column(nullable = false)
     private LocalDate startDate;
 
+    @Column(nullable = false)
     private LocalDate endDate;
 
     private String pickupLocation;
@@ -39,10 +43,9 @@ public class Booking {
     private BookingStatus status;
 
     private String notes;
-    @Transient // Hibernate bu sahəni bazada sütun olaraq yaratmayacaq
+
+    @Transient
     private MultipartFile licenseFile;
 
-    // Bazada faylın yolunu saxlamaq üçün String istifadə et
     private String licenseFilePath;
-
 }

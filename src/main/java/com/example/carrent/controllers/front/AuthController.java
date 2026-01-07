@@ -8,17 +8,19 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(){
-        return "dashboard/login";
+        return "front/login";
     }
 
     @GetMapping("/register")
     public String register(){
-        return "dashboard/register";
+        return "front/register";
     }
 
     @GetMapping("/forgot")
     public String forgot(){
-        return "dashboard/forgot";
+        return "front/forgot";
     }
+
+
 
 }

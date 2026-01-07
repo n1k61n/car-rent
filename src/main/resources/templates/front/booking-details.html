@@ -1,87 +1,95 @@
-<!doctype html>
-<html lang="en" layout:decorate="~{front/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
+    <!doctype html>
+    <html lang="en" layout:decorate="~{front/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+          xmlns:th="http://www.thymeleaf.org">
+    <head>
 
-</head>
-<body>
+    </head>
+    <body>
 
-<div layout:fragment="content">
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-lg-12">
+    <div layout:fragment="content">
+        <div class="container my-5">
+            <div class="row">
+                <div class="col-lg-12">
 
-                <div class="section-title">CAR INFORMATION</div>
-                <div class="car-info-card">
-                    <div class="car-body">
-                        <img th:src="${car.imageUrl}" class="car-img" alt="Car Image">
-                        <div class="flex-grow-1">
-                            <h4 th:text="${car.brand} + ' ' + ${car.model} + (${car.year} != null ? ' (' + ${car.year} + ')' : '')">
-                                Toyota Camry
-                            </h4>
-                            <p class="text-muted">Or similar Class</p>
+                    <div class="section-title">CAR INFORMATION</div>
+                    <div class="car-info-card">
+                        <div class="car-body">
+                            <img th:src="${car.imageUrl}" class="car-img" alt="Car Image">
+                            <div class="flex-grow-1">
+                                <h4 th:text="${car.brand} + ' ' + ${car.model} + (${car.year} != null ? ' (' + ${car.year} + ')' : '')">
+                                    Toyota Camry
+                                </h4>
+                                <p class="text-muted">Or similar Class</p>
 
-                            <div class="spec-grid">
-                                <span><i class="icon-user"></i> <span th:text="${car.passengerCount}">5</span> Passengers</span>
-                                <span><i class="icon-check"></i> Mileage: <span th:text="${car.mileage}">Unlimited</span></span>
-                                <span><i class="icon-briefcase"></i> <span th:text="${car.suitcases}">2 Large, 3 Small Suitcases</span></span>
-                                <span><i class="icon-check"></i> Fuel policy: <span th:text="${car.fuelPolicy}">full to full</span></span>
-                                <span><i class="icon-cog"></i> <span th:text="${car.transmission}">Automatic</span></span>
-                                <span><i class="icon-check"></i> 24h Road assistance</span>
-                                <span><i class="icon-shield"></i> Insurance included</span>
-                                <span><i class="icon-check"></i> Free cancellation</span>
-                            </div>
+                                <div class="spec-grid">
+                                    <span><i class="icon-user"></i> <span th:text="${car.passengerCount}">5</span> Passengers</span>
+                                    <span><i class="icon-check"></i> Mileage: <span th:text="${car.mileage}">Unlimited</span></span>
+                                    <span><i class="icon-briefcase"></i> <span th:text="${car.suitcases}">2 Large, 3 Small Suitcases</span></span>
+                                    <span><i class="icon-check"></i> Fuel policy: <span th:text="${car.fuelPolicy}">full to full</span></span>
+                                    <span><i class="icon-cog"></i> <span th:text="${car.transmission}">Automatic</span></span>
+                                    <span><i class="icon-check"></i> 24h Road assistance</span>
+                                    <span><i class="icon-shield"></i> Insurance included</span>
+                                    <span><i class="icon-check"></i> Free cancellation</span>
+                                </div>
 
-                            <div class="price-box">
-                                <span class="old-price" th:text="${totalPrice + 50} + ' AZN'">450 AZN</span>
-                                <span class="new-price" th:text="${totalPrice} + ' AZN'">400 AZN</span>
-                                <div class="text-muted small">Price for days: <span th:text="${days}">8</span></div>
+                                <div class="price-box">
+                                    <span class="old-price" th:text="${totalPrice + 50} + ' AZN'">450 AZN</span>
+                                    <span class="new-price" th:text="${totalPrice} + ' AZN'">400 AZN</span>
+                                    <div class="text">Price for days: <span th:text="${days}">8</span></div>
+                                    <div class="text">Pick up location: <span th:text="${bookingDto.pickupLocation}">8</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-title">CUSTOMER INFORMATION</div>
+                    <div class="bg-white p-4 shadow-sm">
+                        <form action="/booking/complete" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="carId" th:value="${bookingDto.carId}">
+                            <input type="hidden" name="startDate" th:value="${bookingDto.startDate}">
+                            <input type="hidden" name="endDate" th:value="${bookingDto.endDate}">
+                            <input type="hidden" name="pickupLocation" th:value="${bookingDto.pickupLocation}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" name="firstName" class="form-control form-input-custom" placeholder="First Name" required th:value="${user != null ? user.firstName : ''}">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" name="email" class="form-control form-input-custom" placeholder="Email Address" required th:value="${user != null ? user.email : ''}">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="lastName" class="form-control form-input-custom" placeholder="Last Name" required th:value="${user != null ? user.lastName : ''}">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="phone" class="form-control form-input-custom" placeholder="Phone Number" required th:value="${user != null ? user.phoneNumber : ''}">
+                                </div>
+                            </div>
+
+                            <div class="section-title mt-4">DRIVING LICENSE DOCUMENT</div>
+                            <div class="p-3 mb-4" style="background: #e9ecef; border-radius: 5px;">
+                                <p class="text-muted mb-2">For confirmation your booking please attach driving license copy.</p>
+                                <input type="file" name="licenseFile" class="form-control-file" accept="image/*,.pdf">
+                            </div>
+
+                            <div class="section-title mt-4">ADDITIONAL INFORMATION</div>
+                            <textarea name="notes" class="form-control mb-4" rows="4" placeholder="Anything regarding your reservation..."></textarea>
+
+                            <div th:if="${error}" class="alert alert-danger mt-3">
+                                <p th:text="${error}" class="mb-0"></p>
+                            </div>
+
+                            <div th:if="${success}" class="alert alert-success mt-3">
+                                <p th:text="${success}" class="mb-0"></p>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-book-now">BOOK NOW</button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
-
-                <div class="section-title">CUSTOMER INFORMATION</div>
-                <div class="bg-white p-4 shadow-sm">
-                    <form action="/booking/complete" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="carId" th:value="${bookingDto.carId}">
-                        <input type="hidden" name="startDate" th:value="${bookingDto.startDate}">
-                        <input type="hidden" name="endDate" th:value="${bookingDto.endDate}">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" name="firstName" class="form-control form-input-custom" placeholder="First Name" required th:value="${user != null ? user.firstName : ''}">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="email" name="email" class="form-control form-input-custom" placeholder="Email Address" required th:value="${user != null ? user.email : ''}">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" name="lastName" class="form-control form-input-custom" placeholder="Last Name" required th:value="${user != null ? user.lastName : ''}">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" name="phone" class="form-control form-input-custom" placeholder="Phone Number" required th:value="${user != null ? user.phoneNumber : ''}">
-                            </div>
-                        </div>
-
-                        <div class="section-title mt-4">DRIVING LICENSE DOCUMENT</div>
-                        <div class="p-3 mb-4" style="background: #e9ecef; border-radius: 5px;">
-                            <p class="text-muted mb-2">For confirmation your booking please attach driving license copy.</p>
-                            <input type="file" name="licenseFile" class="form-control-file" accept="image/*,.pdf">
-                        </div>
-
-                        <div class="section-title mt-4">ADDITIONAL INFORMATION</div>
-                        <textarea name="notes" class="form-control mb-4" rows="4" placeholder="Anything regarding your reservation..."></textarea>
-
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-book-now">BOOK NOW</button>
-                        </div>
-                    </form>
-                </div>
-
             </div>
         </div>
     </div>
-</div>
 
-</body>
-</html>
+    </body>
+    </html>
