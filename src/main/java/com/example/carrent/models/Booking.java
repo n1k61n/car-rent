@@ -40,6 +40,7 @@ public class Booking {
     private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private BookingStatus status;
 
     private String notes;

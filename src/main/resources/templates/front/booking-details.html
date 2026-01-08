@@ -51,16 +51,24 @@
                             <input type="hidden" name="pickupLocation" th:value="${bookingDto.pickupLocation}">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="text" name="firstName" class="form-control form-input-custom" placeholder="First Name" required th:value="${user != null ? user.firstName : ''}">
+                                    <input type="text" name="firstName" class="form-control form-input-custom"
+                                           placeholder="First Name" required
+                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.firstName : ''}">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="email" name="email" class="form-control form-input-custom" placeholder="Email Address" required th:value="${user != null ? user.email : ''}">
+                                    <input type="email" name="email" class="form-control form-input-custom"
+                                           placeholder="Email Address" required
+                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.email : ''}">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" name="lastName" class="form-control form-input-custom" placeholder="Last Name" required th:value="${user != null ? user.lastName : ''}">
+                                    <input type="text" name="lastName" class="form-control form-input-custom"
+                                           placeholder="Last Name" required
+                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.lastName : ''}">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" name="phone" class="form-control form-input-custom" placeholder="Phone Number" required th:value="${user != null ? user.phoneNumber : ''}">
+                                    <input type="text" name="phone" class="form-control form-input-custom"
+                                           placeholder="Phone Number" required
+                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.phoneNumber : ''}">
                                 </div>
                             </div>
 

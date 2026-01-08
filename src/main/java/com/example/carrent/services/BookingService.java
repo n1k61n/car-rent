@@ -1,14 +1,17 @@
 package com.example.carrent.services;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
-import com.example.carrent.dtos.booking.BookingCreateDto;
-import com.example.carrent.dtos.booking.BookingDto;
-import jakarta.validation.Valid;
+import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.enums.BookingStatus;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public interface BookingService {
 
     boolean completeBooking(BookingCompleteDto bookingDto);
+
+
+    List<BookingOrdersDto> getAllOrders();
+
+    boolean updateStatus(Long id, BookingStatus status);
 }

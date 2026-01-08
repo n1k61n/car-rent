@@ -4,11 +4,15 @@ import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingCreateDto;
 import com.example.carrent.dtos.booking.BookingDto;
 import com.example.carrent.dtos.car.CarDto;
+import com.example.carrent.dtos.user.UserDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.CarService;
+import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +34,17 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final CarService carService;
+    private final UserService userService;
+
+
+    @GetMapping("/booking/save")
+    public String showBookingPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            UserDto currentUser = userService.getUserByEmail(userDetails);
+            model.addAttribute("user", currentUser);
+        }
+        return "front/booking-details";
+    }
 
     @PostMapping("/booking/save")
     public String showDetailsPage(@Valid @ModelAttribute BookingDto bookingDto,
