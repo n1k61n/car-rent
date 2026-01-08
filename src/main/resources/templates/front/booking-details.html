@@ -44,11 +44,12 @@
 
                     <div class="section-title">CUSTOMER INFORMATION</div>
                     <div class="bg-white p-4 shadow-sm">
-                        <form action="/booking/complete" method="post" enctype="multipart/form-data">
+                        <form th:action="@{/booking/complete}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="carId" th:value="${bookingDto.carId}">
                             <input type="hidden" name="startDate" th:value="${bookingDto.startDate}">
                             <input type="hidden" name="endDate" th:value="${bookingDto.endDate}">
                             <input type="hidden" name="pickupLocation" th:value="${bookingDto.pickupLocation}">
+                            <input type="hidden" name="userId" th:value="${#authentication.principal.id}">
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="text" name="firstName" class="form-control form-input-custom"

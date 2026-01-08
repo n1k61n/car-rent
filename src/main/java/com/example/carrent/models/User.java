@@ -30,7 +30,6 @@ public class User implements UserDetails {
     private String password;
     private String phoneNumber;
 
-    // Standart olaraq hamısını true edirik ki, girişə icazə versin
     private boolean enabled = true;
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
@@ -49,6 +48,6 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email; // Email bizim login istifadəçi adımızdır
+        return this.email;
     }
 }

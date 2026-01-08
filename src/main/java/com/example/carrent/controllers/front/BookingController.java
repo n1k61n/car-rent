@@ -38,7 +38,11 @@ public class BookingController {
 
 
     @GetMapping("/booking/save")
-    public String showBookingPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showBookingPage(@RequestParam(required = false) Long carId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (carId != null) {
+            CarDto car = carService.getCarById(carId);
+            model.addAttribute("car", car);
+        }
         if (userDetails != null) {
             UserDto currentUser = userService.getUserByEmail(userDetails);
             model.addAttribute("user", currentUser);
@@ -86,14 +90,18 @@ public class BookingController {
     @PostMapping("/booking/complete")
     public String completeBooking(@ModelAttribute BookingCompleteDto bookingDto,
                                   RedirectAttributes redirectAttributes) {
-        System.out.println(bookingDto);
         try {
             boolean result = bookingService.completeBooking(bookingDto);
-            redirectAttributes.addFlashAttribute("success", "Sifarişiniz uğurla tamamlandı!");
-            return "redirect:/booking/success";
+            if (result) {
+                return "redirect:/booking/success";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Sifariş tamamlanarkən xəta baş verdi.");
+                return "redirect:/booking/save?carId=" + bookingDto.getCarId();
+            }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Xəta baş verdi: " + e.getMessage());
-            return "redirect:/booking/details";
+            redirectAttributes.addFlashAttribute("error", "Xəta: " + e.getMessage());
+            // Əsas məqam: carId-ni ötürürük ki, GET metodu car obyektini yenidən tapsın
+            return "redirect:/booking/save?carId=" + bookingDto.getCarId();
         }
     }
 
