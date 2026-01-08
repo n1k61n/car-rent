@@ -1,9 +1,13 @@
 package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
+import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.dtos.car.CarDto;
+import com.example.carrent.dtos.user.UserDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.models.Booking;
 import com.example.carrent.models.Car;
+import com.example.carrent.models.User;
 import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.services.BookingService;
@@ -18,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -64,6 +69,48 @@ public class BookingServiceImpl implements BookingService {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookingOrdersDto> getAllOrders() {
+        List<Booking> bookings = bookingRepository.findAllWithDetails(); // Join Fetch metodu
+
+        return bookings.stream().map(booking -> {
+            BookingOrdersDto dto = new BookingOrdersDto();
+            dto.setId(booking.getId());
+
+            // Lazy obyektlərə müraciət artıq xəta verməyəcək
+            if (booking.getCar() != null) {
+                dto.setCarBrand(booking.getCar().getBrand());
+                dto.setCarModel(booking.getCar().getModel());
+            }
+
+            if (booking.getUser() != null) {
+                dto.setUserFirstName(booking.getUser().getFirstName());
+                dto.setUserLastName(booking.getUser().getLastName());
+            }
+
+            dto.setStartDate(booking.getStartDate());
+            dto.setEndDate(booking.getEndDate());
+            dto.setStatus(booking.getStatus());
+            dto.setLicenseFilePath(booking.getLicenseFilePath());
+
+            return dto;
+        }).toList();
+    }
+
+
+    @Override
+    @Transactional
+    public boolean updateStatus(Long id, BookingStatus status) {
+        Booking booking = bookingRepository.findById(id).orElse(null);
+        if(booking == null){
+            return false;
+        }
+        booking.setStatus(status);
+        bookingRepository.save(booking);
+        return true;
     }
 
 }

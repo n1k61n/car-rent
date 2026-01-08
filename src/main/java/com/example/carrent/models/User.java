@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -15,7 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +28,27 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private String phone;
+    private String phoneNumber;
+
+    // Standart olaraq hamısını true edirik ki, girişə icazə versin
+    private boolean enabled = true;
+    private boolean accountNonExpired = true;
+    private boolean credentialsNonExpired = true;
+    private boolean accountNonLocked = true;
+
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany
-    List<Booking> bookings;
+
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email; // Email bizim login istifadəçi adımızdır
+    }
 }

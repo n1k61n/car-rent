@@ -21,19 +21,14 @@ public class MessageServiceImpl implements MessageService {
     private final ModelMapper modelMapper;
 
     public boolean createUserMessage(MessageDto messageDto) {
-        if(messageDto != null){
-            Message message = modelMapper.map(messageDto, Message.class);
+        if(messageDto == null) return false;
 
-            // Tarixi burada set edirik
-            message.setCreatedAt(LocalDateTime.now());
+        Message message = modelMapper.map(messageDto, Message.class);
+        message.setCreatedAt(LocalDateTime.now());
 
-            User existUser = userRepository.findByEmail(messageDto.getEmail());
-            if(existUser != null){
-                message.setUser(existUser);
-            }
-            messageRepository.save(message);
-            return true;
-        }
-        return false;
+        userRepository.findByEmail(messageDto.getEmail()).ifPresent(user -> message.setUser(user));
+
+        messageRepository.save(message);
+        return true;
     }
 }

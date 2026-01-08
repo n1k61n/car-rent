@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">CarRental &mdash; Free Website Template by Colorlib</title>
@@ -65,7 +68,23 @@
                             <li><a th:text="#{nav.blog}" href="/blog" class="nav-link">Bloq</a></li>
                             <li><a th:text="#{nav.about}" href="/about" class="nav-link">Haqqımızda</a></li>
                             <li><a th:text="#{nav.contact}" href="/contact" class="nav-link">Əlaqə</a></li>
-                            <li><a th:text="#{nav.login}" href="/login" class="nav-link">Daxil ol</a></li>
+                            <li th:if="${!isLoggedIn}">
+                                <a href="/login" class="nav-link">Giriş</a>
+                            </li>
+
+                            <li th:if="${isLoggedIn}" class="has-children">
+                                <a href="#" class="nav-link">
+                                    <span th:text="${username}">İstifadəçi</span>
+                                </a>
+                                <ul class="dropdown">
+                                    <li><a href="/profile">Profilim</a></li>
+                                    <li><a href="/bookings">Sifarişlərim</a></li>
+                                    <li>
+                                        <form th:action="@{/logout}" method="post" id="logoutForm" style="display:none;"></form>
+                                        <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" class="nav-link">Çıxış</a>
+                                    </li>
+                                </ul>
+                            </li>
 
                             <li class="has-children">
                                 <a href="#" class="nav-link">
