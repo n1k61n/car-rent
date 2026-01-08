@@ -10,9 +10,6 @@
 
 <div layout:fragment="content">
     <div class="container-fluid">
-        <h1 class="h3 mb-2 text-gray-800">Sifarişlər</h1>
-        <p class="mb-4">Sistemdəki bütün avtomobil sifarişlərinin siyahısı.</p>
-
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Bütün Sifarişlər</h6>
@@ -63,7 +60,7 @@
                                         <button type="submit" class="btn btn-sm btn-danger">Rədd et</button>
                                     </form>
 
-                                    <a th:if="${booking.licenseFilePath != null}" th:href="${booking.licenseFilePath}" target="_blank" class="btn btn-sm btn-primary ml-1">
+                                    <a th:if="${booking.licenseFilePath != null}" th:href="@{'/uploads/licenses/' + ${booking.licenseFilePath}}" target="_blank" class="btn btn-sm btn-primary ml-1">
                                         <i class="fas fa-id-card"></i> Vəsiqə
                                     </a>
                                 </div>

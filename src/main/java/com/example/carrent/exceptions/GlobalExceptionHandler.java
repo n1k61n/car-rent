@@ -11,6 +11,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MultipartException.class)
     public String handleMultipartException(MultipartException e, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", "Fayl yüklənməsi zamanı xəta: Fayl çox böyükdür və ya format düzgün deyil.");
-        return "redirect:/";
+        return "redirect:/booking";
     }
 }

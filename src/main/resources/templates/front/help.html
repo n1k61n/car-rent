@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layout}"> <head>
+    <title>Yardım Mərkəzi - CarRental</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="hero inner-page" style="background-image: url('/front/images/hero_1.jpg'); padding: 100px 0; background-size: cover;">
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-lg-5">
+                    <div class="intro">
+                        <h1 class="text"><strong>Yardım Mərkəzi</strong></h1>
+                        <div class="custom-breadcrumbs">
+                            <a href="/">Ana Səhifə</a> <span class="mx-2">/</span> <strong>Yardım</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="mb-5">
+                        <h2 class="text-black">Tez-tez Verilən Suallar</h2>
+                        <p>Sizə necə kömək edə bilərik? Aşağıda ən çox verilən sualların cavablarını tapa bilərsiniz.</p>
+                    </div>
+
+                    <div class="accordion" id="accordionExample">
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <div class="card-header bg-white" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne">
+                                        Avtomobil icarəyə götürmək üçün nə lazımdır?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    İcarə üçün etibarlı sürücülük vəsiqəsi, şəxsiyyət vəsiqəsi və minimum 21 yaş həddi tələb olunur.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <div class="card-header bg-white" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseTwo">
+                                        Ödəniş üsulları hansılardır?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Biz həm onlayn kart ödənişlərini (Visa/Mastercard), həm də ofisimizdə nağd ödənişləri qəbul edirik.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="bg-white p-4 shadow-sm">
+                        <h3 class="h5 text-black mb-3">Bizimlə Əlaqə</h3>
+                        <p>Sualınıza cavab tapa bilmədiniz?</p>
+                        <ul class="list-unstyled footer-link">
+                            <li class="d-block mb-3">
+                                <span class="d-block text-black">Telefon:</span>
+                                <span>+994 50 123 45 67</span>
+                            </li>
+                            <li class="d-block mb-3">
+                                <span class="d-block text-black">E-poçt:</span>
+                                <span>support@carrental.az</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -43,4 +43,22 @@ public class HomeController {
     public String contact(){
         return "front/contact";
     }
+
+    @GetMapping("/help")
+    public String helpPage(Model model) {
+        model.addAttribute("currentUri", "/help");
+        return "front/help";
+    }
+
+    @GetMapping("/term")
+    public String termsPage(Model model) {
+        model.addAttribute("currentUri", "/term");
+        return "front/term";
+    }
+
+    @GetMapping("/privacy")
+    public String privacyPage(Model model) {
+        model.addAttribute("currentUri", "/privacy");
+        return "front/privacy";
+    }
 }
