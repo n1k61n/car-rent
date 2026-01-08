@@ -1,11 +1,9 @@
 package com.example.carrent.controllers.front;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
-import com.example.carrent.dtos.booking.BookingCreateDto;
 import com.example.carrent.dtos.booking.BookingDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.user.UserDto;
-import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.CarService;
 import com.example.carrent.services.UserService;
@@ -16,15 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 
@@ -47,7 +43,7 @@ public class BookingController {
             UserDto currentUser = userService.getUserByEmail(userDetails);
             model.addAttribute("user", currentUser);
         }
-        return "front/booking-details";
+        return "front/booking";
     }
 
     @PostMapping("/booking/save")
@@ -57,15 +53,16 @@ public class BookingController {
                                   RedirectAttributes redirectAttributes) {
 
 
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Tarixlər düzgün formatda deyil.");
-            return "redirect:/car-details/" + bookingDto.getCarId();
+            return "redirect:/car/" + bookingDto.getCarId();
         }
 
 
         if (bookingDto.getEndDate().isBefore(bookingDto.getStartDate())) {
             redirectAttributes.addFlashAttribute("error", "Qaytarma tarixi götürmə tarixindən əvvəl ola bilməz.");
-            return "redirect:/car-details/" + bookingDto.getCarId();
+            return "redirect:/car/" + bookingDto.getCarId();
         }
 
         CarDto car = carService.getCarById(bookingDto.getCarId());
@@ -84,14 +81,23 @@ public class BookingController {
         Double dailyPrice = car.getDailyPrice() != null ? car.getDailyPrice() : 0.0;
         model.addAttribute("totalPrice", days * dailyPrice);
 
-        return "front/booking-details";
+        return "front/booking";
     }
 
     @PostMapping("/booking/complete")
     public String completeBooking(@ModelAttribute BookingCompleteDto bookingDto,
-                                  RedirectAttributes redirectAttributes) {
+                                  @RequestParam("licenseFile") MultipartFile licenseFile,
+                                  @AuthenticationPrincipal UserDetails userDetails,
+                                  RedirectAttributes redirectAttributes)
+
+    {
+        System.out.println("DEBUG: Metoda girdi!");
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
         try {
-            boolean result = bookingService.completeBooking(bookingDto);
+            boolean result = bookingService.completeBooking(bookingDto, licenseFile);
             if (result) {
                 return "redirect:/booking/success";
             } else {

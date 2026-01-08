@@ -43,7 +43,6 @@ public class SecurityConfig {
                 }
             }
 
-            // 3. Heç biri yoxdursa ana səhifə
             response.sendRedirect("/");
         };
     }
@@ -55,7 +54,7 @@ public class SecurityConfig {
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
-                    auth.requestMatchers("/*",  "/front/**", "/blog/**", "/listing/**", "/car/**", "/car-details/**").permitAll();
+                    auth.requestMatchers("/*",  "/front/**", "/blog/**", "/listing/**", "/car/**","/booking/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(form -> {

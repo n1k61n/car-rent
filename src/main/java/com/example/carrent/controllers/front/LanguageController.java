@@ -21,7 +21,6 @@ public class LanguageController {
         if (localeResolver != null) {
             localeResolver.setLocale(request, response, new Locale(lang));
         }
-        // İstifadəçini gəldiyi səhifəyə geri göndərir
         String referer = request.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/");
     }

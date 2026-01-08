@@ -62,7 +62,7 @@ public class ListingController {
         }
 
         model.addAttribute("car", car);
-        return "front/car-details";
+        return "front/car";
     }
 
 

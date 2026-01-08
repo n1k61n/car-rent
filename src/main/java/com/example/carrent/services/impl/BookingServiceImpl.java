@@ -17,11 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
@@ -35,42 +37,7 @@ public class BookingServiceImpl implements BookingService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
-    @Transactional
-    @Override
-    public boolean completeBooking(BookingCompleteDto dto) {
-        // Debug üçün: Konsola baxın, ID-nin gəldiyinə əmin olun
-        System.out.println("Gələn User ID: " + dto.getUserId());
 
-        if (dto.getUserId() == null) {
-            throw new IllegalArgumentException("İstifadəçi ID-si boş ola bilməz!");
-        }
-
-        Car car = carRepository.findById(dto.getCarId())
-                .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
-
-        try {
-            Booking booking = new Booking();
-            booking.setCar(car);
-            booking.setStartDate(dto.getStartDate());
-            booking.setEndDate(dto.getEndDate());
-            booking.setPickupLocation(dto.getPickupLocation());
-            booking.setNotes(dto.getNotes());
-            booking.setStatus(BookingStatus.PENDING);
-
-            // İstifadəçini set edirik
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı"));
-            booking.setUser(user);
-
-            // ... qiymət hesablama və fayl saxlama hissəsi (dəyişmir)
-
-            bookingRepository.save(booking);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -112,6 +79,81 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(status);
         bookingRepository.save(booking);
         return true;
+    }
+
+    @Override
+    public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
+        try {
+            // 1. Avtomobili yoxla
+            Car car = carRepository.findById(dto.getCarId())
+                    .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
+
+            // 2. İstifadəçini tap (Təhlükəsiz yol: ID-yə güvənmək əvəzinə mövcud sessiyadan alırıq)
+            // Əgər DTO-dan gələn ID mütləqdirsə:
+            User user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı ID: " + dto.getUserId()));
+
+            // 3. Booking obyektini qur
+            Booking booking = new Booking();
+            booking.setCar(car);
+            booking.setUser(user);
+            booking.setStartDate(dto.getStartDate());
+            booking.setEndDate(dto.getEndDate());
+            booking.setPickupLocation(dto.getPickupLocation());
+            booking.setNotes(dto.getNotes());
+            booking.setStatus(BookingStatus.PENDING);
+
+            // 4. Qiymət hesablama
+            long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+            if (days <= 0) days = 1;
+            booking.setTotalPrice(days * car.getDailyPrice());
+
+            // 5. Faylı yaddaşa yazmaq (Əgər DTO-da MultipartFile varsa)
+            if (dto.getLicenseFile() != null && !dto.getLicenseFile().isEmpty()) {
+                String fileName = saveLicenseFile(licenseFile);
+                booking.setLicenseFilePath(fileName);
+            }
+
+            bookingRepository.save(booking);
+            return true;
+
+        } catch (Exception e) {
+            // Loglama vacibdir, System.out yerinə logger istifadə etmək daha yaxşıdır
+            System.err.println("Booking Error: " + e.getMessage());
+            // @Transactional olduğu üçün burada runtime exception atmaq lazımdır ki, rollback işləsin
+            throw new RuntimeException("Sifariş tamamlanarkən texniki xəta: " + e.getMessage());
+        }
+    }
+
+
+    private String saveLicenseFile(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        // 1. Faylların saxlanacağı qovluq (məsələn: uploads/licenses)
+        String uploadDir = "uploads/licenses/";
+        Path uploadPath = Paths.get(uploadDir);
+
+        // 2. Qovluq yoxdursa, yaradırıq
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // 3. Fayl adını unikal edirik (Məs: 550e8400-e29b-car.jpg)
+        String originalFileName = file.getOriginalFilename();
+        String extension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        }
+        String uniqueFileName = UUID.randomUUID().toString() + extension;
+
+        // 4. Faylı diskə kopyalayırıq
+        Path filePath = uploadPath.resolve(uniqueFileName);
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // 5. Verilənlər bazasında saxlamaq üçün fayl adını (və ya yolunu) qaytarırıq
+        return uniqueFileName;
     }
 
 }
