@@ -1,9 +1,6 @@
 package com.example.carrent.services;
 
-import com.example.carrent.dtos.user.UserDto;
-import com.example.carrent.dtos.user.UserProfileDto;
-import com.example.carrent.dtos.user.UserRegistrationDto;
-import com.example.carrent.dtos.user.UsersDashboardDto;
+import com.example.carrent.dtos.user.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,4 +19,6 @@ public interface UserService {
     Page<UsersDashboardDto> findPaginated(int page, int size, String keyword);
 
     long countAll();
+
+    boolean updateProfile(String email, UserProfileUpdateDto userProfileUpdateDto);
 }

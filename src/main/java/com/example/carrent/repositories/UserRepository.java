@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Əgər keyword yoxdursa standart səhifələmə
     Page<User> findAll(Pageable pageable);
+
+    boolean existsByEmail(String email);
 }

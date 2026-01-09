@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class BookingOrdersDto {
     private Long id;
 
-    // Entity yox, String və ya müvafiq DTO istifadə edin
+    private Long carId;
     private String userFirstName;
     private String userLastName;
 

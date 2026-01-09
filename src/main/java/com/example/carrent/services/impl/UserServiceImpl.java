@@ -1,9 +1,6 @@
 package com.example.carrent.services.impl;
 
-import com.example.carrent.dtos.user.UserDto;
-import com.example.carrent.dtos.user.UserProfileDto;
-import com.example.carrent.dtos.user.UserRegistrationDto;
-import com.example.carrent.dtos.user.UsersDashboardDto;
+import com.example.carrent.dtos.user.*;
 import com.example.carrent.enums.Role;
 import com.example.carrent.models.User;
 import com.example.carrent.repositories.UserRepository;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +76,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public long countAll() {
         return userRepository.count();
+    }
+
+    @Override
+    @Transactional
+    public boolean updateProfile(String currentEmail, UserProfileUpdateDto dto) {
+        User user = userRepository.findByEmail(currentEmail)
+                .orElseThrow(() -> new RuntimeException("İstifadəçi tapılmadı!"));
+
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setPhoneNumber(dto.getPhoneNumber());
+
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(dto.getPassword());
+            user.setPassword(encodedPassword);
+        }
+
+        userRepository.save(user);
+        return true;
     }
 
 

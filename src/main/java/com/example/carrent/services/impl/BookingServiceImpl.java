@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingOrdersDto> getAllOrders() {
-        List<Booking> bookings = bookingRepository.findAllWithDetails(); // Join Fetch metodu
+        List<Booking> bookings = bookingRepository.findAllWithDetails();
 
         return bookings.stream().map(booking -> {
             BookingOrdersDto dto = new BookingOrdersDto();
@@ -50,6 +50,7 @@ public class BookingServiceImpl implements BookingService {
 
             // Lazy obyektlərə müraciət artıq xəta verməyəcək
             if (booking.getCar() != null) {
+                dto.setCarId(booking.getCar().getId());
                 dto.setCarBrand(booking.getCar().getBrand());
                 dto.setCarModel(booking.getCar().getModel());
             }
@@ -80,50 +81,62 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(booking);
         return true;
     }
-
-    @Override
-    public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
-        try {
-            // 1. Avtomobili yoxla
-            Car car = carRepository.findById(dto.getCarId())
-                    .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
-
-            // 2. İstifadəçini tap (Təhlükəsiz yol: ID-yə güvənmək əvəzinə mövcud sessiyadan alırıq)
-            // Əgər DTO-dan gələn ID mütləqdirsə:
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı ID: " + dto.getUserId()));
-
-            // 3. Booking obyektini qur
-            Booking booking = new Booking();
-            booking.setCar(car);
-            booking.setUser(user);
-            booking.setStartDate(dto.getStartDate());
-            booking.setEndDate(dto.getEndDate());
-            booking.setPickupLocation(dto.getPickupLocation());
-            booking.setNotes(dto.getNotes());
-            booking.setStatus(BookingStatus.PENDING);
-
-            // 4. Qiymət hesablama
-            long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
-            if (days <= 0) days = 1;
-            booking.setTotalPrice(days * car.getDailyPrice());
-
-            // 5. Faylı yaddaşa yazmaq (Əgər DTO-da MultipartFile varsa)
-            if (dto.getLicenseFile() != null && !dto.getLicenseFile().isEmpty()) {
-                String fileName = saveLicenseFile(licenseFile);
-                booking.setLicenseFilePath(fileName);
-            }
-
-            bookingRepository.save(booking);
-            return true;
-
-        } catch (Exception e) {
-            // Loglama vacibdir, System.out yerinə logger istifadə etmək daha yaxşıdır
-            System.err.println("Booking Error: " + e.getMessage());
-            // @Transactional olduğu üçün burada runtime exception atmaq lazımdır ki, rollback işləsin
-            throw new RuntimeException("Sifariş tamamlanarkən texniki xəta: " + e.getMessage());
-        }
-    }
+//
+//    @Override
+//    public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
+//        try {
+//            // 1. Avtomobili yoxla
+//            Car car = carRepository.findById(dto.getCarId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
+//
+//            // 2. İstifadəçini tap (Təhlükəsiz yol: ID-yə güvənmək əvəzinə mövcud sessiyadan alırıq)
+//            // Əgər DTO-dan gələn ID mütləqdirsə:
+//            User user = userRepository.findById(dto.getUserId())
+//                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı ID: " + dto.getUserId()));
+//
+//            // 3. Booking obyektini qur
+//            Booking booking = new Booking();
+//            booking.setCar(car);
+//            booking.setUser(user);
+//            booking.setStartDate(dto.getStartDate());
+//            booking.setEndDate(dto.getEndDate());
+//            booking.setPickupLocation(dto.getPickupLocation());
+//            booking.setNotes(dto.getNotes());
+//            booking.setStatus(BookingStatus.PENDING);
+//
+//            // 1. Ölçü yoxlanışı (10MB = 10 * 1024 * 1024 byte)
+//            long maxSize = 10 * 1024 * 1024;
+//            if (licenseFile.getSize() > maxSize) {
+//                throw new RuntimeException("Fayl çox böyükdür! Maksimum 10MB olar.");
+//            }
+//
+//            // 2. Format yoxlanışı (Content Type vasitəsilə)
+//            String contentType = licenseFile.getContentType();
+//            if (contentType == null || !contentType.startsWith("image/")) {
+//                throw new RuntimeException("Yalnız şəkil formatlarına icazə verilir!");
+//            }
+//
+//            // 4. Qiymət hesablama
+//            long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+//            if (days <= 0) days = 1;
+//            booking.setTotalPrice(days * car.getDailyPrice());
+//
+//            // 5. Faylı yaddaşa yazmaq (Əgər DTO-da MultipartFile varsa)
+//            if (dto.getLicenseFile() != null && !dto.getLicenseFile().isEmpty()) {
+//                String fileName = saveLicenseFile(licenseFile);
+//                booking.setLicenseFilePath(fileName);
+//            }
+//
+//            bookingRepository.save(booking);
+//            return true;
+//
+//        } catch (Exception e) {
+//            // Loglama vacibdir, System.out yerinə logger istifadə etmək daha yaxşıdır
+//            System.err.println("Booking Error: " + e.getMessage());
+//            // @Transactional olduğu üçün burada runtime exception atmaq lazımdır ki, rollback işləsin
+//            throw new RuntimeException("Sifariş tamamlanarkən texniki xəta: " + e.getMessage());
+//        }
+//    }
 
     @Override
     public long countActive() {
@@ -159,6 +172,69 @@ public class BookingServiceImpl implements BookingService {
 
         // 5. Verilənlər bazasında saxlamaq üçün fayl adını (və ya yolunu) qaytarırıq
         return uniqueFileName;
+    }
+
+
+    @Override
+    @Transactional // Xəta baş verərsə bazadakı dəyişiklikləri geri qaytarmaq üçün mütləqdir
+    public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
+        // 1. Faylın boş olub-olmadığını dərhal yoxlayaq
+        if (licenseFile == null || licenseFile.isEmpty()) {
+            throw new RuntimeException("Sürücülük vəsiqəsi faylı yüklənməlidir!");
+        }
+
+        // 2. Ölçü və Format yoxlanışı (Validasiya)
+        validateLicenseFile(licenseFile);
+
+        try {
+            Car car = carRepository.findById(dto.getCarId())
+                    .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
+
+            User user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı ID: " + dto.getUserId()));
+
+            Booking booking = new Booking();
+            booking.setCar(car);
+            booking.setUser(user);
+            booking.setStartDate(dto.getStartDate());
+            booking.setEndDate(dto.getEndDate());
+            booking.setPickupLocation(dto.getPickupLocation());
+            booking.setNotes(dto.getNotes());
+
+            // Statusu Enum olaraq təyin edirik
+            booking.setStatus(BookingStatus.PENDING);
+
+            // 3. Qiymət hesablama (Gələcək tarixi yoxlamaq şərti ilə)
+            long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+            if (days < 0) throw new RuntimeException("Geri qaytarma tarixi gediş tarixindən əvvəl ola bilməz!");
+            if (days == 0) days = 1;
+
+            booking.setTotalPrice(days * car.getDailyPrice());
+
+            // 4. Faylı yaddaşa yaz və yolunu bazaya qeyd et
+            String fileName = saveLicenseFile(licenseFile);
+            booking.setLicenseFilePath(fileName);
+
+            bookingRepository.save(booking);
+            return true;
+
+        } catch (Exception e) {
+            // Əgər fayl yazılıbsa amma baza xətası olubsa, burada həmin faylı silmək məntiqli olar
+            throw new RuntimeException("Sifariş tamamlanarkən texniki xəta: " + e.getMessage());
+        }
+    }
+
+    // Yoxlama məntiqini ayrıca metoda çıxarmaq kodu təmiz saxlayır
+    private void validateLicenseFile(MultipartFile file) {
+        long maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.getSize() > maxSize) {
+            throw new RuntimeException("Fayl çox böyükdür! Maksimum 10MB.");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new RuntimeException("Yalnız şəkil formatları (JPG, PNG) qəbul edilir.");
+        }
     }
 
 }
