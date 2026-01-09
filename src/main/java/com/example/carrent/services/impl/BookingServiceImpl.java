@@ -125,6 +125,11 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    @Override
+    public long countActive() {
+        return bookingRepository.countByStatus(BookingStatus.ACTIVE);
+    }
+
 
     private String saveLicenseFile(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {

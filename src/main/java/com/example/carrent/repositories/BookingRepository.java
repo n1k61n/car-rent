@@ -1,5 +1,6 @@
 package com.example.carrent.repositories;
 
+import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.models.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,6 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b JOIN FETCH b.car WHERE b.user.email = :email")
     List<Booking> findAllByUserEmailWithCar(@Param("email") String email);
+
+    long countByStatus(BookingStatus status);
 }

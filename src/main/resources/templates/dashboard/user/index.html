@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <title>İstifadəçilər - Dashboard</title>
+</head>
+
+<body id="page-top">
+
+<div layout:fragment="content">
+    <div class="container-fluid">
+
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="dataTables_length">
+                                    <form action="/dashboard/user/index" method="get" id="sizeForm">
+                                        <label>Göstər
+                                            <select name="size" class="custom-select custom-select-sm form-control form-control-sm"
+                                                    onchange="document.getElementById('sizeForm').submit()">
+                                                <option value="10" th:selected="${pageSize == 10}">10</option>
+                                                <option value="25" th:selected="${pageSize == 25}">25</option>
+                                                <option value="50" th:selected="${pageSize == 50}">50</option>
+                                            </select> istifadəçi
+                                        </label>
+                                        <input type="hidden" name="keyword" th:value="${keyword}">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="dataTables_filter text-right">
+                                    <form action="/dashboard/user/index" method="get">
+                                        <input type="hidden" name="size" th:value="${pageSize}">
+                                        <label>Axtar:
+                                            <input type="search" name="keyword" th:value="${keyword}"
+                                                   class="form-control form-control-sm" placeholder="Ad və ya Email...">
+                                        </label>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Ad Soyad</th>
+                                        <th>Email</th>
+                                        <th>Telefon</th>
+                                        <th>Rol</th>
+                                        <th>Status</th>
+                                        <th>Əməliyyatlar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="user, i : ${users}">
+                                        <td th:text="${i.index + 1 + (currentPage * pageSize)}">1</td>
+                                        <td th:text="${user.firstName + ' ' + user.lastName}">John Doe</td>
+                                        <td th:text="${user.email}">john@example.com</td>
+                                        <td th:text="${user.phoneNumber}">+994 50...</td>
+                                        <td>
+                                            <span class="badge badge-info" th:text="${user.role}">ADMIN</span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${user.enabled}" class="badge badge-success">Aktiv</span>
+                                            <span th:unless="${user.enabled}" class="badge badge-danger">Deaktiv</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a th:href="${'/dashboard/user/edit/' + user.id}" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a th:href="${'/dashboard/user/delete/' + user.id}" class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('İstifadəçini silməyə əminsiniz?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(user)}">
+                                        <td colspan="7" class="text-center">Heç bir istifadəçi tapılmadı.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info">
+                                    <span th:if="${totalItems > 0}">
+                                        [[${totalItems}]] qeyddən [[${currentPage * pageSize + 1}]] -
+                                        [[${(currentPage + 1) * pageSize > totalItems ? totalItems : (currentPage + 1) * pageSize}]] arası
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate">
+                                    <ul class="pagination">
+                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                            <a th:href="@{/dashboard/user/index(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}" class="page-link">Əvvəlki</a>
+                                        </li>
+
+                                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages > 0 ? totalPages - 1 : 0)}"
+                                            th:classappend="${i == currentPage} ? 'active'">
+                                            <a th:href="@{/dashboard/user/index(page=${i}, size=${pageSize}, keyword=${keyword})}"
+                                               th:text="${i + 1}" class="page-link">1</a>
+                                        </li>
+
+                                        <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                            <a th:href="@{/dashboard/user/index(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}" class="page-link">Növbəti</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

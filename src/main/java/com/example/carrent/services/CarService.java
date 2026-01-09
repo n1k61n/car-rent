@@ -5,6 +5,7 @@ import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.models.Car;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,6 @@ public interface CarService {
     boolean updateCar(Long id, CarUpdateDto carUpdateDto);
     Page<CarDto> searchCars(String keyword, Pageable pageable);
 
+
+    long countAll();
 }

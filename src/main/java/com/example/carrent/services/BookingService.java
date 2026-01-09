@@ -3,6 +3,7 @@ package com.example.carrent.services;
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingOrdersDto;
 import com.example.carrent.enums.BookingStatus;
+import org.jspecify.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface BookingService {
     boolean updateStatus(Long id, BookingStatus status);
 
     boolean completeBooking(BookingCompleteDto bookingDto, MultipartFile licenseFile);
+
+    long countActive();
 }

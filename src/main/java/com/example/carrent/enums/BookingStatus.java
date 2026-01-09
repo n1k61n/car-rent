@@ -5,5 +5,6 @@ public enum BookingStatus {
     CONFIRMED,  // Ödəniş edilib və ya admin təsdiqləyib
     CANCELLED,  // İptal edilib
     COMPLETED,   // Maşın geri qaytarılıb və proses bitib
+    ACTIVE,
     APPROVED
 }
