@@ -22,4 +22,7 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b LEFT JOIN FETCH b.car LEFT JOIN FETCH b.user")
     List<Booking> findAllWithDetails();
+
+    @Query("SELECT b FROM Booking b JOIN FETCH b.car WHERE b.user.email = :email")
+    List<Booking> findAllByUserEmailWithCar(@Param("email") String email);
 }

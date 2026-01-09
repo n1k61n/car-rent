@@ -1,5 +1,6 @@
 package com.example.carrent.dtos.user;
 
+import com.example.carrent.enums.Role;
 import lombok.Data;
 
 @Data
@@ -10,5 +11,6 @@ public class UserDto {
     private String phoneNumber;
     private String email;
     private String password;
+    private Role role;
 
 }
