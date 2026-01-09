@@ -1,6 +1,7 @@
 package com.example.carrent.services;
 
 import com.example.carrent.dtos.user.UserDto;
+import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserRegistrationDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,5 @@ public interface UserService {
 
     boolean registerNewUser(UserRegistrationDto registrationDto);
 
-
-    UserDto getUserByEmail(UserDetails userDetails);
+    UserProfileDto findByEmail(String name);
 }

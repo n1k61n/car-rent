@@ -69,7 +69,7 @@
                             <li><a th:text="#{nav.about}" href="/about" class="nav-link">Haqqımızda</a></li>
                             <li><a th:text="#{nav.contact}" href="/contact" class="nav-link">Əlaqə</a></li>
                             <li th:if="${!isLoggedIn}">
-                                <a href="/login" class="nav-link">Giriş</a>
+                                <a th:text="#{nav.login}" href="/login" class="nav-link">Giriş</a>
                             </li>
 
                             <li th:if="${isLoggedIn}" class="has-children">
@@ -91,13 +91,13 @@
                                     <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Dil</span>
                                 </a>
                                 <ul class="dropdown">
-                                    <li>
-                                        <a th:href="${currentUri + '?lang=az'}">AZ
-                                            <img src="https://flagcdn.com/w20/az.png" style="margin-right: 5px;"></a>
+                                    <li><a th:href="@{''(lang='az')}">AZ</a>
+<!--                                        <a th:href="${currentUri + '?lang=az'}">AZ-->
+<!--                                            <img src="https://flagcdn.com/w20/az.png" style="margin-right: 5px;"></a>-->
                                     </li>
-                                    <li>
-                                        <a th:href="${currentUri + '?lang=en'}">EN
-                                        <img src="https://flagcdn.com/w20/gb.png" style="margin-right: 5px;"></a>
+                                    <li><a th:href="@{''(lang='en')}">EN</a>
+<!--                                        <a th:href="${currentUri + '?lang=en'}">EN-->
+<!--                                        <img src="https://flagcdn.com/w20/gb.png" style="margin-right: 5px;"></a>-->
                                     </li>
                                 </ul>
                             </li>

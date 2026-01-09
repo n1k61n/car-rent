@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{front/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <title th:text="#{nav.about} + ' - CarRental'">Profilim - CarRental</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <div class="hero inner-page" style="background-image: url('/front/images/hero_1_a.jpg');">
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-lg-5">
+                    <div class="intro">
+                        <h1 th:text="#{user.profile}">Şəxsi Kabinet</h1>
+                        <p class="text">Profil məlumatlarınızı buradan idarə edə bilərsiniz.</p>
+
+                        <div class="custom-breadcrumbs">
+                            <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
+                            <span class="mx-2">/</span>
+                            <strong th:text="#{user.profile}">Şəxsi Kabinet</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-5">
+                    <div class="p-4 bg-white shadow-sm rounded">
+                        <div class="text-center mb-4">
+                            <div class="display-1 text-primary"><span class="icon-user-circle"></span></div>
+                            <h3 th:text="${user.firstName + ' ' + user.lastName}">Ad Soyad</h3>
+                            <span class="badge badge-primary" th:text="${user?.role}">USER</span>
+                        </div>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></li>
+                            <li class="mb-2"><strong>Telefon:</strong> <span th:text="${user.phoneNumber}">+994 -- --- -- --</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="bg-white p-5 shadow-sm rounded">
+                        <h4 class="mb-4">Məlumatları Yenilə</h4>
+                        <form th:action="@{/profile/update}" method="post">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Ad</label>
+                                    <input type="text" class="form-control" name="firstName" th:value="${user.firstName}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Soyad</label>
+                                    <input type="text" class="form-control" name="lastName" th:value="${user.lastName}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon Nömrəsi</label>
+                                <input type="text" class="form-control" name="phoneNumber" th:value="${user.phoneNumber}">
+                            </div>
+                            <div class="form-group">
+                                <label>Yeni Şifrə (Dəyişmək istəmirsinizsə boş qoyun)</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+                            <button type="submit" class="btn btn-primary text-white px-4">Yadda Saxla</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

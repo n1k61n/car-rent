@@ -48,10 +48,6 @@ public class RegisterController {
         return "redirect:/login?success";
     }
 
-    @GetMapping("/profile")
-    public String showProfile(@AuthenticationPrincipal UserProfileDto currentUser, Model model) {
-        model.addAttribute("user", currentUser);
-        return "front/profile";
-    }
+
 
 }
