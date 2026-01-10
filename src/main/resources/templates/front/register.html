@@ -17,60 +17,67 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="bg-white p-5 shadow-sm rounded">
-                        <h2 class="text-black mb-4 font-weight-bold">Hesab Yaradın</h2>
+                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{register.title}">Hesab Yaradın</h2>
 
                         <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}"></div>
 
-                        <form action="/register" method="post">
+                        <form th:action="@{/register}" method="post">
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label class="text-black">Ad</label>
-                                    <input type="text" name="firstName" class="form-control" placeholder="Adınız" required>
+                                    <label class="text-black" th:text="#{register.first_name}">Ad</label>
+                                    <input type="text" name="firstName" class="form-control" th:placeholder="#{register.first_name_placeholder}" required>
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    <label class="text-black">Soyad</label>
-                                    <input type="text" name="lastName" class="form-control" placeholder="Soyadınız" required>
+                                    <label class="text-black" th:text="#{register.last_name}">Soyad</label>
+                                    <input type="text" name="lastName" class="form-control" th:placeholder="#{register.last_name_placeholder}" required>
                                 </div>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black">Email Ünvanı</label>
-                                <input type="email" name="email" class="form-control" placeholder="nümunə@mail.com" required>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label class="text-black">Telefon nomresi</label>
-                                <input type="phoneNumber" name="phoneNumber" class="form-control" placeholder="0123456789" required>
+                                <label class="text-black" th:text="#{contact.email}">Email Ünvanı</label>
+                                <input type="email" name="email" class="form-control" placeholder="example@mail.com" required>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black">Şifrə</label>
+                                <label class="text-black" th:text="#{register.phone}">Telefon nömrəsi</label>
+                                <input type="text" name="phoneNumber" class="form-control" placeholder="0XXXXXXXXX" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="text-black" th:text="#{login.password}">Şifrə</label>
                                 <input type="password" name="password" class="form-control" placeholder="*******" required>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black">Şifrənin Təkrarı</label>
+                                <label class="text-black" th:text="#{register.confirm_password}">Şifrənin Təkrarı</label>
                                 <input type="password" name="confirmPassword" class="form-control" placeholder="*******" required>
                             </div>
 
                             <div class="form-group d-flex align-items-center mb-4">
                                 <input type="checkbox" id="terms" name="terms" class="mr-2" required>
-                                <label for="terms" class="mb-0 small text-muted">
+                                <label for="terms" class="mb-0 small text-muted" th:text="#{register.terms_accept}">
                                     Şərtləri və qaydaları qəbul edirəm
                                 </label>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block text-white py-3">Qeydiyyatdan Keç</button>
+                            <button type="submit" class="btn btn-primary btn-block text-white py-3" th:text="#{register.btn_submit}">Qeydiyyatdan Keç</button>
                         </form>
 
                         <div class="mt-4 text-center">
-                            <p class="small">Artıq hesabınız var? <a href="/login">Giriş edin</a></p>
-                            <p class="small"><a href="/">Ana səhifəyə dön</a></p>
+                            <p class="small">
+                                <span th:text="#{register.have_account}">Artıq hesabınız var?</span>
+                                <a href="/login" th:text="#{register.login_link}">Giriş edin</a>
+                            </p>
+                            <p class="small">
+                                <a href="/" th:text="#{login.back_home}">Ana səhifəyə dön</a>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <script src="/front/js/jquery-3.3.1.min.js"></script>

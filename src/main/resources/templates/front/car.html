@@ -12,7 +12,6 @@
 <body>
 
 
-
 <div layout:fragment="content" >
 
     <section class="car-detail-header">
@@ -20,14 +19,17 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="display-4 font-weight-bold" th:text="${car.brand + ' ' + car.model}">Maserati Quattroporte</h1>
-                    <p class="font-gray-7"><a href="/" class="text-primary">Home</a>
-                        <a href="/listing" class="text-primary">Listing</a>
+                    <p class="font-gray-7">
+                        <a href="/" class="text-primary" th:text="#{nav.home}">Home</a>
+                        <span class="mx-2">/</span>
+                        <a href="/listing" class="text-primary" th:text="#{nav.cars}">Listing</a>
+                        <span class="mx-2">/</span>
                         <span class="text-primary" th:text="${car.model}">Model</span>
                     </p>
                 </div>
                 <div class="col-md-4 text-md-right">
                     <div class="price-tag">
-                        $<span th:text="${car.dailyPrice}">450</span><small class="font-gray-5">/günlük</small>
+                        $<span th:text="${car.dailyPrice}">450</span><small class="font-gray-5" th:text="'/' + #{car.day}">/günlük</small>
                     </div>
                 </div>
             </div>
@@ -41,76 +43,64 @@
                     <img th:src="${car.imageUrl}" alt="Car Image" class="car-image-main mb-5">
 
                     <div class="row mb-5 text-center">
-                        <div class="col-4 border-right">
-                            <span class="spec-label">Qapı Sayı</span>
+                        <div class="col-3 border-right">
+                            <span class="spec-label" th:text="#{car.doors}">Qapı Sayı</span>
                             <span class="spec-value" th:text="${car.doorCount}">4</span>
                         </div>
-                        <div class="col-4 border-right">
-                            <span class="spec-label">Sərnişin</span>
+                        <div class="col-3 border-right">
+                            <span class="spec-label" th:text="#{car.passenger}">Sərnişin</span>
                             <span class="spec-value" th:text="${car.passengerCount}">5</span>
                         </div>
-                        <div class="col-4">
-                            <span class="spec-label">Sürət Qutusu</span>
+                        <div class="col-3 border-right">
+                            <span class="spec-label" th:text="#{car.transmission}">Sürət Qutusu</span>
                             <span class="spec-value" th:text="${car.transmission}">Avtomat</span>
                         </div>
-                        <div class="col-4">
-                            <span class="spec-label">Yanacaq</span>
-                            <span class="spec-value" th:text="${car.fuelType != null ? car.fuelType : 'Petrol'}">Petrol</span>
+                        <div class="col-3">
+                            <span class="spec-label" th:text="#{car.fuel}">Yanacaq</span>
+                            <span class="spec-value" th:text="${car.fuelType}">Petrol</span>
                         </div>
                     </div>
-                    <h3 class="h4 text-black mb-4">Maşın Haqqında</h3>
-                    <p class="font-gray-8" th:text="${car.description}">
-                        Bu maşın həm lüksü, həm də sürəti sevənlər üçün ideal seçimdir...
-                    </p>
+                    <h3 class="h4 text-black mb-4" th:text="#{car.about_title}">Maşın Haqqında</h3>
+                    <p class="font-gray-8" th:text="${car.description}">Təsvir...</p>
 
-                    <h5 class="mt-5 mb-3">Əlavə Özəlliklər</h5>
+                    <h5 class="mt-5 mb-3" th:text="#{car.extra_features}">Əlavə Özəlliklər</h5>
                     <ul class="list-unstyled ul-check primary">
                         <th:block th:if="${car.features != null and !car.features.isEmpty()}">
-                            <li th:each="feature : ${car.features}" th:text="${feature}">Kondisioner</li>
+                            <li th:each="feature : ${car.features}" th:text="${feature}">Feature</li>
                         </th:block>
-
-                        <th:block th:if="${car.features == null or car.features.isEmpty()}">
-                            <li>GPS Naviqasiya sistemi</li>
-                            <li>Bluetooth və Multimedia</li>
-                            <li>Uşaq oturacağı mövcuddur</li>
-                        </th:block>
-
-                        <li>Hərtərəfli sığorta (CDW)</li>
-                        <li>7/24 Yol yardımı</li>
+                        <li th:text="#{car.insurance}">Hərtərəfli sığorta</li>
+                        <li th:text="#{car.roadside_assist}">7/24 Yol yardımı</li>
                     </ul>
-
                 </div>
 
-                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
                 <div class="col-lg-4">
-                    <div class="booking-card bg-white shadow-sm">
-                        <h3 class="h5 text-black mb-4">İndi Rezerv Et</h3>
+                    <div class="booking-card bg-white shadow-sm p-4">
+                        <h3 class="h5 text-black mb-4" th:text="#{booking.title}">İndi Rezerv Et</h3>
 
                         <form action="/booking/save" method="post">
                             <input type="hidden" name="carId" th:value="${car.id}">
 
                             <div class="form-group">
-                                <label>Götürmə Tarixi</label>
+                                <label th:text="#{booking.start_date}">Götürmə Tarixi</label>
                                 <input type="date" id="startDate" name="startDate" class="form-control" required>
                             </div>
 
                             <div class="form-group">
-                                  <label>Qaytarma Tarixi</label>
+                                <label th:text="#{booking.end_date}">Qaytarma Tarixi</label>
                                 <input type="date" id="endDate" name="endDate" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="font-size-14 font-gray-8">Götürmə Məkanı</label>
+                                <label th:text="#{booking.location}">Götürmə Məkanı</label>
                                 <select name="pickupLocation" class="form-control" required>
-                                    <option value="" disabled selected>Select Pickup Location</option>
+                                    <option value="" disabled selected th:text="#{booking.select_location}">Məkan seçin</option>
                                     <option value="Heydar Aliyev Airport">Heydar Aliyev Airport</option>
                                     <option value="Baku City Center">Baku City Center</option>
                                     <option value="Baku Railway Station">Baku Railway Station</option>
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block py-3 primary-black--hover">
+                            <button type="submit" class="btn btn-primary btn-block py-3" th:text="#{booking.btn_confirm}">
                                 Sifarişi Təsdiqlə
                             </button>
                         </form>
@@ -119,11 +109,8 @@
             </div>
         </div>
     </div>
-
-
-
-
 </div>
+
 
 </body>
 

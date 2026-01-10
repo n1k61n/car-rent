@@ -19,41 +19,47 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="bg-white p-5 shadow-sm rounded">
-                        <h2 class="text-black mb-4 font-weight-bold">Sistemə Giriş</h2>
+                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{login.title}">Sistemə Giriş</h2>
 
-                        <div th:if="${param.error}" class="alert alert-danger p-2 mb-3 small">
+                        <div th:if="${param.error}" class="alert alert-danger p-2 mb-3 small" th:text="#{login.error_message}">
                             E-poçt ünvanı və ya şifrə yanlışdır.
                         </div>
 
-                        <form action="/login" method="post">
+                        <form th:action="@{/login}" method="post">
                             <div class="form-group">
-                                <label class="text-black">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="E-poçtunuzu daxil edin" required>
+                                <label class="text-black" th:text="#{contact.email}">Email</label>
+                                <input type="email" name="email" class="form-control" th:placeholder="#{login.email_placeholder}" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="text-black">Şifrə</label>
-                                <input type="password" name="password" class="form-control" placeholder="Şifrənizi daxil edin" required>
+                                <label class="text-black" th:text="#{login.password}">Şifrə</label>
+                                <input type="password" name="password" class="form-control" th:placeholder="#{login.password_placeholder}" required>
                             </div>
 
                             <div class="form-group d-flex align-items-center mb-4">
                                 <input type="checkbox" id="remember" name="remember-me" class="mr-2">
-                                <label for="remember" class="mb-0">Məni xatırla</label>
+                                <label for="remember" class="mb-0" th:text="#{login.remember_me}">Məni xatırla</label>
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" value="Giriş et" class="btn btn-primary btn-block text-white py-3">
+                                <input type="submit" th:value="#{nav.login}" class="btn btn-primary btn-block text-white py-3">
                             </div>
                         </form>
 
                         <div class="mt-4 text-center">
-                            <p class="small">Hesabınız yoxdur? <a href="/register">Qeydiyyatdan keçin</a></p>
-                            <p class="small"><a href="/">Ana səhifəyə dön</a></p>
+                            <p class="small">
+                                <span th:text="#{login.no_account}">Hesabınız yoxdur?</span>
+                                <a href="/register" th:text="#{login.register_link}">Qeydiyyatdan keçin</a>
+                            </p>
+                            <p class="small">
+                                <a href="/" th:text="#{login.back_home}">Ana səhifəyə dön</a>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <script src="/front/js/jquery-3.3.1.min.js"></script>

@@ -41,13 +41,6 @@
 
           <div class="site-section bg-light">
               <div class="container">
-<!--                  <div class="row">-->
-<!--                      <div class="col-lg-7">-->
-<!--                          <h2 class="section-heading"><strong>Avtomobil Siyahısı</strong></h2>-->
-<!--                          <p class="mb-5">Sizin rahatlığınız üçün ən son model və tam sığortalı avtomobilləri təqdim edirik.</p>-->
-<!--                      </div>-->
-<!--                  </div>-->
-
 
                   <div class="row">
                       <div class="col-md-6 col-lg-4 mb-4" th:each="car : ${carPage.content}">
@@ -60,19 +53,20 @@
                               <div class="listing-contents h-100">
                                   <h3 th:text="${car.brand + ' ' + car.model}">Model Adı</h3>
                                   <div class="rent-price">
-                                      <strong th:text="${'$' + car.dailyPrice}">$0.00</strong><span class="mx-1">/</span>day
+                                      <strong th:text="${'$' + car.dailyPrice}">$0.00</strong><span class="mx-1">/</span>
+                                      <span th:text="#{car.day}">gün</span>
                                   </div>
                                   <div class="d-block d-md-flex mb-3 border-bottom pb-3">
                                       <div class="listing-feature pr-4">
-                                          <span class="caption">Luggage:</span>
+                                          <span class="caption" th:text="#{car.luggage}">Luggage:</span>
                                           <span class="number" th:text="${car.luggageCapacity}">0</span>
                                       </div>
                                       <div class="listing-feature pr-4">
-                                          <span class="caption">Doors:</span>
+                                          <span class="caption" th:text="#{car.doors}">Doors:</span>
                                           <span class="number" th:text="${car.doorCount}">0</span>
                                       </div>
                                       <div class="listing-feature pr-4">
-                                          <span class="caption">Passenger:</span>
+                                          <span class="caption" th:text="#{car.passenger}">Passenger:</span>
                                           <span class="number" th:text="${car.passengerCount}">0</span>
                                       </div>
                                   </div>
