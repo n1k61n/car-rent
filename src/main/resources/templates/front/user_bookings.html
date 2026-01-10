@@ -18,7 +18,7 @@
                         <div class="custom-breadcrumbs">
                             <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
                             <span class="mx-2">/</span>
-                            <strong th:text="#{user.booking}">Haqqımızda</strong>
+                            <strong th:text="#{user.booking}">Sifarişlərim</strong>
                         </div>
                     </div>
                 </div>
@@ -34,13 +34,13 @@
                         <table class="table table-hover">
                             <thead class="thead-light">
                             <tr>
-                                <th>#ID</th>
-                                <th>Avtomobil</th>
-                                <th>Götürülmə Tarixi</th>
-                                <th>Qaytarılma Tarixi</th>
-                                <th>Ümumi Qiymət</th>
-                                <th>Status</th>
-                                <th>Əməliyyat</th>
+                                <th th:text="#{booking.id}">#ID</th>
+                                <th th:text="#{booking.car}">Avtomobil</th>
+                                <th th:text="#{booking.start_date}">Götürülmə Tarixi</th>
+                                <th th:text="#{booking.end_date}">Qaytarılma Tarixi</th>
+                                <th th:text="#{booking.total_price}">Ümumi Qiymət</th>
+                                <th th:text="#{booking.status}">Status</th>
+                                <th th:text="#{booking.action}">Əməliyyat</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -53,20 +53,25 @@
                                 <td th:text="${#temporals.format(booking.endDate, 'dd-MM-yyyy')}">05-01-2024</td>
                                 <td th:text="${booking.totalPrice + ' AZN'}">250 AZN</td>
                                 <td>
-                                        <span th:classappend="${booking.status.name() == 'COMPLETED' ? 'badge-success' : 'badge-warning'}"
-                                              class="badge p-2" th:text="${booking.status}">Gözləmədə</span>
+                                    <span th:classappend="${booking.status.name() == 'COMPLETED' ? 'badge-success' : 'badge-warning'}"
+                                          class="badge p-2" th:text="${booking.status}">Gözləmədə</span>
                                 </td>
                                 <td>
-                                    <form th:action="@{/bookings/delete}" method="post" onsubmit="return confirm('Ləğv etməyə əminsiniz?')">
+                                    <form th:action="@{/bookings/delete}" method="post">
                                         <input type="hidden" name="id" th:value="${booking.id}"/>
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Ləğv et</button>
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                th:onclick="return confirm([[#{booking.cancel_confirm}]])"
+                                                th:text="#{booking.btn_cancel}">
+                                            Ləğv et
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(bookings)}">
                                 <td colspan="7" class="text-center py-5">
-                                    <p class="text-muted">Hələ ki, heç bir sifarişiniz yoxdur.</p>
-                                    <a href="/listing" class="btn btn-primary btn-sm text-white">İndi İcarələ</a>
+                                    <p class="text-muted" th:text="#{booking.no_data}">Hələ ki, heç bir sifarişiniz yoxdur.</p>
+                                    <a href="/listing" class="btn btn-primary btn-sm text-white" th:text="#{btn.rent_now}">İndi İcarələ</a>
                                 </td>
                             </tr>
                             </tbody>
