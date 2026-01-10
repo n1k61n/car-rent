@@ -14,11 +14,12 @@ public interface UserService {
 
     UserProfileDto findByEmail(String name);
 
-    List<UsersDashboardDto> getAllUsers();
 
     Page<UsersDashboardDto> findPaginated(int page, int size, String keyword);
 
     long countAll();
 
     boolean updateProfile(String email, UserProfileUpdateDto userProfileUpdateDto);
+
+    boolean deleteBooking(Long id, String name);
 }

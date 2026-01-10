@@ -2,7 +2,11 @@ package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.user.*;
 import com.example.carrent.enums.Role;
+import com.example.carrent.models.Booking;
+import com.example.carrent.models.Car;
 import com.example.carrent.models.User;
+import com.example.carrent.repositories.BookingRepository;
+import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final BookingRepository bookingRepository;
+    private final CarRepository carRepository;
 
     @Override
     @Transactional
@@ -54,14 +60,7 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserProfileDto.class);
     }
 
-    @Override
-    public List<UsersDashboardDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        if(users.isEmpty()){
-            return List.of();
-        }
-        return users.stream().map(user -> modelMapper.map(user, UsersDashboardDto.class)).toList();
-    }
+
 
     @Override
     public Page<UsersDashboardDto> findPaginated(int pageNo, int pageSize, String keyword) {
@@ -97,6 +96,26 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    @Transactional
+    public boolean deleteBooking(Long id, String email) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sifariş tapılmadı!"));
+
+        if (!booking.getUser().getEmail().equals(email)) {
+            throw new RuntimeException("Bu sifarişi silmək icazəniz yoxdur!");
+        }
+
+        Car car = booking.getCar();
+        if (car != null) {
+            car.setAvailable(true);
+            carRepository.save(car);
+        }
+
+        bookingRepository.delete(booking);
+
+        return true;
+    }
 
     @Override
     public boolean existsByEmail(String email) {

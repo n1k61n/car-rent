@@ -20,8 +20,13 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "brand", nullable = false)
     private String brand;
+
+    @Column(name = "model", nullable = false)
     private String model;
+
     @Column(name = "daily_price")
     private Double dailyPrice;
     private Integer year;
@@ -38,7 +43,10 @@ public class Car {
     @Column(name = "luggage_capacity")
     private Integer luggageCapacity;
     private Boolean available;
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private String suitcases;
     private String fuelPolicy;
     private String mileage;
@@ -46,12 +54,17 @@ public class Car {
     private Boolean insuranceIncluded = true;
     private Boolean freeCancellation = true;
 
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "car")
-    private List<Rental> rentals;
+    private List<Booking> bookings;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "car_features", joinColumns = @JoinColumn(name = "car_id"))

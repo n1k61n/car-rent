@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class User implements UserDetails {
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
     private boolean accountNonLocked = true;
+
+    @OneToOne(mappedBy = "user")
+    private Car car;
 
     @Enumerated(EnumType.STRING)
     private Role role;

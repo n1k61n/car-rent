@@ -93,21 +93,24 @@
                                                 Gündəlik Qiymət <i class="fas fa-sort fa-xs text-muted"></i>
                                             </a>
                                         </th>
+
                                         <th>Sürət qutusu</th>
                                         <th>Yanacaq</th>
                                         <th>Qapı/Sərnişin</th>
                                         <th>Baqaj</th>
+                                        <th>Bos masin</th>
                                         <th>Statuslar</th>
                                         <th>Əməliyyatlar</th>
                                     </tr>
                                     </thead>                                    <tbody>
                                     <tr th:each="car, i : ${carList}">
-                                        <td th:text="${i.index + 1}">BMW X5</td>
+                                        <td th:text="${car.id}">BMW X5</td>
                                         <td th:text="${car.brand + ' ' + car.model}">BMW X5</td>
 
                                         <td th:text="${car.year}">2022</td>
 
                                         <td th:text="${'$' + car.dailyPrice}">$100.0</td>
+
 
                                         <td th:text="${car.transmission}">Automatic</td>
 
@@ -116,7 +119,10 @@
                                         <td th:text="${car.doorCount + ' / ' + car.passengerCount}">4 / 5</td>
 
                                         <td th:text="${car.luggageCapacity}">400L</td>
-
+                                        <td>
+                                            <span th:if="${car.available}" class="badge badge-success">Mövcuddur</span>
+                                            <span th:unless="${car.available}" class="badge badge-danger">İcarədədir</span>
+                                        </td>
                                         <td>
                                             <span th:if="${car.freeCancellation}" class="badge badge-success">Pulsuz İmtina</span>
                                             <span th:if="${car.insuranceIncluded}" class="badge badge-info">Sığortalı</span>

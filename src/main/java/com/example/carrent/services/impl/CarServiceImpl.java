@@ -63,7 +63,6 @@ public class CarServiceImpl implements CarService {
                 end = LocalDate.parse(dropoff);
             }
         } catch (DateTimeParseException e) {
-            // Tarix formatı səhvdirsə, loglamaq və ya null saxlamaq olar
             System.err.println("Tarix formatı səhvdir: " + e.getMessage());
         }
 

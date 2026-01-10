@@ -25,5 +25,6 @@ public class CarDto {
     private Boolean roadAssistance ;
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;
+    private Boolean available;
 
 }

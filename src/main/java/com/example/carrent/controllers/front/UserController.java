@@ -4,14 +4,12 @@ import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserProfileUpdateDto;
 import com.example.carrent.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -44,4 +42,14 @@ public class UserController {
         model.addAttribute("bookings", user.getBookings());
         return "front/user_bookings";
     }
+
+
+    @PostMapping("/bookings/delete")
+    public String deleteBooking(@RequestParam("id") Long id, Principal principal){
+        boolean result = userService.deleteBooking(id, principal.getName());
+        return "redirect:/bookings";
+    }
+
+
+
 }
