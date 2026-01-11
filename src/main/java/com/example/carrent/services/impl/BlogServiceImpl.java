@@ -5,8 +5,8 @@ import com.example.carrent.dtos.blog.BlogDahboardCreateDto;
 import com.example.carrent.dtos.blog.BlogDahboardUpdateDto;
 import com.example.carrent.dtos.blog.BlogDto;
 import com.example.carrent.dtos.blog.BlogSingleDto;
+import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Blog;
-import com.example.carrent.models.Comment;
 import com.example.carrent.repositories.BlogRepository;
 import com.example.carrent.repositories.CommentRepository;
 import com.example.carrent.services.BlogService;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BlogServiceImpl  implements BlogService {
 
     private final BlogRepository blogRepository;
@@ -36,10 +36,10 @@ public class BlogServiceImpl  implements BlogService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BlogSingleDto getBlogById(Long id) {
-        Blog blog = blogRepository.findById(id).orElseThrow();
-        List<Comment> comments = commentRepository.findByBlogIdOrderByCreatedAtDesc(id);
-        blog.setComments(comments);
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Blog tapılmadı. ID: " + id));
         return modelMapper.map(blog, BlogSingleDto.class);
     }
 
@@ -53,14 +53,11 @@ public class BlogServiceImpl  implements BlogService {
 
 
     @Override
-    public boolean createBlog(BlogDahboardCreateDto blogDahboardCreateDto) {
-        if(blogDahboardCreateDto != null){
-            Blog blog = modelMapper.map(blogDahboardCreateDto, Blog.class);
-            blog.setCreatedAt(LocalDate.now());
-            blogRepository.save(blog);
-            return true;
-        }
-        return false;
+    public boolean createBlog(BlogDahboardCreateDto dto) {
+        Blog blog = modelMapper.map(dto, Blog.class);
+        blog.setCreatedAt(LocalDate.now());
+        blogRepository.save(blog);
+        return true;
     }
 
     @Override
@@ -73,23 +70,22 @@ public class BlogServiceImpl  implements BlogService {
     }
 
     @Override
-    public boolean updateBlog(Long id, BlogDahboardUpdateDto blogDahboardUpdateDto) {
-        if(blogRepository.existsById(id)){
-            Blog blog = modelMapper.map(blogDahboardUpdateDto, Blog.class);
-            blog.setId(id);
-            blogRepository.save(blog);
-            return true;
-        }
-        return false;
+    public boolean updateBlog(Long id, BlogDahboardUpdateDto dto) {
+        Blog existingBlog = blogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Yenilənəcək blog tapılmadı. ID: " + id));
+        modelMapper.map(dto, existingBlog);
+        existingBlog.setId(id);
+        blogRepository.save(existingBlog);
+        return true;
     }
 
     @Override
     public boolean deleteBlog(Long id) {
-        if(blogRepository.existsById(id)){
-            blogRepository.deleteById(id);
-            return true;
+        if (!blogRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Silinəcək blog tapılmadı. ID: " + id);
         }
-        return false;
+        blogRepository.deleteById(id);
+        return true;
     }
 
 }

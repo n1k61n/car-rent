@@ -63,7 +63,7 @@ public class Car {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
     @ElementCollection(fetch = FetchType.EAGER)

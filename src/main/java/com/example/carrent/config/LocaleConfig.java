@@ -16,14 +16,14 @@ public class LocaleConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("az")); // İlk açılış dili
+        slr.setDefaultLocale(new Locale("az"));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang"); // URL-dəki parametr adı
+        lci.setParamName("lang");
         return lci;
     }
 

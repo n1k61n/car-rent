@@ -1,11 +1,9 @@
 package com.example.carrent.models;
 
-import com.example.carrent.dtos.comment.CommentDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +21,7 @@ public class Blog {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
-    private String imageUrl; // car image url
+    private String imageUrl;
     private String author;
     private LocalDate createdAt;
     private String categoryName;
@@ -35,5 +33,6 @@ public class Blog {
     @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
     @ManyToOne
+    @JoinColumn(name = "car_id", nullable = true)
     private Car car;
 }

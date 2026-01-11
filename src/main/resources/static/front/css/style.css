@@ -1761,3 +1761,40 @@ h1, h2, h3, h4, h5,
   .listing p {
     color: #888;
     font-size: 14px; }
+
+/* Navbar-ın bir sırada qalması üçün */
+.site-navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Elementləri kənarlara itələyir */
+}
+
+.site-navigation {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Menyuya boş sahəni doldurmağa icazə verir */
+}
+
+.site-menu {
+    display: flex !important;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-menu > li {
+    white-space: nowrap; /* Yazıların qırılıb alt sətrə düşməsini önləyir */
+}
+
+/* İstifadəçi email-i və dil bölməsinin sağda qalması üçün */
+.user-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Avtomatik sağ tərəfə itələyir */
+}
+
+.user-actions .nav-link {
+    padding: 10px 15px;
+    font-size: 14px;
+}

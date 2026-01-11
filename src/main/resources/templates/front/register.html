@@ -21,48 +21,54 @@
 
                         <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}"></div>
 
-                        <form th:action="@{/register}" method="post">
+                        <form th:action="@{/register}" th:object="${userDto}" method="post">
+
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <label class="text-black" th:text="#{register.first_name}">Ad</label>
-                                    <input type="text" name="firstName" class="form-control" th:placeholder="#{register.first_name_placeholder}" required>
+                                    <input type="text" th:field="*{firstName}" class="form-control"
+                                           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''">
+                                    <div class="text-danger small" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                                 </div>
+
                                 <div class="col-md-6 form-group">
                                     <label class="text-black" th:text="#{register.last_name}">Soyad</label>
-                                    <input type="text" name="lastName" class="form-control" th:placeholder="#{register.last_name_placeholder}" required>
+                                    <input type="text" th:field="*{lastName}" class="form-control"
+                                           th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''">
+                                    <div class="text-danger small" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
                                 </div>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="text-black" th:text="#{contact.email}">Email Ünvanı</label>
-                                <input type="email" name="email" class="form-control" placeholder="example@mail.com" required>
+                                <input type="email" th:field="*{email}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="text-black" th:text="#{register.phone}">Telefon nömrəsi</label>
-                                <input type="text" name="phoneNumber" class="form-control" placeholder="0XXXXXXXXX" required>
+                                <input type="text" th:field="*{phoneNumber}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid' : ''">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="text-black" th:text="#{login.password}">Şifrə</label>
-                                <input type="password" name="password" class="form-control" placeholder="*******" required>
+                                <input type="password" th:field="*{password}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                             </div>
 
                             <div class="form-group mb-3">
                                 <label class="text-black" th:text="#{register.confirm_password}">Şifrənin Təkrarı</label>
-                                <input type="password" name="confirmPassword" class="form-control" placeholder="*******" required>
+                                <input type="password" th:field="*{confirmPassword}" class="form-control"
+                                       th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''">
+                                <div class="text-danger small" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
                             </div>
 
-                            <div class="form-group d-flex align-items-center mb-4">
-                                <input type="checkbox" id="terms" name="terms" class="mr-2" required>
-                                <label for="terms" class="mb-0 small text-muted" th:text="#{register.terms_accept}">
-                                    Şərtləri və qaydaları qəbul edirəm
-                                </label>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-block text-white py-3" th:text="#{register.btn_submit}">Qeydiyyatdan Keç</button>
+                            <button type="submit" class="btn btn-primary btn-block text-white py-3">Qeydiyyatdan Keç</button>
                         </form>
-
                         <div class="mt-4 text-center">
                             <p class="small">
                                 <span th:text="#{register.have_account}">Artıq hesabınız var?</span>

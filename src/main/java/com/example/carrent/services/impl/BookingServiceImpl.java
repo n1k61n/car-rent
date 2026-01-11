@@ -5,6 +5,7 @@ import com.example.carrent.dtos.booking.BookingOrdersDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.user.UserDto;
 import com.example.carrent.enums.BookingStatus;
+import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Booking;
 import com.example.carrent.models.Car;
 import com.example.carrent.models.User;
@@ -73,15 +74,15 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public boolean updateStatus(Long id, BookingStatus status) {
-        Booking booking = bookingRepository.findById(id).orElse(null);
-        if(booking == null){
-            return false;
-        }
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sifariş tapılmadı. ID: " + id));
         booking.setStatus(status);
+        if (status == BookingStatus.COMPLETED || status == BookingStatus.CANCELLED) {
+            booking.getCar().setAvailable(true);
+        }
         bookingRepository.save(booking);
         return true;
     }
-
 
     @Override
     public long countActive() {
@@ -124,53 +125,49 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
         if (licenseFile == null || licenseFile.isEmpty()) {
-            throw new RuntimeException("Sürücülük vəsiqəsi faylı yüklənməlidir!");
+            throw new IllegalArgumentException("Sürücülük vəsiqəsi faylı mütləqdir!");
         }
-
         validateLicenseFile(licenseFile);
+
+
+        Car car = carRepository.findById(dto.getCarId())
+                .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı. ID: " + dto.getCarId()));
+
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("İstifadəçi tapılmadı. ID: " + dto.getUserId()));
+
+
+        long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+        if (days <= 0) days = 1; // Eyni gün üçün 1 günlük ödəniş
+
+
+        Booking booking = new Booking();
+        booking.setCar(car);
+        booking.setUser(user);
+        booking.setStartDate(dto.getStartDate());
+        booking.setEndDate(dto.getEndDate());
+        booking.setPickupLocation(dto.getPickupLocation());
+        booking.setNotes(dto.getNotes());
+        booking.setStatus(BookingStatus.PENDING);
+        booking.setTotalPrice(days * car.getDailyPrice());
+
+
         try {
-            Car car = carRepository.findById(dto.getCarId())
-                    .orElseThrow(() -> new EntityNotFoundException("Avtomobil tapılmadı"));
-
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException("İstifadəçi tapılmadı ID: " + dto.getUserId()));
-
-            car.setAvailable(false);
-            Booking booking = new Booking();
-            booking.setCar(car);
-            booking.setUser(user);
-            booking.setStartDate(dto.getStartDate());
-            booking.setEndDate(dto.getEndDate());
-            booking.setPickupLocation(dto.getPickupLocation());
-            booking.setNotes(dto.getNotes());
-
-
-            // Statusu Enum olaraq təyin edirik
-            booking.setStatus(BookingStatus.PENDING);
-
-            // 3. Qiymət hesablama (Gələcək tarixi yoxlamaq şərti ilə)
-            long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
-            if (days < 0) throw new RuntimeException("Geri qaytarma tarixi gediş tarixindən əvvəl ola bilməz!");
-            if (days == 0) days = 1;
-
-            booking.setTotalPrice(days * car.getDailyPrice());
-
-            // 4. Faylı yaddaşa yaz və yolunu bazaya qeyd et
             String fileName = saveLicenseFile(licenseFile);
             booking.setLicenseFilePath(fileName);
-
-            bookingRepository.save(booking);
-            return true;
-
-        } catch (Exception e) {
-            // Əgər fayl yazılıbsa amma baza xətası olubsa, burada həmin faylı silmək məntiqli olar
-            throw new RuntimeException("Sifariş tamamlanarkən texniki xəta: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException("Fayl sisteminə yazıla bilmədi: " + e.getMessage());
         }
+
+        car.setAvailable(false);
+        bookingRepository.save(booking);
+
+        return true;
     }
 
-    // Yoxlama məntiqini ayrıca metoda çıxarmaq kodu təmiz saxlayır
+
     private void validateLicenseFile(MultipartFile file) {
-        long maxSize = 10 * 1024 * 1024; // 10MB
+        long maxSize = 10 * 1024 * 1024;
         if (file.getSize() > maxSize) {
             throw new RuntimeException("Fayl çox böyükdür! Maksimum 10MB.");
         }

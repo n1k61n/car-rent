@@ -3,7 +3,10 @@ package com.example.carrent.services.impl;
 import com.example.carrent.dtos.car.CarCreateDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
+import com.example.carrent.exceptions.ResourceNotFoundException;
+import com.example.carrent.models.Blog;
 import com.example.carrent.models.Car;
+import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.services.CarService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Set;
 
 
@@ -25,6 +27,7 @@ public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
     private final ModelMapper modelMapper;
+    private final BookingRepository bookingRepository;
 
 
     @Override
@@ -74,6 +77,7 @@ public class CarServiceImpl implements CarService {
     public boolean createCar(CarCreateDto carCreateDto) {
         try {
             Car car = modelMapper.map(carCreateDto, Car.class);
+            car.setAvailable(true);
             carRepository.save(car);
             return true;
         } catch (Exception e) {
@@ -82,13 +86,19 @@ public class CarServiceImpl implements CarService {
 
     }
 
-    @Override
-    public boolean deleteCar(Long id) {
-        if(carRepository.existsById(id)){
-            carRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    @Transactional
+    public boolean deleteCar(Long carId) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı: " + carId));
+
+
+        // 2. Bu maşına bağlı sifarişləri (bookings) sil (və ya başqa məntiq)
+        // Əgər Booking modelində cascade yoxdursa, onları da əllə silməlisən:
+        bookingRepository.deleteByCarId(carId);
+
+        // 3. İndi maşını silə bilərsən
+        carRepository.delete(car);
+        return true;
     }
 
     @Override

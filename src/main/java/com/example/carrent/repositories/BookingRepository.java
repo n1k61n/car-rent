@@ -12,20 +12,12 @@ import java.util.List;
 
 @Repository
 public interface BookingRepository  extends JpaRepository<Booking, Long> {
-    @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE b.car.id = :carId " +
-            "AND b.status <> com.example.carrent.enums.BookingStatus.CANCELLED " +
-            "AND (:startDate < b.endDate AND :endDate > b.startDate)")
-    boolean existsOverlapping(@Param("carId") Long carId,
-                              @Param("startDate") LocalDate startDate,
-                              @Param("endDate") LocalDate endDate);
-
-    List<Booking> findAllByOrderByIdDesc();
 
     @Query("SELECT b FROM Booking b LEFT JOIN FETCH b.car LEFT JOIN FETCH b.user")
     List<Booking> findAllWithDetails();
 
-    @Query("SELECT b FROM Booking b JOIN FETCH b.car WHERE b.user.email = :email")
-    List<Booking> findAllByUserEmailWithCar(@Param("email") String email);
 
     long countByStatus(BookingStatus status);
+
+    void deleteByCarId(Long id);
 }
