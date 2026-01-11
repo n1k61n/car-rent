@@ -118,6 +118,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UsersDashboardDto findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return modelMapper.map(user, UsersDashboardDto.class);
+    }
+
+    @Override
+    public void toggleUserStatus(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEnabled(!user.isEnabled());
+        userRepository.save(user);
+    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }

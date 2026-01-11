@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <title>İstifadəçi Detalları - Dashboard</title>
+</head>
+
+<body id="page-top">
+
+<div layout:fragment="content">
+    <div class="container-fluid">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">İstifadəçi Məlumatları</h6>
+                <a href="/dashboard/user/index" class="btn btn-secondary btn-sm">Geri Qayıt</a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>ID</th>
+                                <td th:text="${user.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Ad</th>
+                                <td th:text="${user.firstName}">John</td>
+                            </tr>
+                            <tr>
+                                <th>Soyad</th>
+                                <td th:text="${user.lastName}">Doe</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td th:text="${user.email}">john@example.com</td>
+                            </tr>
+                            <tr>
+                                <th>Telefon</th>
+                                <td th:text="${user.phoneNumber}">+994 50...</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Rol</th>
+                                <td><span class="badge badge-info" th:text="${user.role}">ADMIN</span></td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <span th:if="${user.enabled}" class="badge badge-success">Aktiv</span>
+                                    <span th:unless="${user.enabled}" class="badge badge-danger">Deaktiv</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Qeydiyyat Tarixi</th>
+                                <td>-</td> <!-- Əgər varsa əlavə edin -->
+                            </tr>
+                        </table>
+
+                        <div class="mt-3">
+                             <form th:action="${'/dashboard/user/toggle-status/' + user.id}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-block" th:classappend="${user.enabled} ? 'btn-warning' : 'btn-success'">
+                                    <i th:class="${user.enabled} ? 'fas fa-user-slash' : 'fas fa-user-check'"></i>
+                                    <span th:text="${user.enabled} ? 'İstifadəçini Deaktiv Et' : 'İstifadəçini Aktivləşdir'"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

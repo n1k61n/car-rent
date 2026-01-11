@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +35,18 @@ public class DashboardUserController {
         model.addAttribute("keyword", keyword);
 
         return "dashboard/user/index";
+    }
+
+    @GetMapping("/details/{id}")
+    public String userDetails(@PathVariable Long id, Model model) {
+        UsersDashboardDto user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "dashboard/user/details";
+    }
+
+    @PostMapping("/toggle-status/{id}")
+    public String toggleUserStatus(@PathVariable Long id) {
+        userService.toggleUserStatus(id);
+        return "redirect:/dashboard/user/index";
     }
 }
