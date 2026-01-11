@@ -30,7 +30,7 @@ public class BookingController {
                                   BindingResult bindingResult,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
-        
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Tarixlər düzgün formatda deyil.");
             return "redirect:/car/" + bookingDto.getCarId();

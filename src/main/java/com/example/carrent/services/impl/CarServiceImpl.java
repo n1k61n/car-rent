@@ -4,7 +4,6 @@ import com.example.carrent.dtos.car.CarCreateDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.exceptions.ResourceNotFoundException;
-import com.example.carrent.models.Blog;
 import com.example.carrent.models.Car;
 import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -90,13 +90,7 @@ public class CarServiceImpl implements CarService {
     public boolean deleteCar(Long carId) {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı: " + carId));
-
-
-        // 2. Bu maşına bağlı sifarişləri (bookings) sil (və ya başqa məntiq)
-        // Əgər Booking modelində cascade yoxdursa, onları da əllə silməlisən:
         bookingRepository.deleteByCarId(carId);
-
-        // 3. İndi maşını silə bilərsən
         carRepository.delete(car);
         return true;
     }
@@ -112,10 +106,12 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public boolean updateCar(Long id, CarUpdateDto carUpdateDto) {
-        if(carRepository.existsById(id)){
-            Car car = modelMapper.map(carUpdateDto, Car.class);
-            car.setId(id);
-            carRepository.save(car);
+        Optional<Car> optionalCar = carRepository.findById(id);
+        if(optionalCar.isPresent()){
+            Car existCar = optionalCar.get();
+            modelMapper.map(carUpdateDto, existCar);
+            existCar.setId(id);
+            carRepository.save(existCar);
             return true;
         }
         return false;
