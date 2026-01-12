@@ -5,6 +5,7 @@ import com.example.carrent.dtos.user.UserRegistrationDto;
 import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class RegisterController {
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("userDto") UserRegistrationDto registrationDto,
                                BindingResult bindingResult,
-                               Model model) {
+                               Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             return "front/register";
@@ -57,25 +59,49 @@ public class RegisterController {
 
         // 4. Qeydiyyat prosesi
         try {
+
             userService.registerNewUser(registrationDto);
-            return "front/verify-otp";
+            redirectAttributes.addFlashAttribute("email", registrationDto.getEmail());
+            return "redirect:/verify-otp";
         } catch (Exception e) {
             model.addAttribute("error", "Qeydiyyat zamanı gözlənilməz xəta baş verdi.");
             return "front/register";
         }
     }
 
-    @PostMapping("/verify")
+    @GetMapping("/verify-otp")
+    public String showVerifyOtpForm(Model model) {
+        if (!model.containsAttribute("email")) {
+            return "redirect:/register";
+        }
+        return "front/verify-otp";
+    }
+
+
+    @PostMapping("/verify-otp")
     public String verifyOtp(@RequestParam String email, @RequestParam String code, Model model) {
         boolean isValid = otpService.verifyOtp(email, code);
 
         if (isValid) {
             userService.enableUser(email);
-            return "registration-success";
+            return "front/registration-success";
         } else {
             model.addAttribute("error", "Kod yanlışdır.");
-            return "verify-otp";
+            model.addAttribute("email", email);
+            return "front/verify-otp";
         }
+    }
+
+    @GetMapping("/auth/resend")
+    public String resendOtp(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        try {
+            otpService.createAndSendOtp(email);
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("message", "Yeni kod göndərildi.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Kod göndərilərkən xəta baş verdi.");
+        }
+        return "redirect:/verify-otp";
     }
 
 }

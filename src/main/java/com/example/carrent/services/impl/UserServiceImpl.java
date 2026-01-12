@@ -4,10 +4,13 @@ import com.example.carrent.dtos.user.*;
 import com.example.carrent.enums.Role;
 import com.example.carrent.models.Booking;
 import com.example.carrent.models.Car;
+import com.example.carrent.models.Otp;
 import com.example.carrent.models.User;
 import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
+import com.example.carrent.services.EmailService;
+import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final BookingRepository bookingRepository;
     private final CarRepository carRepository;
+    private final OtpService otpService;
+    private final EmailService emailService;
+
 
     @Override
     @Transactional
@@ -42,6 +48,14 @@ public class UserServiceImpl implements UserService {
 
             Role userRole = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
             user.setRole(userRole);
+
+            String otp = otpService.generateOTP();
+
+            emailService.sendOtpEmail(registrationDto.getEmail(), otp);
+            System.out.println("OTP: " + otp);
+
+            Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
+            boolean saved = otpService.saved(otpEntity);
             userRepository.save(user);
             return true;
         } catch (Exception e) {
@@ -129,7 +143,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void enableUser(String email) {
-
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEnabled(true);
+        user.setCredentialsNonExpired(true);
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        userRepository.save(user);
     }
 
     @Override
