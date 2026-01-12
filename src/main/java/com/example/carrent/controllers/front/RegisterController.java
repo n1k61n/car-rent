@@ -2,6 +2,7 @@ package com.example.carrent.controllers.front;
 
 
 import com.example.carrent.dtos.user.UserRegistrationDto;
+import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +12,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
 public class RegisterController {
 
     private final UserService userService;
+    private final OtpService otpService;
 
     @GetMapping("/login")
     public String showLoginForm() {
@@ -55,12 +58,24 @@ public class RegisterController {
         // 4. Qeydiyyat prosesi
         try {
             userService.registerNewUser(registrationDto);
-            return "redirect:/login?success";
+            return "front/verify-otp";
         } catch (Exception e) {
             model.addAttribute("error", "Qeydiyyat zamanı gözlənilməz xəta baş verdi.");
             return "front/register";
         }
     }
 
+    @PostMapping("/verify")
+    public String verifyOtp(@RequestParam String email, @RequestParam String code, Model model) {
+        boolean isValid = otpService.verifyOtp(email, code);
+
+        if (isValid) {
+            userService.enableUser(email);
+            return "registration-success";
+        } else {
+            model.addAttribute("error", "Kod yanlışdır.");
+            return "verify-otp";
+        }
+    }
 
 }

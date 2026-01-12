@@ -26,4 +26,6 @@ public interface UserService {
     UsersDashboardDto findById(Long id);
 
     void toggleUserStatus(Long id);
+
+    void enableUser(String email);
 }

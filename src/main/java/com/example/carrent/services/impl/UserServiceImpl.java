@@ -42,10 +42,6 @@ public class UserServiceImpl implements UserService {
 
             Role userRole = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
             user.setRole(userRole);
-            user.setEnabled(true);
-            user.setAccountNonLocked(true);
-            user.setAccountNonExpired(true);
-            user.setCredentialsNonExpired(true);
             userRepository.save(user);
             return true;
         } catch (Exception e) {
@@ -128,6 +124,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setEnabled(!user.isEnabled());
         userRepository.save(user);
+    }
+
+
+    @Override
+    public void enableUser(String email) {
+
     }
 
     @Override
