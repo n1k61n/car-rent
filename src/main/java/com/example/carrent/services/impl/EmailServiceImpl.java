@@ -13,11 +13,10 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendOtpEmail(String toEmail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("rentcar@gmail.com");
+        message.setFrom("eminelxanoglu@gmail.com");
         message.setTo(toEmail);
         message.setSubject("Doğrulama Kodu (OTP)");
         message.setText("Sizin təhlükəsizlik kodunuz: " + otp + "\n\nBu kodu heç kimlə bölüşməyin.");
-
         mailSender.send(message);
     }
 }
