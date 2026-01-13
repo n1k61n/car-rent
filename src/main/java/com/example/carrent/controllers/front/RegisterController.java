@@ -5,7 +5,6 @@ import com.example.carrent.dtos.user.UserRegistrationDto;
 import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
