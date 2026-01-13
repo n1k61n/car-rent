@@ -40,10 +40,10 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private boolean enabled = true;
-    private boolean accountNonExpired = true;
-    private boolean credentialsNonExpired = true;
-    private boolean accountNonLocked = true;
+    private boolean enabled;
+    private boolean accountNonExpired;
+    private boolean credentialsNonExpired ;
+    private boolean accountNonLocked;
 
     @OneToOne(mappedBy = "user")
     private Car car;
