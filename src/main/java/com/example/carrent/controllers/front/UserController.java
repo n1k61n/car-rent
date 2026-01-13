@@ -3,13 +3,16 @@ package com.example.carrent.controllers.front;
 import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserProfileUpdateDto;
 import com.example.carrent.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -24,13 +27,37 @@ public class UserController {
     public String showProfile(Model model, Principal principal) {
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
+        
+        // Flash atributdan gələn UserProfileUpdateDto varsa onu istifadə et, yoxsa yenisini yarat
+        if (!model.containsAttribute("userProfileUpdateDto")) {
+            UserProfileUpdateDto updateDto = new UserProfileUpdateDto();
+            updateDto.setFirstName(user.getFirstName());
+            updateDto.setLastName(user.getLastName());
+            updateDto.setPhoneNumber(user.getPhoneNumber());
+            model.addAttribute("userProfileUpdateDto", updateDto);
+        }
+        
         return "front/account/profile";
     }
 
     @PostMapping("/profile/update")
-    public String profileUpdate(Principal principal, UserProfileUpdateDto userProfileUpdateDto){
+    public String profileUpdate(Principal principal, 
+                                @Valid UserProfileUpdateDto userProfileUpdateDto,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes){
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateDto", bindingResult);
+            redirectAttributes.addFlashAttribute("userProfileUpdateDto", userProfileUpdateDto);
+            return "redirect:/profile";
+        }
 
         boolean result = userService.updateProfile(principal.getName(), userProfileUpdateDto);
+        if (result) {
+            redirectAttributes.addFlashAttribute("message", "Profiliniz uğurla yeniləndi.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Profil yenilənərkən xəta baş verdi.");
+        }
         return "redirect:/profile";
     }
 

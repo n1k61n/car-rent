@@ -1,6 +1,9 @@
 package com.example.carrent.services.impl;
 
-import com.example.carrent.dtos.user.*;
+import com.example.carrent.dtos.user.UserProfileDto;
+import com.example.carrent.dtos.user.UserProfileUpdateDto;
+import com.example.carrent.dtos.user.UserRegistrationDto;
+import com.example.carrent.dtos.user.UsersDashboardDto;
 import com.example.carrent.enums.Role;
 import com.example.carrent.models.Booking;
 import com.example.carrent.models.Car;
@@ -22,8 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

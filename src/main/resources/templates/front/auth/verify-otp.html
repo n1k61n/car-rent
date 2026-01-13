@@ -26,6 +26,7 @@
                         <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}">
                             Daxil edilən kod yanlışdır və ya vaxtı bitib.
                         </div>
+                        <div th:if="${message}" class="alert alert-success p-2 mb-3 small" th:text="${message}"></div>
 
                         <form method="post">
                             <input type="hidden" name="email" th:value="${email}" />
@@ -40,7 +41,9 @@
                                        required
                                        maxlength="6"
                                        pattern="\d{6}">
-                                <small class="form-text text-muted">Kodun etibarlılıq müddəti 5 dəqiqədir.</small>
+                                <small class="form-text text-muted mt-2">
+                                    Kodun bitmə vaxtı: <span id="timer" class="text-danger font-weight-bold">05:00</span>
+                                </small>
                             </div>
 
                             <div class="form-group">
@@ -49,10 +52,12 @@
                         </form>
 
                         <div class="mt-4 text-center">
-                            <p class="small">
+                            <!-- Timer bitəndə görünəcək hissə -->
+                            <p class="small" id="resend-container" style="display: none;">
                                 <span>Kod gəlmədi?</span>
                                 <a th:href="@{/auth/resend(email=${email})}" class="font-weight-bold">Yenidən göndər</a>
                             </p>
+
                             <p class="small">
                                 <a href="/login" th:text="#{login.back_home}">Giriş səhifəsinə dön</a>
                             </p>
@@ -68,6 +73,7 @@
 <script src="/front/js/jquery-3.3.1.min.js"></script>
 <script src="/front/js/bootstrap.min.js"></script>
 <script src="/front/js/main.js"></script>
+<script src="/front/js/otp-timer.js"></script>
 
 </body>
 </html>
