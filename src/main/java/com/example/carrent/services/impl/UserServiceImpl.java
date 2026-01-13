@@ -1,9 +1,6 @@
 package com.example.carrent.services.impl;
 
-import com.example.carrent.dtos.user.UserProfileDto;
-import com.example.carrent.dtos.user.UserProfileUpdateDto;
-import com.example.carrent.dtos.user.UserRegistrationDto;
-import com.example.carrent.dtos.user.UsersDashboardDto;
+import com.example.carrent.dtos.user.*;
 import com.example.carrent.enums.Role;
 import com.example.carrent.models.Booking;
 import com.example.carrent.models.Car;
@@ -13,6 +10,7 @@ import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.EmailService;
+import com.example.carrent.services.NotificationService;
 import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final CarRepository carRepository;
     private final OtpService otpService;
     private final EmailService emailService;
+    private final NotificationService notificationService;
 
 
     @Override
@@ -57,8 +57,16 @@ public class UserServiceImpl implements UserService {
             System.out.println("OTP: " + otp);
 
             Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
-            boolean saved = otpService.saved(otpEntity);
-            userRepository.save(user);
+            otpService.saved(otpEntity);
+            User savedUser = userRepository.save(user);
+
+            // Create notification
+            notificationService.createNotification(
+                    "New user registered: " + savedUser.getFirstName(),
+                    "/dashboard/user/index",
+                    "USER"
+            );
+
             return true;
         } catch (Exception e) {
             return false;
@@ -166,6 +174,7 @@ public class UserServiceImpl implements UserService {
 
         // Random şifrə yarat (8 simvol)
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
+        System.out.println("Yeni şifrə: " + newPassword);
         
         // Şifrəni kodlaşdır və yadda saxla
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -173,5 +182,10 @@ public class UserServiceImpl implements UserService {
 
         // Email göndər
         emailService.sendNewPasswordEmail(email, newPassword);
+    }
+
+    @Override
+    public List<User> getRecentUsers() {
+        return userRepository.findTop5ByOrderByCreatedAtDesc();
     }
 }

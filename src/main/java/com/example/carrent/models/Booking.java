@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -34,6 +36,9 @@ public class Booking {
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     private String pickupLocation;
 

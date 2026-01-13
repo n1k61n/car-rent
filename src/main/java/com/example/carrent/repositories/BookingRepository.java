@@ -20,4 +20,6 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
     long countByStatus(BookingStatus status);
 
     void deleteByCarId(Long id);
+
+    List<Booking> findTop5ByOrderByCreatedAtDesc();
 }

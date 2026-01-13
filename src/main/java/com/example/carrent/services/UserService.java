@@ -1,9 +1,11 @@
 package com.example.carrent.services;
 
-import com.example.carrent.dtos.user.*;
-import org.jspecify.annotations.Nullable;
+import com.example.carrent.dtos.user.UserProfileDto;
+import com.example.carrent.dtos.user.UserProfileUpdateDto;
+import com.example.carrent.dtos.user.UserRegistrationDto;
+import com.example.carrent.dtos.user.UsersDashboardDto;
+import com.example.carrent.models.User;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -30,4 +32,6 @@ public interface UserService {
     void enableUser(String email);
     
     void resetPasswordToRandom(String email);
+
+    List<User> getRecentUsers();
 }
