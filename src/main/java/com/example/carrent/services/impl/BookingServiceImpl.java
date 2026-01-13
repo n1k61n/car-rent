@@ -2,8 +2,6 @@ package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingOrdersDto;
-import com.example.carrent.dtos.car.CarDto;
-import com.example.carrent.dtos.user.UserDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Booking;
@@ -13,7 +11,7 @@ import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.BookingService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.carrent.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -37,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
     private final CarRepository carRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
 
 
@@ -138,7 +137,7 @@ public class BookingServiceImpl implements BookingService {
 
 
         long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
-        if (days <= 0) days = 1; // Eyni gün üçün 1 günlük ödəniş
+        if (days <= 0) days = 1;
 
 
         Booking booking = new Booking();
@@ -160,7 +159,14 @@ public class BookingServiceImpl implements BookingService {
         }
 
         car.setAvailable(false);
-        bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        // Create notification
+        notificationService.createNotification(
+                "New booking for " + savedBooking.getCar().getBrand(),
+                "/dashboard/bookings/index",
+                "BOOKING"
+        );
 
         return true;
     }
@@ -178,4 +184,8 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    @Override
+    public List<Booking> getRecentBookings() {
+        return bookingRepository.findTop5ByOrderByCreatedAtDesc();
+    }
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/layout}">
+<head>
+    <title>Admin Activity Log</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Admin Activity Log</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-01-13 12:05 PM</td>
+                                <td>admin@example.com</td>
+                                <td>UPDATE_CAR</td>
+                                <td>Updated car details for ID: 5</td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-13 11:30 AM</td>
+                                <td>admin@example.com</td>
+                                <td>CREATE_BLOG</td>
+                                <td>New blog post created: "Top 5 SUVs for Family Trips"</td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-12 09:00 PM</td>
+                                <td>admin@example.com</td>
+                                <td>DELETE_USER</td>
+                                <td>Deleted user with email: test@example.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+</body>
+</html>
