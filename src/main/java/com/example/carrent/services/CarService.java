@@ -16,7 +16,7 @@ public interface CarService {
     Page<Car> findAll(Pageable pageable);
     CarDto getCarById(Long id);
     Set<String> getAllCarTypes();
-    Page<Car> searchCarsPageable(String brand, String pickup, String dropoff, Pageable pageable);
+    Page<Car> searchCarsPageable(String brand, String category, Integer passengerCount, Pageable pageable);
     boolean createCar(@Valid CarCreateDto carCreateDto);
     boolean deleteCar(Long id);
     CarUpdateDto getUpdateCar(Long id);

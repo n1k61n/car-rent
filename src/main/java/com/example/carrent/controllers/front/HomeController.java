@@ -1,9 +1,11 @@
 package com.example.carrent.controllers.front;
 
 
+import com.example.carrent.dtos.category.CategoryDto;
 import com.example.carrent.dtos.testimonial.TestimonialDto;
 import com.example.carrent.models.Car;
 import com.example.carrent.services.CarService;
+import com.example.carrent.services.CategoryService;
 import com.example.carrent.services.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ public class HomeController {
 
     private final CarService carService;
     private final TestimonialService testimonialService;
+    private final CategoryService categoryService;
 
 
     @GetMapping()
@@ -36,6 +39,10 @@ public class HomeController {
         model.addAttribute("testimonials", testimonialDtoListlist);
         Set<String> brands = carService.getAllCarTypes();
         model.addAttribute("brands", brands);
+        
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+
         return "front/index";
     }
 

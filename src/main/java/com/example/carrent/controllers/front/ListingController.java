@@ -30,20 +30,18 @@ public class ListingController {
     public String getListings(Model model,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(required = false) String brand,
-                              @RequestParam(required = false) String pickup,
-                              @RequestParam(required = false) String dropoff) {
+                              @RequestParam(required = false) String category,
+                              @RequestParam(required = false) Integer passengerCount) {
 
 
         Pageable pageable = PageRequest.of(page, 6);
-        Page<Car> carPage = carService.searchCarsPageable(brand, pickup, dropoff, pageable);
+        Page<Car> carPage = carService.searchCarsPageable(brand, category, passengerCount, pageable);
 
         model.addAttribute("carPage", carPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("selectedBrand", brand != null ? brand : "");
-
-        // BURANI DƏYİŞDİK: Linklər üçün String dəyərlərini göndəririk
-        model.addAttribute("selectedPickup", (pickup != null && !pickup.equals("null")) ? pickup : "");
-        model.addAttribute("selectedDropoff", (dropoff != null && !dropoff.equals("null")) ? dropoff : "");
+        model.addAttribute("selectedCategory", category != null ? category : "");
+        model.addAttribute("selectedPassengerCount", passengerCount != null ? passengerCount : "");
 
         int count = 3;
         List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
@@ -67,5 +65,3 @@ public class ListingController {
 
 
 }
-
-

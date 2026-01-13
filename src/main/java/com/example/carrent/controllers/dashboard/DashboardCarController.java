@@ -3,7 +3,9 @@ package com.example.carrent.controllers.dashboard;
 import com.example.carrent.dtos.car.CarCreateDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
+import com.example.carrent.dtos.category.CategoryDto;
 import com.example.carrent.services.CarService;
+import com.example.carrent.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,12 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/dashboard/car")
 @RequiredArgsConstructor
 public class DashboardCarController {
 
     private final CarService carService;
+    private final CategoryService categoryService;
 
     @GetMapping("/index")
     public String cars(
@@ -51,7 +56,9 @@ public class DashboardCarController {
     }
 
     @GetMapping("/create")
-    public String showCreateForm() {
+    public String showCreateForm(Model model) {
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "dashboard/car/create";
     }
 
@@ -65,6 +72,8 @@ public class DashboardCarController {
     public String showEditForm(@PathVariable Long id, Model model) {
         CarUpdateDto carUpdateDto = carService.getUpdateCar(id);
         model.addAttribute("car", carUpdateDto);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "dashboard/car/update";
     }
 

@@ -31,7 +31,7 @@
 
                         <div class="mb-3 mb-md-0 col-md-3">
                             <select name="brand" id="car-brand" class="custom-select form-control">
-                                <option value="" th:text="#{car.select_type}">Növü seçin</option>
+                                <option value="" th:text="#{car.select_type}">Marka seçin</option>
                                 <option th:each="brandName : ${brands}"
                                         th:value="${brandName}"
                                         th:text="${brandName}">Ferrari</option>
@@ -39,16 +39,18 @@
                         </div>
 
                         <div class="mb-3 mb-md-0 col-md-3">
-                            <div class="form-control-wrap">
-                                <input type="text" name="pickup" id="cf-3" th:placeholder="#{car.pickup}" class="form-control datepicker px-3">
-                                <span class="icon icon-date_range"></span>
-                            </div>
+                            <select name="category" id="car-category" class="custom-select form-control">
+                                <option value="" th:text="#{car.select_category}">Kateqoriya seçin</option>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat.name}"
+                                        th:text="${cat.name}">Sedan</option>
+                            </select>
                         </div>
 
                         <div class="mb-3 mb-md-0 col-md-3">
                             <div class="form-control-wrap">
-                                <input type="text" name="dropoff" id="cf-4" th:placeholder="#{car.dropoff}" class="form-control datepicker px-3">
-                                <span class="icon icon-date_range"></span>
+                                <input type="number" name="passengerCount" id="passenger-count" th:placeholder="#{car.passenger}" class="form-control px-3" min="1">
+                                <span class="icon icon-person"></span>
                             </div>
                         </div>
 
@@ -152,4 +154,3 @@
   </body>
 
 </html>
-

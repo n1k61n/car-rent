@@ -5,8 +5,10 @@ import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Car;
+import com.example.carrent.models.Category;
 import com.example.carrent.repositories.BookingRepository;
 import com.example.carrent.repositories.CarRepository;
+import com.example.carrent.repositories.CategoryRepository;
 import com.example.carrent.services.CarService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,12 +30,13 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final ModelMapper modelMapper;
     private final BookingRepository bookingRepository;
+    private final CategoryRepository categoryRepository;
 
 
     @Override
     @Transactional(readOnly = true)
     public Page<Car> findAll(Pageable pageable) {
-        return carRepository.findAll(pageable);
+        return carRepository.findByAvailableTrue(pageable);
     }
 
     @Override
@@ -52,24 +55,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Page<Car> searchCarsPageable(String brand, String pickup, String dropoff, Pageable pageable) {
+    public Page<Car> searchCarsPageable(String brand, String category, Integer passengerCount, Pageable pageable) {
         String brandFilter = (brand == null || brand.isEmpty() || brand.equals("Select Type")) ? null : brand;
+        String categoryFilter = (category == null || category.isEmpty()) ? null : category;
+        Integer passengerCountFilter = (passengerCount == null || passengerCount <= 0) ? null : passengerCount;
 
-        LocalDate start = null;
-        LocalDate end = null;
-
-        try {
-            if (pickup != null && !pickup.isEmpty()) {
-                start = LocalDate.parse(pickup);
-            }
-            if (dropoff != null && !dropoff.isEmpty()) {
-                end = LocalDate.parse(dropoff);
-            }
-        } catch (DateTimeParseException e) {
-            System.err.println("Tarix formatı səhvdir: " + e.getMessage());
-        }
-
-        return carRepository.findAvailableCarsPageable(brandFilter, start, end, pageable);
+        return carRepository.findAvailableCars(brandFilter, categoryFilter, passengerCountFilter, pageable);
     }
 
 
@@ -77,6 +68,13 @@ public class CarServiceImpl implements CarService {
     public boolean createCar(CarCreateDto carCreateDto) {
         try {
             Car car = modelMapper.map(carCreateDto, Car.class);
+            
+            if (carCreateDto.getCategoryId() != null) {
+                Category category = categoryRepository.findById(carCreateDto.getCategoryId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Kateqoriya tapılmadı"));
+                car.setCategory(category);
+            }
+            
             car.setAvailable(true);
             carRepository.save(car);
             return true;
@@ -99,7 +97,11 @@ public class CarServiceImpl implements CarService {
     public CarUpdateDto getUpdateCar(Long id) {
         if(carRepository.existsById(id)){
             Car car = carRepository.findById(id).get();
-            return modelMapper.map(car, CarUpdateDto.class);
+            CarUpdateDto dto = modelMapper.map(car, CarUpdateDto.class);
+            if (car.getCategory() != null) {
+                dto.setCategoryId(car.getCategory().getId());
+            }
+            return dto;
         }
         return null;
     }
@@ -110,6 +112,13 @@ public class CarServiceImpl implements CarService {
         if(optionalCar.isPresent()){
             Car existCar = optionalCar.get();
             modelMapper.map(carUpdateDto, existCar);
+            
+            if (carUpdateDto.getCategoryId() != null) {
+                Category category = categoryRepository.findById(carUpdateDto.getCategoryId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Kateqoriya tapılmadı"));
+                existCar.setCategory(category);
+            }
+
             existCar.setId(id);
             carRepository.save(existCar);
             return true;

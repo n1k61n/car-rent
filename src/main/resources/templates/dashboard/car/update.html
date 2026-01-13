@@ -3,12 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Yeni Maşın Əlavə Et</title>
+    <title>Maşını Yenilə</title>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="container-fluid">
-        <h1 class="h3 mb-4 text-gray-800">Yeni Avtomobil Qeydiyyatı</h1>
+        <h1 class="h3 mb-4 text-gray-800">Avtomobil Məlumatlarını Yenilə</h1>
 
         <form method="post">
             <div class="card shadow mb-4">
@@ -61,6 +61,16 @@
                         <div class="col-md-3">
                             <label class="form-label">Yürüş (Mileage)</label>
                             <input type="text" name="mileage"  th:value="${car.mileage}" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Kateqoriya</label>
+                            <select name="categoryId" class="form-control">
+                                <option value="" disabled>Kateqoriya seçin</option>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat.id}"
+                                        th:text="${cat.name}"
+                                        th:selected="${car.categoryId == cat.id}"></option>
+                            </select>
                         </div>
                     </div>
 

@@ -16,22 +16,21 @@ import java.util.Set;
 public interface CarRepository extends JpaRepository<Car, Long> {
 
 
-    @Query("SELECT DISTINCT c.brand FROM Car c ORDER BY c.brand ASC")
+    @Query("SELECT DISTINCT c.brand FROM Car c WHERE c.available = true ORDER BY c.brand ASC")
     Set<String> findAllBrandsOrderByName();
 
     @Query("SELECT c FROM Car c WHERE " +
             "c.available = true AND " +
-            "(:brand IS NULL OR LOWER(CAST(c.brand AS string)) LIKE LOWER(CONCAT('%', CAST(:brand AS string), '%'))) AND " +
-            "(:pickupDate IS NULL OR :dropoffDate IS NULL OR NOT EXISTS (" +
-            "    SELECT b FROM Booking b WHERE b.car = c AND " +
-            "    b.status NOT IN (com.example.carrent.enums.BookingStatus.CANCELLED, com.example.carrent.enums.BookingStatus.REJECTED) AND " +
-            "    (:pickupDate < b.endDate AND :dropoffDate > b.startDate)" +
-            "))")
-    Page<Car> findAvailableCarsPageable(
+            "(:brand IS NULL OR c.brand = :brand) AND " +
+            "(:category IS NULL OR c.category.name = :category) AND " +
+            "(:passengerCount IS NULL OR c.passengerCount >= :passengerCount)")
+    Page<Car> findAvailableCars(
             @Param("brand") String brand,
-            @Param("pickupDate") LocalDate pickupDate,
-            @Param("dropoffDate") LocalDate dropoffDate,
+            @Param("category") String category,
+            @Param("passengerCount") Integer passengerCount,
             Pageable pageable);
 
     Page<Car> findByBrandContainingIgnoreCaseOrModelContainingIgnoreCase(String keyword, String keyword1, Pageable pageable);
+
+    Page<Car> findByAvailableTrue(Pageable pageable);
 }

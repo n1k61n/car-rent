@@ -42,7 +42,8 @@ public class Car {
     private String imageUrl;
     @Column(name = "luggage_capacity")
     private Integer luggageCapacity;
-    private Boolean available;
+    
+    private Boolean available = true;
     
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -50,9 +51,10 @@ public class Car {
     private String suitcases;
     private String fuelPolicy;
     private String mileage;
-    private boolean roadAssistance;
-    private boolean insuranceIncluded;
-    private boolean freeCancellation;
+    
+    private Boolean roadAssistance;
+    private Boolean insuranceIncluded;
+    private Boolean freeCancellation;
 
 
     @OneToOne
