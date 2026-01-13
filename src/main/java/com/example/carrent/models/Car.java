@@ -50,9 +50,9 @@ public class Car {
     private String suitcases;
     private String fuelPolicy;
     private String mileage;
-    private Boolean roadAssistance = true;
-    private Boolean insuranceIncluded = true;
-    private Boolean freeCancellation = true;
+    private boolean roadAssistance;
+    private boolean insuranceIncluded;
+    private boolean freeCancellation;
 
 
     @OneToOne
