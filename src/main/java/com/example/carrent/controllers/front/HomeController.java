@@ -41,24 +41,24 @@ public class HomeController {
 
     @GetMapping("/contact")
     public String contact(){
-        return "front/contact";
+        return "front/pages/contact";
     }
 
     @GetMapping("/help")
     public String helpPage(Model model) {
         model.addAttribute("currentUri", "/help");
-        return "front/help";
+        return "front/pages/help";
     }
 
     @GetMapping("/term")
     public String termsPage(Model model) {
         model.addAttribute("currentUri", "/term");
-        return "front/term";
+        return "front/pages/term";
     }
 
     @GetMapping("/privacy")
     public String privacyPage(Model model) {
         model.addAttribute("currentUri", "/privacy");
-        return "front/privacy";
+        return "front/pages/privacy";
     }
 }

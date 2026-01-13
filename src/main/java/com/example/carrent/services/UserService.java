@@ -28,4 +28,6 @@ public interface UserService {
     void toggleUserStatus(Long id);
 
     void enableUser(String email);
+    
+    void resetPasswordToRandom(String email);
 }

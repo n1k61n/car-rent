@@ -24,7 +24,7 @@ public class UserController {
     public String showProfile(Model model, Principal principal) {
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-        return "front/profile";
+        return "front/account/profile";
     }
 
     @PostMapping("/profile/update")
@@ -40,7 +40,7 @@ public class UserController {
     public String showBookings(Model model, Principal principal) {
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("bookings", user.getBookings());
-        return "front/user_bookings";
+        return "front/account/user_bookings";
     }
 
 

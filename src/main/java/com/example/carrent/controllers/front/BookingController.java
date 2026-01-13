@@ -62,7 +62,7 @@ public class BookingController {
         Double dailyPrice = car.getDailyPrice() != null ? car.getDailyPrice() : 0.0;
         model.addAttribute("totalPrice", days * dailyPrice);
 
-        return "front/booking";
+        return "front/catalog/booking";
     }
 
     @PostMapping("/booking/complete")
@@ -94,6 +94,6 @@ public class BookingController {
 
     @GetMapping("/booking/success")
     public String showSuccessPage() {
-        return "front/success";
+        return "front/catalog/success";
     }
 }

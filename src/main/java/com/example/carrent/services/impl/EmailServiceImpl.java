@@ -19,4 +19,14 @@ public class EmailServiceImpl implements EmailService {
         message.setText("Sizin təhlükəsizlik kodunuz: " + otp + "\n\nBu kodu heç kimlə bölüşməyin.");
         mailSender.send(message);
     }
+
+    @Override
+    public void sendNewPasswordEmail(String toEmail, String newPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("eminelxanoglu@gmail.com");
+        message.setTo(toEmail);
+        message.setSubject("Yeni Şifrəniz");
+        message.setText("Sizin yeni şifrəniz: " + newPassword + "\n\nZəhmət olmasa giriş etdikdən sonra şifrənizi dəyişin.");
+        mailSender.send(message);
+    }
 }

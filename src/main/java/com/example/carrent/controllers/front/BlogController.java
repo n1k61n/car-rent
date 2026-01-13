@@ -27,7 +27,7 @@ public class BlogController {
         Pageable pageable = PageRequest.of(page, 6);
         Page<BlogDto> blogs = blogService.getAllBlogs(pageable);
         model.addAttribute("blogs", blogs);
-        return "front/blog";
+        return "front/blog/blog";
     }
 
     @PostMapping("/single/add-comment")
@@ -41,7 +41,7 @@ public class BlogController {
     public String getSingleBlog(@PathVariable Long id, Model model){
         BlogSingleDto blogSingleDto = blogService.getBlogById(id);
         model.addAttribute("blogSingle", blogSingleDto);
-        return "/front/single";
+        return "front/blog/single";
     }
 
 }

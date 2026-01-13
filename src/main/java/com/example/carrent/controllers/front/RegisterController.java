@@ -25,14 +25,14 @@ public class RegisterController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "front/login";
+        return "front/auth/login";
     }
 
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("userDto", new UserRegistrationDto());
-        return "front/register";
+        return "front/auth/register";
     }
 
     @PostMapping("/register")
@@ -41,20 +41,20 @@ public class RegisterController {
                                Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "front/register";
+            return "front/auth/register";
         }
 
         // 2. Şifrələrin eyniliyini yoxla
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             // Xüsusi xəta mesajını confirmPassword sahəsinə bağlayırıq
             bindingResult.rejectValue("confirmPassword", "error.userDto", "Şifrələr bir-biri ilə eyni deyil!");
-            return "front/register";
+            return "front/auth/register";
         }
 
         // 3. Email-in unikal olmasını yoxla
         if (userService.existsByEmail(registrationDto.getEmail())) {
             bindingResult.rejectValue("email", "error.userDto", "Bu email artıq qeydiyyatdan keçib!");
-            return "front/register";
+            return "front/auth/register";
         }
 
         // 4. Qeydiyyat prosesi
@@ -65,7 +65,7 @@ public class RegisterController {
             return "redirect:/verify-otp";
         } catch (Exception e) {
             model.addAttribute("error", "Qeydiyyat zamanı gözlənilməz xəta baş verdi.");
-            return "front/register";
+            return "front/auth/register";
         }
     }
 
@@ -74,7 +74,7 @@ public class RegisterController {
         if (!model.containsAttribute("email")) {
             return "redirect:/register";
         }
-        return "front/verify-otp";
+        return "front/auth/verify-otp";
     }
 
 
@@ -84,11 +84,11 @@ public class RegisterController {
 
         if (isValid) {
             userService.enableUser(email);
-            return "front/registration-success";
+            return "front/auth/registration-success";
         } else {
             model.addAttribute("error", "Kod yanlışdır.");
             model.addAttribute("email", email);
-            return "front/verify-otp";
+            return "front/auth/verify-otp";
         }
     }
 
@@ -104,4 +104,20 @@ public class RegisterController {
         return "redirect:/verify-otp";
     }
 
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "front/auth/forgot_password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.resetPasswordToRandom(email);
+            redirectAttributes.addFlashAttribute("message", "Yeni şifrə emailinizə göndərildi. Zəhmət olmasa emailinizi yoxlayın.");
+            return "redirect:/login";
+        } catch (Exception ex) {
+            model.addAttribute("error", "Email tapılmadı.");
+            return "front/auth/forgot_password";
+        }
+    }
 }

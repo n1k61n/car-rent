@@ -24,6 +24,7 @@
                         <div th:if="${param.error}" class="alert alert-danger p-2 mb-3 small" th:text="#{login.error_message}">
                             E-poçt ünvanı və ya şifrə yanlışdır.
                         </div>
+                        <div th:if="${message}" class="alert alert-success p-2 mb-3 small" th:text="${message}"></div>
 
                         <form th:action="@{/login}" method="post">
                             <div class="form-group">
@@ -46,6 +47,9 @@
                         </form>
 
                         <div class="mt-4 text-center">
+                            <p class="small">
+                                <a href="/forgot-password">Şifrəni unutmusunuz?</a>
+                            </p>
                             <p class="small">
                                 <span th:text="#{login.no_account}">Hesabınız yoxdur?</span>
                                 <a href="/register" th:text="#{login.register_link}">Qeydiyyatdan keçin</a>

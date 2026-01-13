@@ -19,6 +19,6 @@ public class AboutController {
     public String getAboutPage(Model model) {
         List<TeamMemberDto> team = teamMemberService.getAllTeamMembers();
         model.addAttribute("teamMembers", team);
-        return "front/about";
+        return "front/pages/about";
     }
 }

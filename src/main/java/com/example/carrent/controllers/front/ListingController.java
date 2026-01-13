@@ -49,7 +49,7 @@ public class ListingController {
         List<TestimonialDto> testimonialDtoListlist = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", testimonialDtoListlist);
 
-        return "front/listing";
+        return "front/catalog/listing";
     }
 
 
@@ -62,7 +62,7 @@ public class ListingController {
         }
 
         model.addAttribute("car", car);
-        return "front/car";
+        return "front/catalog/car";
     }
 
 

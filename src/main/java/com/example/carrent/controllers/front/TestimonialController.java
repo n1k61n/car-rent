@@ -22,7 +22,7 @@ public class TestimonialController {
         int count = 9;
         List<TestimonialDto> list = testimonialService.getLastTestimonials(count);
         model.addAttribute("testimonials", list);
-        return "front/testimonials";
+        return "front/pages/testimonials";
     }
 
 

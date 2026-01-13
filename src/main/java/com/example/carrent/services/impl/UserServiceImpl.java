@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -154,5 +155,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    @Transactional
+    public void resetPasswordToRandom(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
+
+        // Random şifrə yarat (8 simvol)
+        String newPassword = UUID.randomUUID().toString().substring(0, 8);
+        
+        // Şifrəni kodlaşdır və yadda saxla
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        // Email göndər
+        emailService.sendNewPasswordEmail(email, newPassword);
     }
 }
