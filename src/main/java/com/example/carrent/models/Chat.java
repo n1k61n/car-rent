@@ -9,7 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class Chat {
     private String from;
+    private String to;
     private String text;
+    private String sessionId;
+    private String content;
+
 }

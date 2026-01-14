@@ -1,64 +1,129 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const chatWindows = document.getElementById('chat-windows');
-    const messageForm = document.getElementById('messageForm');
-    const messageInput = document.getElementById('messageInput');
+let stompClient = null;
+let selectedGuestId = null;
+let chatHistory = {};
+const currentUserName = "ADMIN"; // Adminin tanınması üçün
 
-    let stompClient = null;
+function connectAdmin() {
+    const socket = new SockJS('/ws-chat');
+    stompClient = Stomp.over(socket);
 
-    function connect() {
-        const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
+    // Konsolda lazımsız logları bağlamaq üçün (istəsəniz silə bilərsiniz)
+    stompClient.debug = null;
 
-        // Konsolda lazımsız loqları gizlətmək üçün (istəyə bağlı)
-        stompClient.debug = null;
+    stompClient.connect({}, function (frame) {
+        console.log('Admin Connected: ' + frame);
 
-        stompClient.connect({}, function (frame) {
-            console.log('Bağlantı uğurludur: ' + frame);
-
-            // Bağlantı qurulan kimi "Gözlənilir" yazısını silirik
-            if (chatWindows) {
-                chatWindows.innerHTML = '';
-            }
-
-            stompClient.subscribe('/topic/public', function (payload) {
-                const message = JSON.parse(payload.body);
-                renderMessage(message);
-            });
-        }, function (error) {
-            console.error('WebSocket bağlantı xətası: ', error);
+        stompClient.subscribe('/topic/admin', function (payload) {
+            const message = JSON.parse(payload.body);
+            console.log("Serverdən gələn data:", message);
+            handleIncomingMessage(message);
         });
+    });
+}
+
+function handleIncomingMessage(message) {
+    // Sizin modeldəki sahələrə uyğunlaşdırma
+    const guestId = message.sessionId;
+    const guestName = message.from || "Qonaq";
+    const messageText = message.content || message.text; // Hər iki ehtimalı yoxlayırıq
+
+    if (!guestId) return;
+
+    // 1. İstifadəçi siyahıda yoxdursa, sol tərəfə əlavə et
+    if (!chatHistory[guestId]) {
+        chatHistory[guestId] = [];
+        const userHtml = `
+            <div id="user-${guestId}" class="user-list-item" onclick="selectGuest('${guestId}', '${guestName}')">
+                <div class="avatar-wrapper">
+                    <img src="/dashboard/img/undraw_profile.svg" alt="User">
+                </div>
+                <div class="user-details">
+                    <div class="user-name">${guestName}</div>
+                    <div class="user-status text-success">Online</div>
+                </div>
+            </div>`;
+        document.getElementById('user-list').insertAdjacentHTML('beforeend', userHtml);
     }
 
-    function renderMessage(message) {
-        if (!chatWindows) return;
+    // 2. Mesajı tarixçəyə əlavə et
+    const msgObj = {
+        from: guestName,
+        text: messageText,
+        isMe: (guestName === currentUserName || message.from === "ADMIN")
+    };
 
-        const messageDiv = document.createElement('div');
-        const isMine = message.from === currentUserName;
+    chatHistory[guestId].push(msgObj);
 
-        // HTML strukturu sizin CSS-ə uyğun olaraq
-        messageDiv.className = isMine ? 'message sent' : 'message received';
-        messageDiv.innerHTML = `
-            <div class="bubble shadow-sm">
-                ${!isMine ? `<small class="d-block font-weight-bold mb-1" style="font-size: 0.7rem; color: #4e73df;">${message.from}</small>` : ''}
-                <span>${message.text}</span>
+    // 3. Əgər hal-hazırda bu istifadəçi ilə çat açıqdırsa, dərhal ekranda göstər
+    if (selectedGuestId === guestId) {
+        renderMessage(msgObj);
+    } else {
+        // Digər halda sol tərəfdə bildiriş rəngi ver
+        $(`#user-${guestId}`).addClass('unread-highlight');
+    }
+}
+
+function selectGuest(guestId, guestName) {
+    selectedGuestId = guestId;
+
+    // Vizual aktivlik
+    $('.user-list-item').removeClass('active');
+    $(`#user-${guestId}`).addClass('active').removeClass('unread-highlight');
+
+    // Sağ tərəfi təmizlə və tarixçəni yüklə
+    const chatWin = document.getElementById('chat-windows');
+    chatWin.innerHTML = '';
+
+    if (chatHistory[guestId]) {
+        chatHistory[guestId].forEach(msg => renderMessage(msg));
+    }
+}
+
+function renderMessage(msg) {
+    const chatWin = document.getElementById('chat-windows');
+    // Mesajın kimdən gəldiyini yoxlayırıq
+    const isMe = msg.from === "ADMIN" || msg.isMe;
+
+    const msgHtml = `
+        <div class="message ${isMe ? 'sent' : 'received'}">
+            <div class="bubble">
+                ${msg.text}
             </div>
-        `;
+            <div class="message-time">
+                ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </div>
+        </div>`;
 
-        chatWindows.appendChild(messageDiv);
-        chatWindows.scrollTop = chatWindows.scrollHeight;
-    }
+    chatWin.insertAdjacentHTML('beforeend', msgHtml);
+    chatWin.scrollTop = chatWin.scrollHeight;
+}
 
-    if (messageForm) {
-        messageForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const content = messageInput.value.trim();
-            if (content && stompClient) {
-                const chatMessage = { from: currentUserName, text: content };
-                stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-                messageInput.value = '';
-            }
-        });
-    }
+$(document).ready(function() {
+    connectAdmin();
 
-    connect();
+    $('#messageForm').on('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('messageInput');
+        const text = input.value.trim();
+
+        if (text && selectedGuestId) {
+            const chatMessage = {
+                from: "ADMIN",
+                to: selectedGuestId,
+                content: text, // Sizin loglarda 'content' işləyir
+                sessionId: selectedGuestId // Cavab verdiyimiz adamın ID-si
+            };
+
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+
+            // Öz ekranımızda göstərək
+            const myMsg = { from: "ADMIN", text: text, isMe: true };
+            renderMessage(myMsg);
+            chatHistory[selectedGuestId].push(myMsg);
+
+            input.value = '';
+        } else if (!selectedGuestId) {
+            alert("Zəhmət olmasa, əvvəlcə sol tərəfdən bir istifadəçi seçin.");
+        }
+    });
 });

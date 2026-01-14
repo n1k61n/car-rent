@@ -111,44 +111,36 @@
 
     </div>
 
-    <!-- Chat Button -->
-    <button id="chatToggleBtn" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: #0779e4; color: white; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease;">
-        <span  style="font-size: 24px;">💬</span>
+    <button id="chatToggleBtn" style="position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, #0779e4, #1c2bde); color: white; border: none; box-shadow: 0 8px 25px rgba(7, 121, 228, 0.4); z-index: 9999; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; outline: none;">
+        <span style="font-size: 28px;">💬</span>
     </button>
 
-    <div id="chatInterface" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); z-index: 9999; flex-direction: column; overflow: hidden; transition: all 0.3s ease;">
-        <!-- Chat Header -->
-        <div style="background: #0779e4; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h5 style="margin: 0; font-size: 18px;">Live Chat</h5>
-                <div sec:authorize="isAuthenticated()">
-                    <small style="opacity: 0.9;" id="chatUserName" th:text="${#authentication.principal.username}"></small>
-                </div>
-                <div sec:authorize="isAnonymous()">
-                    <input type="text" id="anonymousUserName" placeholder="Enter your name" style="background: transparent; border: none; border-bottom: 1px solid white; color: white; outline: none;">
-                </div>
-            </div>
-            <button id="chatCloseBtn"
-                    style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; width: 30px; height: 30px; line-height: 30px;">
-            </button>
+    <div id="chatInterface" style="display: none; position: fixed; bottom: 110px; right: 30px; width: 380px; height: 550px; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); z-index: 9999; flex-direction: column; overflow: hidden; transition: all 0.4s ease;">
+
+        <div style="background: linear-gradient(to right, #0779e4, #1c2bde); color: white; padding: 25px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h5 style="margin: 0; font-size: 16px; font-weight: 600;">Canlı Dəstək</h5>
+            <button id="chatCloseBtn" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
         </div>
 
-        <!-- Chat Messages -->
-        <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; background: #f5f5f5;">
-            <div style="text-align: center; color: #999; font-size: 14px; margin-bottom: 15px;">
-                <small>Start a conversation</small>
-            </div>
+        <div id="namePromptScreen" sec:authorize="isAnonymous()" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; background: #f8f9fa;">
+            <div style="font-size: 40px; margin-bottom: 20px;">👋</div>
+            <h6 style="margin-bottom: 10px; color: #333;">Xoş gəlmisiniz!</h6>
+            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Sizə kömək edə bilməyimiz üçün zəhmət olmasa adınızı qeyd edin.</p>
+            <input type="text" id="anonymousUserName" placeholder="Adınız və Soyadınız"
+                   style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
+            <button id="startChatBtn" style="width: 100%; padding: 12px; background: #0779e4; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s;">Çata Başla</button>
         </div>
 
-        <!-- Chat Input -->
-        <div style="padding: 15px; background: white; border-top: 1px solid #e0e0e0;">
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="chatInput" placeholder="Type your message..."
-                       style="flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 14px;">
-                <button id="chatSendBtn"
-                        style="background: #0779e4; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                    <span class="icon-arrow_forward"></span>
-                </button>
+        <div id="mainChatArea" style="flex: 1; display: none; flex-direction: column; overflow: hidden;">
+            <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 15px;">
+                <div style="text-align: center;"><small style="color: #aaa;">Söhbət başladı</small></div>
+            </div>
+
+            <div style="padding: 20px; background: white; border-top: 1px solid #f0f0f0;">
+                <div style="display: flex; background: #f1f3f4; border-radius: 25px; padding: 5px 15px; align-items: center;">
+                    <input type="text" id="chatInput" placeholder="Mesajınızı yazın..." style="flex: 1; border: none; background: transparent; outline: none; padding: 10px 0;">
+                    <button id="chatSendBtn" style="background: #0779e4; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer;">➤</button>
+                </div>
             </div>
         </div>
     </div>
@@ -212,6 +204,7 @@
 <script src="/front/js/jquery-3.3.1.min.js"></script>
 <script src="/front/js/popper.min.js"></script>
 <script src="/front/js/bootstrap.min.js"></script>
+
 <script src="/front/js/owl.carousel.min.js"></script>
 <script src="/front/js/jquery.sticky.js"></script>
 <script src="/front/js/jquery.waypoints.min.js"></script>
@@ -225,8 +218,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
-<script src="/front/js/main.js"></script>
+<input type="hidden" id="authUserName" th:value="${#authentication.name}">
+<input type="hidden" id="isAuth" th:value="${#authorization.expression('isAuthenticated()')}">
+
 <script src="/front/js/chat.js"></script>
+<script src="/front/js/main.js"></script>
 
 </body>
 

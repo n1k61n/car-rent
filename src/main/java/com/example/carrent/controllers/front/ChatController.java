@@ -1,21 +1,29 @@
 package com.example.carrent.controllers.front;
 
-import com.example.carrent.models.ChatMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.carrent.models.Chat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+
 
 @Controller
 public class ChatController {
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
 
     @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(ChatMessage chatMessage) {
-        log.info("Received chat message: From = {}, Text = {}", chatMessage.getFrom(), chatMessage.getText());
-        return chatMessage;
+    public void sendMessage(@Payload Chat chat) {
+        System.out.println("Mesaj alındı: " + chat.getContent());
+
+        messagingTemplate.convertAndSend("/topic/admin", chat);
+
+        // Əgər mesaj admin tərəfindən müəyyən istifadəçiyə göndərilibsə
+        if (chat.getTo() != null && !chat.getTo().equals("ADMIN")) {
+            messagingTemplate.convertAndSend("/topic/user/" + chat.getTo(), chat);
+        }
     }
 }

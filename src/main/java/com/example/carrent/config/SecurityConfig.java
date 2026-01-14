@@ -54,9 +54,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/ws-chat/**").permitAll();
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
-                    auth.requestMatchers("/*", "/ws/**", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**").permitAll();
+                    auth.requestMatchers("/*", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(form -> {
