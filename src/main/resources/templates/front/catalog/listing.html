@@ -42,7 +42,16 @@
           <div class="site-section bg-light">
               <div class="container">
 
-                  <div class="row">
+                  <!-- Maşın tapılmadı mesajı -->
+                  <div class="row" th:if="${carPage.content.isEmpty()}">
+                      <div class="col-12 text-center py-5">
+                          <h3 class="text-muted" th:text="#{car.not_found}">Təəssüf ki, axtarışınıza uyğun avtomobil tapılmadı.</h3>
+                          <p class="text-muted" th:text="#{car.not_found_parameter}">Zəhmət olmasa, fərqli parametrlərlə yenidən cəhd edin.</p>
+                          <a href="/listing" class="btn btn-primary mt-3" th:text="#{btn.show_all}">Bütün Maşınları Göstər</a>
+                      </div>
+                  </div>
+
+                  <div class="row" th:if="${!carPage.content.isEmpty()}">
                       <div class="col-md-6 col-lg-4 mb-4" th:each="car : ${carPage.content}">
                           <div class="listing d-block align-items-stretch">
                               <div class="listing-img h-100 mr-4">
@@ -78,20 +87,20 @@
                           </div>
                       </div>
                   </div>
-                  <div class="row">
+                  <div class="row" th:if="${!carPage.content.isEmpty()}">
                       <div class="col-5">
                           <div class="custom-pagination">
                               <a th:if="${carPage.hasPrevious()}"
-                                 th:href="'/listing?page=' + ${currentPage - 1} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}">&lt;</a>
+                                 th:href="'/listing?page=' + ${currentPage - 1} + '&brand=' + ${selectedBrand} + '&category=' + ${selectedCategory} + '&passengerCount=' + ${selectedPassengerCount}">&lt;</a>
 
                               <span th:each="i : ${#numbers.sequence(0, (carPage.totalPages > 0 ? carPage.totalPages - 1 : 0))}">
-                                  <a th:href="'/listing?page=' + ${i} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}"
+                                  <a th:href="'/listing?page=' + ${i} + '&brand=' + ${selectedBrand} + '&category=' + ${selectedCategory} + '&passengerCount=' + ${selectedPassengerCount}"
                                      th:text="${i + 1}"
                                      th:classappend="${currentPage == i} ? 'active' : ''">1</a>
                             </span>
 
                               <a th:if="${carPage.hasNext()}"
-                                 th:href="'/listing?page=' + ${currentPage + 1} + '&brand=' + ${selectedBrand} + '&pickup=' + ${selectedPickup} + '&dropoff=' + ${selectedDropoff}">&gt;</a>
+                                 th:href="'/listing?page=' + ${currentPage + 1} + '&brand=' + ${selectedBrand} + '&category=' + ${selectedCategory} + '&passengerCount=' + ${selectedPassengerCount}">&gt;</a>
 
                           </div>
                       </div>
