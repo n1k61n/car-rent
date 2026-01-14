@@ -18,7 +18,7 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/dashboard/admin")
 @RequiredArgsConstructor
-public class AdminController {
+public class DashboardAdminController {
 
     private final UserService userService;
 

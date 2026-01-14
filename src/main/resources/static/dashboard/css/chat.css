@@ -1,0 +1,73 @@
+/* Ana Konteyner */
+.chat-container {
+    display: flex;
+    height: 70vh;
+    background-color: #fff;
+}
+
+/* Sol Sidebar */
+.chat-users-sidebar {
+    width: 280px;
+    border-right: 1px solid #e3e6f0;
+    background-color: #f8f9fc;
+    overflow-y: auto;
+}
+
+/* Şəkli kiçik saxlayan hissə */
+.avatar-wrapper {
+    width: 45px !important;
+    height: 45px !important;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Mesaj sahəsi */
+.chat-main-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mesaj Balonları */
+.message {
+    display: flex;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.message.sent { justify-content: flex-end; }
+.message.received { justify-content: flex-start; }
+
+.bubble {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 70%;
+    font-size: 0.9rem;
+}
+
+.message.sent .bubble {
+    background-color: #4e73df;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message.received .bubble {
+    background-color: #eaecf4;
+    color: #3a3b45;
+    border-bottom-left-radius: 2px;
+}

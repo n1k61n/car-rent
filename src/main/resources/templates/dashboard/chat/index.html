@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/layout}">
+<head>
+    <title>Chat</title>
+    <link href="/dashboard/css/chat.css" rel="stylesheet">
+</head>
+<body>
+
+<div layout:fragment="content">
+    <h1 class="h3 mb-4 text-gray-800">Çat Sistemi</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-body p-0">
+            <div class="chat-container">
+                <div class="chat-users-sidebar">
+                    <div class="p-3">
+                        <input type="text" class="form-control form-control-sm" placeholder="İstifadəçi axtar...">
+                    </div>
+                    <div id="user-list">
+                        <div class="user-list-item active">
+                            <div class="avatar-wrapper">
+                                <img src="/dashboard/img/undraw_profile.svg" alt="User">
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">Ümumi Kanal</div>
+                                <div class="user-status text-success">Online</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-main-area">
+                    <div id="chat-windows" class="messages-body">
+                        <div class="text-center text-muted small py-5">Bağlantı gözlənilir...</div>
+                    </div>
+
+                    <div class="messages-footer">
+                        <form id="messageForm">
+                            <div class="input-group">
+                                <input type="text" id="messageInput" autocomplete="off"
+                                       class="form-control border-0 bg-light"
+                                       placeholder="Mesajınızı yazın...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit" id="sendButton">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="/dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:inline="javascript">
+    var currentUserName = /*[[${#authentication.name}]]*/ 'Anonymous';
+</script>
+<script src="/dashboard/js/chat.js"></script>
+
+</body>
+</html>
