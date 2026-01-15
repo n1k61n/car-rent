@@ -52,10 +52,7 @@ public class DashboardChatController {
         chatService.saveChat(chat);
 
         if ("ADMIN".equals(chat.getTo())) {
-            // Send message to admin's private chat topic
             messagingTemplate.convertAndSend("/topic/admin", chat);
-
-            // Create and send a real-time notification
             String link = "/dashboard/chat?user=" + chat.getSessionId();
             Notification notification = notificationService.createNotification("New message from " + chat.getFrom(), link, "CHAT");
             messagingTemplate.convertAndSend("/topic/notifications", notification);
