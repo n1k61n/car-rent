@@ -1,6 +1,6 @@
 package com.example.carrent.controllers.dashboard;
 
-import com.example.carrent.models.Chat;
+import com.example.carrent.dtos.chat.ChatDto;
 import com.example.carrent.models.Notification;
 import com.example.carrent.services.ChatService;
 import com.example.carrent.services.NotificationService;
@@ -39,7 +39,7 @@ public class DashboardChatController {
     }
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload Chat chat) {
+    public void sendMessage(@Payload ChatDto chat) {
         System.out.println("Gələn: " + chat.getContent() + " | Kimdən: " + chat.getFrom() + " | ID: " + chat.getSessionId());
 
         if (chat.getEmail() == null) {
@@ -67,13 +67,13 @@ public class DashboardChatController {
 
     @GetMapping("/history/{id}")
     @ResponseBody
-    public List<Chat> getChatHistory(@PathVariable String id) {
+    public List<ChatDto> getChatHistory(@PathVariable String id) {
         return chatService.getHistoryBySessionId(id);
     }
 
     @GetMapping("/active-sessions")
     @ResponseBody
-    public List<Chat> getActiveSessions() {
+    public List<ChatDto> getActiveSessions() {
         return chatService.getUniqueChatSessionsAfter(LocalDateTime.now().minusHours(24));
     }
 }
