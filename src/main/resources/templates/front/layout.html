@@ -126,8 +126,8 @@
             <div style="font-size: 40px; margin-bottom: 20px;">👋</div>
             <h6 style="margin-bottom: 10px; color: #333;">Xoş gəlmisiniz!</h6>
             <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Sizə kömək edə bilməyimiz üçün zəhmət olmasa adınızı qeyd edin.</p>
-            <input type="text" id="anonymousUserName" placeholder="Adınız və Soyadınız"
-                   style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
+            <input type="text" id="anonymousUserName" placeholder="Adınız və Soyadınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
+            <input type="email" id="anonymousUserEmail" placeholder="Email ünvanınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
             <button id="startChatBtn" style="width: 100%; padding: 12px; background: #0779e4; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s;">Çata Başla</button>
         </div>
 
@@ -218,8 +218,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
-<input type="hidden" id="authUserName" th:value="${#authentication.name}">
+
 <input type="hidden" id="isAuth" th:value="${#authorization.expression('isAuthenticated()')}">
+<input type="hidden" id="authUserName" th:value="${#authentication.name}">
+<input type="hidden" id="authUserEmail" th:value="${#authentication.name}">
+
 
 <script src="/front/js/chat.js"></script>
 <script src="/front/js/main.js"></script>

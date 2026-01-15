@@ -16,13 +16,13 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Override
-    public void createNotification(String message, String link, String type) {
+    public Notification createNotification(String message, String link, String type) {
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setLink(link);
         notification.setType(type);
         notification.setRead(false);
-        notificationRepository.save(notification);
+        return notificationRepository.save(notification);
     }
 
     @Override

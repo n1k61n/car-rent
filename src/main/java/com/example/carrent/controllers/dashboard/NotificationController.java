@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/dashboard/notifications")
@@ -16,8 +17,11 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/read/{id}")
-    public String markAsReadAndRedirect(@PathVariable Long id) {
+    public RedirectView readNotification(@PathVariable Long id) {
         Notification notification = notificationService.markAsRead(id);
-        return "redirect:" + notification.getLink();
+        if (notification != null) {
+            return new RedirectView(notification.getLink());
+        }
+        return new RedirectView("/dashboard");
     }
 }

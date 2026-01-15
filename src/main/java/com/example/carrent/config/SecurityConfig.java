@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/dashboard/chat/history/**", "/dashboard/chat/active-sessions").permitAll();
                     auth.requestMatchers("/ws-chat/**").permitAll();
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
                     auth.requestMatchers("/*", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**").permitAll();

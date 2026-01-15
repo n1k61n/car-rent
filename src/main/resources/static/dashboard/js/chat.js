@@ -1,129 +1,189 @@
 let stompClient = null;
 let selectedGuestId = null;
-let chatHistory = {};
-const currentUserName = "ADMIN"; // Adminin tanınması üçün
+
+$(document).ready(function() {
+    connectAdmin();
+    loadActiveUsers();
+
+    // Siyahıda istifadəçiyə klik edəndə
+    $(document).on('click', '.user-list-item', function() {
+        const email = $(this).data('email');
+        const name = $(this).data('name');
+        selectGuest(email, name);
+    });
+
+    // Mesaj göndərmə forması
+    $('#messageForm').on('submit', function(e) {
+        e.preventDefault();
+        sendMessageToUser();
+    });
+
+    // URL-dən gələn istifadəçini avtomatik seç
+    const urlParams = new URLSearchParams(window.location.search);
+    const userToSelect = urlParams.get('user');
+    if (userToSelect) {
+        // We need a small delay to ensure the user list has been loaded via fetch
+        setTimeout(() => {
+            const userElement = $(`[data-email="${userToSelect}"]`);
+            if (userElement.length > 0) {
+                const name = userElement.data('name');
+                selectGuest(userToSelect, name);
+            } else {
+
+                selectGuest(userToSelect, userToSelect);
+            }
+        }, 500); // 500ms delay might need adjustment
+    }
+});
 
 function connectAdmin() {
     const socket = new SockJS('/ws-chat');
     stompClient = Stomp.over(socket);
-
-    // Konsolda lazımsız logları bağlamaq üçün (istəsəniz silə bilərsiniz)
     stompClient.debug = null;
 
-    stompClient.connect({}, function (frame) {
-        console.log('Admin Connected: ' + frame);
+    stompClient.connect({}, function(frame) {
+        console.log('Admin connected');
 
-        stompClient.subscribe('/topic/admin', function (payload) {
+        // Admin ümumi kanalı dinləyir (Yeni gələn mesajları görmək üçün)
+        stompClient.subscribe('/topic/admin', function(payload) {
             const message = JSON.parse(payload.body);
-            console.log("Serverdən gələn data:", message);
-            handleIncomingMessage(message);
+            const guestId = message.sessionId;
+            const guestName = message.from;
+
+            // Əgər mesaj admin-dən gəlibsə, heç nə etmə (öz mesajımızdır)
+            if (guestName === "ADMIN") return;
+
+            // 1. İstifadəçi siyahıda yoxdursa, əlavə et
+            if ($(`[data-email="${guestId}"]`).length === 0) {
+                addUserToSidebar(guestId, guestName);
+            }
+
+            // 2. Əgər gələn mesaj hal-hazırda açıq olan çatın sahibindəndirsə, ekrana çıxar
+            if (selectedGuestId === guestId) {
+                renderMessage({
+                    from: guestName,
+                    text: message.content,
+                    isMe: false
+                });
+            } else {
+                // Digər halda sol tərəfdəki istifadəçi siyahısını vizual olaraq yenilə
+                $(`[data-email="${guestId}"]`).addClass('unread-highlight');
+                // Siyahıda yuxarı qaldır
+                const userItem = $(`[data-email="${guestId}"]`);
+                $('#user-list').prepend(userItem);
+            }
         });
     });
 }
 
-function handleIncomingMessage(message) {
-    // Sizin modeldəki sahələrə uyğunlaşdırma
-    const guestId = message.sessionId;
-    const guestName = message.from || "Qonaq";
-    const messageText = message.content || message.text; // Hər iki ehtimalı yoxlayırıq
+function loadActiveUsers() {
+    fetch('/dashboard/chat/active-sessions')
+        .then(response => response.json())
+        .then(users => {
+            const userList = document.getElementById('user-list');
+            if (!userList) return;
+            userList.innerHTML = ''; // Təmizlə
 
-    if (!guestId) return;
-
-    // 1. İstifadəçi siyahıda yoxdursa, sol tərəfə əlavə et
-    if (!chatHistory[guestId]) {
-        chatHistory[guestId] = [];
-        const userHtml = `
-            <div id="user-${guestId}" class="user-list-item" onclick="selectGuest('${guestId}', '${guestName}')">
-                <div class="avatar-wrapper">
-                    <img src="/dashboard/img/undraw_profile.svg" alt="User">
-                </div>
-                <div class="user-details">
-                    <div class="user-name">${guestName}</div>
-                    <div class="user-status text-success">Online</div>
-                </div>
-            </div>`;
-        document.getElementById('user-list').insertAdjacentHTML('beforeend', userHtml);
-    }
-
-    // 2. Mesajı tarixçəyə əlavə et
-    const msgObj = {
-        from: guestName,
-        text: messageText,
-        isMe: (guestName === currentUserName || message.from === "ADMIN")
-    };
-
-    chatHistory[guestId].push(msgObj);
-
-    // 3. Əgər hal-hazırda bu istifadəçi ilə çat açıqdırsa, dərhal ekranda göstər
-    if (selectedGuestId === guestId) {
-        renderMessage(msgObj);
-    } else {
-        // Digər halda sol tərəfdə bildiriş rəngi ver
-        $(`#user-${guestId}`).addClass('unread-highlight');
-    }
+            users.forEach(user => {
+                // user obyekti: { sessionId: "...", from: "..." }
+                // Bizim halda sessionId email-dir.
+                addUserToSidebar(user.sessionId, user.from);
+            });
+        })
+        .catch(err => console.error("Siyahı yüklənmədi:", err));
 }
 
-function selectGuest(guestId, guestName) {
-    selectedGuestId = guestId;
+function addUserToSidebar(email, name) {
+    const userList = document.getElementById('user-list');
+    // Dublikat yoxlanışı
+    if ($(`[data-email="${email}"]`).length > 0) return;
 
-    // Vizual aktivlik
-    $('.user-list-item').removeClass('active');
-    $(`#user-${guestId}`).addClass('active').removeClass('unread-highlight');
-
-    // Sağ tərəfi təmizlə və tarixçəni yüklə
-    const chatWin = document.getElementById('chat-windows');
-    chatWin.innerHTML = '';
-
-    if (chatHistory[guestId]) {
-        chatHistory[guestId].forEach(msg => renderMessage(msg));
-    }
-}
-
-function renderMessage(msg) {
-    const chatWin = document.getElementById('chat-windows');
-    // Mesajın kimdən gəldiyini yoxlayırıq
-    const isMe = msg.from === "ADMIN" || msg.isMe;
-
-    const msgHtml = `
-        <div class="message ${isMe ? 'sent' : 'received'}">
-            <div class="bubble">
-                ${msg.text}
+    const userHtml = `
+        <div class="user-list-item" data-email="${email}" data-name="${name}">
+            <div class="avatar-wrapper">
+                <img src="/dashboard/img/undraw_profile.svg" alt="User">
             </div>
-            <div class="message-time">
-                ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            <div class="user-details">
+                <div class="user-name">${name}</div>
+                <div class="user-status text-success">Online</div>
             </div>
         </div>`;
 
-    chatWin.insertAdjacentHTML('beforeend', msgHtml);
-    chatWin.scrollTop = chatWin.scrollHeight;
+    // insertAdjacentHTML istifadə edərək əlavə edirik
+    userList.insertAdjacentHTML('afterbegin', userHtml);
 }
 
-$(document).ready(function() {
-    connectAdmin();
+function selectGuest(email, name) {
+    selectedGuestId = email;
 
-    $('#messageForm').on('submit', function(e) {
-        e.preventDefault();
-        const input = document.getElementById('messageInput');
-        const text = input.value.trim();
+    // Vizual olaraq seçilən istifadəçini işarələ
+    $('.user-list-item').removeClass('active');
+    $(`[data-email="${email}"]`).addClass('active').removeClass('unread-highlight');
+    // Başlıqda adı göstər (əgər varsa)
+    // $('#chatWith').text(name);
 
-        if (text && selectedGuestId) {
-            const chatMessage = {
-                from: "ADMIN",
-                to: selectedGuestId,
-                content: text, // Sizin loglarda 'content' işləyir
-                sessionId: selectedGuestId // Cavab verdiyimiz adamın ID-si
-            };
+    const chatWin = document.getElementById('chat-windows');
+    chatWin.innerHTML = '<div class="text-center p-3">Yüklənir...</div>';
 
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+    // Mesaj tarixçəsini gətir
+    fetch(`/dashboard/chat/history/${email}`)
+        .then(res => res.json())
+        .then(messages => {
+            chatWin.innerHTML = ''; // "Yüklənir" yazısını sil
+            if (messages.length === 0) {
+                chatWin.innerHTML = '<div class="text-center p-3 text-muted">Hələ mesaj yoxdur.</div>';
+            } else {
+                messages.forEach(msg => {
+                    renderMessage({
+                        from: msg.from,
+                        text: msg.content,
+                        isMe: msg.from === "ADMIN"
+                    });
+                });
+            }
+            chatWin.scrollTop = chatWin.scrollHeight;
+        });
+}
 
-            // Öz ekranımızda göstərək
-            const myMsg = { from: "ADMIN", text: text, isMe: true };
-            renderMessage(myMsg);
-            chatHistory[selectedGuestId].push(myMsg);
+function sendMessageToUser() {
+    const input = document.getElementById('messageInput');
+    const text = input.value.trim();
 
-            input.value = '';
-        } else if (!selectedGuestId) {
-            alert("Zəhmət olmasa, əvvəlcə sol tərəfdən bir istifadəçi seçin.");
-        }
-    });
-});
+    if (text && selectedGuestId && stompClient) {
+        const chatMessage = {
+            from: "ADMIN",
+            to: selectedGuestId,      // Mesajın gedəcəyi istifadəçi ID-si
+            content: text,
+            sessionId: selectedGuestId // BAZADA BU ID İLƏ SAXLANACAQ
+        };
+
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+
+        renderMessage({
+            from: "ADMIN",
+            text: text,
+            isMe: true
+        });
+
+        input.value = '';
+    }
+}
+
+function renderMessage(data) {
+    const chatWin = document.getElementById('chat-windows');
+    const align = data.isMe ? 'flex-end' : 'flex-start';
+    const bg = data.isMe ? '#007bff' : '#f1f1f1';
+    const color = data.isMe ? 'white' : '#333';
+    const radius = data.isMe ? '15px 15px 0 15px' : '15px 15px 15px 0';
+
+    const html = `
+        <div style="display: flex; justify-content: ${align}; margin-bottom: 10px;">
+            <div style="background: ${bg}; color: ${color}; padding: 8px 15px; border-radius: ${radius}; max-width: 70%; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                ${data.text}
+            </div>
+        </div>
+    `;
+
+    chatWin.insertAdjacentHTML('beforeend', html);
+    chatWin.scrollTop = chatWin.scrollHeight;
+}
