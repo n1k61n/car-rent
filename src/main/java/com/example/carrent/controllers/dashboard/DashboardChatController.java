@@ -40,17 +40,13 @@ public class DashboardChatController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
-        System.out.println("Gələn: " + chat.getContent() + " | Kimdən: " + chat.getFrom() + " | ID: " + chat.getSessionId());
-
         if (chat.getEmail() == null) {
             chat.setEmail(chat.getFrom());
         }
         if ("ADMIN".equals(chat.getTo()) && chat.getSessionId() == null) {
             chat.setSessionId(chat.getFrom());
         }
-
         chatService.saveChat(chat);
-
         if ("ADMIN".equals(chat.getTo())) {
             messagingTemplate.convertAndSend("/topic/admin", chat);
             String link = "/dashboard/chat?user=" + chat.getSessionId();

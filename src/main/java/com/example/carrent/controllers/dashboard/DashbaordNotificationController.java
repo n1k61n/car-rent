@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("/dashboard/notifications")
 @RequiredArgsConstructor
-public class NotificationController {
+public class DashbaordNotificationController {
 
     private final NotificationService notificationService;
 
