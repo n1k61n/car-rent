@@ -115,14 +115,14 @@
                 showReceivedMessage(message);
             });
 
-            const joinMessage = {
-                from: currentUserName,
-                email: currentUserName,
-                content: "Mən qoşuldum",
-                to: "ADMIN",
-                sessionId: sessionId
-            };
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(joinMessage));
+//            const joinMessage = {
+//                from: currentUserName,
+//                email: currentUserName,
+//                content: "Mən qoşuldum",
+//                to: "ADMIN",
+//                sessionId: sessionId
+//            };
+//            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(joinMessage));
 
             fetchHistory();
         }, function(error) {

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"
+      layout:decorate="~{front/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="hero inner-page" style="background-image: url('/front/images/hero_1_a.jpg');">
+
+    </div>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Payment Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/booking/process-payment}" method="post">
+                            <input type="hidden" name="bookingId" th:value="${bookingId}">
+
+                            <div class="form-group">
+                                <label for="cardName">Card Holder Name</label>
+                                <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardNumber">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" placeholder="0000 0000 0000 0000" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="expiryDate">Expiry Date</label>
+                                        <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="cvv">CVV</label>
+                                        <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-success btn-block btn-lg">Pay Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

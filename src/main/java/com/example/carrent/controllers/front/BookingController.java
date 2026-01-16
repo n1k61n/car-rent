@@ -3,6 +3,7 @@ package com.example.carrent.controllers.front;
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingDto;
 import com.example.carrent.dtos.car.CarDto;
+import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.CarService;
 import jakarta.validation.Valid;
@@ -82,13 +83,32 @@ public class BookingController {
         }
 
         try {
-            boolean result = bookingService.completeBooking(bookingDto, file);
-            if (result) return "redirect:/booking/success";
+            Long bookingId = bookingService.completeBooking(bookingDto, file);
+            return "redirect:/booking/payment/" + bookingId;
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Xəta baş verdi: " + e.getMessage());
         }
         return "redirect:/booking/save?carId=" + bookingDto.getCarId();
+    }
+
+    @GetMapping("/booking/payment/{id}")
+    public String showPaymentPage(@PathVariable Long id, Model model) {
+        model.addAttribute("bookingId", id);
+        return "front/catalog/payment";
+    }
+
+    @PostMapping("/booking/process-payment")
+    public String processPayment(@RequestParam("bookingId") Long bookingId, RedirectAttributes redirectAttributes) {
+        try {
+            // Simulate payment processing
+            // Update booking status to CONFIRMED (indicating payment received)
+            bookingService.updateStatus(bookingId, BookingStatus.PENDING);
+            return "redirect:/booking/success";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Payment failed: " + e.getMessage());
+            return "redirect:/booking/payment/" + bookingId;
+        }
     }
 
 

@@ -25,6 +25,9 @@ public class UserController {
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
         
@@ -45,6 +48,9 @@ public class UserController {
                                 @Valid UserProfileUpdateDto userProfileUpdateDto,
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes){
+        if (principal == null) {
+            return "redirect:/login";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateDto", bindingResult);
@@ -65,6 +71,9 @@ public class UserController {
 
     @GetMapping("/bookings")
     public String showBookings(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("bookings", user.getBookings());
         return "front/account/user_bookings";
@@ -73,6 +82,9 @@ public class UserController {
 
     @PostMapping("/bookings/delete")
     public String deleteBooking(@RequestParam("id") Long id, Principal principal){
+        if (principal == null) {
+            return "redirect:/login";
+        }
         boolean result = userService.deleteBooking(id, principal.getName());
         return "redirect:/bookings";
     }

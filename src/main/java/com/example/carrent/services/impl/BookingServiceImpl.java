@@ -122,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public boolean completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
+    public Long completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
         if (licenseFile == null || licenseFile.isEmpty()) {
             throw new IllegalArgumentException("Sürücülük vəsiqəsi faylı mütləqdir!");
         }
@@ -168,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
                 "BOOKING"
         );
 
-        return true;
+        return savedBooking.getId();
     }
 
 

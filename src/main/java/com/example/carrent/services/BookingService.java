@@ -17,7 +17,7 @@ public interface BookingService {
 
     boolean updateStatus(Long id, BookingStatus status);
 
-    boolean completeBooking(BookingCompleteDto bookingDto, MultipartFile licenseFile);
+    Long completeBooking(BookingCompleteDto bookingDto, MultipartFile licenseFile);
 
     long countActive();
 
