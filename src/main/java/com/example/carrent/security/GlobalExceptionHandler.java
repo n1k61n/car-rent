@@ -1,4 +1,4 @@
-package com.example.carrent.exceptions;
+package com.example.carrent.security;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
