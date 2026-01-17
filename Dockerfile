@@ -1,7 +1,8 @@
 # 1. Merhele: Build
 FROM maven:3.8.5-openjdk-17 AS build
 COPY . .
-RUN mvn clean package -DskipTests
+# Burada -Dmaven.test.skip=true əlavə etdik
+RUN mvn clean package -Dmaven.test.skip=true
 
 # 2. Merhele: Run
 FROM openjdk:17.0.1-jdk-slim
