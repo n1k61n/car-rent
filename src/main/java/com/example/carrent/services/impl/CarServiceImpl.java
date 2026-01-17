@@ -70,10 +70,12 @@ public class CarServiceImpl implements CarService {
 
 
     @Override
+    @Transactional
     public boolean createCar(CarCreateDto carCreateDto) {
         log.info("Creating new car: {} {}", carCreateDto.getBrand(), carCreateDto.getModel());
         try {
             Car car = modelMapper.map(carCreateDto, Car.class);
+            car.setId(null);
             
             if (carCreateDto.getCategoryId() != null) {
                 Category category = categoryRepository.findById(carCreateDto.getCategoryId())
@@ -89,7 +91,6 @@ public class CarServiceImpl implements CarService {
             log.error("Error creating car", e);
             return false;
         }
-
     }
 
     @Transactional
@@ -117,27 +118,27 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public boolean updateCar(Long id, CarUpdateDto carUpdateDto) {
         log.info("Updating car ID: {}", id);
-        Optional<Car> optionalCar = carRepository.findById(id);
-        if(optionalCar.isPresent()){
-            Car existCar = optionalCar.get();
-            modelMapper.map(carUpdateDto, existCar);
-            
-            if (carUpdateDto.getCategoryId() != null) {
-                Category category = categoryRepository.findById(carUpdateDto.getCategoryId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Kateqoriya tapılmadı"));
-                existCar.setCategory(category);
-            }
 
-            existCar.setId(id);
-            carRepository.save(existCar);
-            log.info("Car updated successfully. ID: {}", id);
-            return true;
+        Car existCar = carRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı: " + id));
+
+        modelMapper.map(carUpdateDto, existCar);
+
+        // Obyektin ID-sini dəyişməyin, Hibernate id-ni idarə edir
+        if (carUpdateDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(carUpdateDto.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Kateqoriya tapılmadı"));
+            existCar.setCategory(category);
         }
-        log.warn("Car not found for update. ID: {}", id);
-        return false;
+
+        carRepository.save(existCar);
+        log.info("Car updated successfully. ID: {}", id);
+        return true;
     }
+
 
 
 
