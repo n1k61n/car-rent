@@ -13,6 +13,7 @@ import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
@@ -42,6 +44,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingOrdersDto> getAllOrders() {
+        log.debug("Fetching all booking orders");
         List<Booking> bookings = bookingRepository.findAllWithDetails();
 
         return bookings.stream().map(booking -> {
@@ -73,6 +76,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public boolean updateStatus(Long id, BookingStatus status) {
+        log.info("Updating booking status. ID: {}, Status: {}", id, status);
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sifariş tapılmadı. ID: " + id));
         booking.setStatus(status);
@@ -80,6 +84,7 @@ public class BookingServiceImpl implements BookingService {
             booking.getCar().setAvailable(true);
         }
         bookingRepository.save(booking);
+        log.info("Booking status updated successfully. ID: {}", id);
         return true;
     }
 
@@ -123,6 +128,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public Long completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
+        log.info("Attempting to complete booking for Car ID: {}, User ID: {}", dto.getCarId(), dto.getUserId());
         if (licenseFile == null || licenseFile.isEmpty()) {
             throw new IllegalArgumentException("Sürücülük vəsiqəsi faylı mütləqdir!");
         }
@@ -155,6 +161,7 @@ public class BookingServiceImpl implements BookingService {
             String fileName = saveLicenseFile(licenseFile);
             booking.setLicenseFilePath(fileName);
         } catch (IOException e) {
+            log.error("Failed to save license file", e);
             throw new RuntimeException("Fayl sisteminə yazıla bilmədi: " + e.getMessage());
         }
 
@@ -167,7 +174,7 @@ public class BookingServiceImpl implements BookingService {
                 "/dashboard/bookings/index",
                 "BOOKING"
         );
-
+        log.info("Booking completed successfully. Booking ID: {}", savedBooking.getId());
         return savedBooking.getId();
     }
 

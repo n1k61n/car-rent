@@ -11,6 +11,7 @@ import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.CategoryRepository;
 import com.example.carrent.services.CarService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
@@ -36,12 +38,14 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional(readOnly = true)
     public Page<Car> findAll(Pageable pageable) {
+        log.debug("Fetching all available cars");
         return carRepository.findByAvailableTrue(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CarDto getCarById(Long id) {
+        log.debug("Fetching car by ID: {}", id);
         return carRepository.findById(id)
                 .map(car -> modelMapper.map(car, CarDto.class))
                 .orElseGet(CarDto::new);
@@ -56,6 +60,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Page<Car> searchCarsPageable(String brand, String category, Integer passengerCount, Pageable pageable) {
+        log.debug("Searching cars. Brand: {}, Category: {}, Passengers: {}", brand, category, passengerCount);
         String brandFilter = (brand == null || brand.isEmpty() || brand.equals("Select Type")) ? null : brand;
         String categoryFilter = (category == null || category.isEmpty()) ? null : category;
         Integer passengerCountFilter = (passengerCount == null || passengerCount <= 0) ? null : passengerCount;
@@ -66,6 +71,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public boolean createCar(CarCreateDto carCreateDto) {
+        log.info("Creating new car: {} {}", carCreateDto.getBrand(), carCreateDto.getModel());
         try {
             Car car = modelMapper.map(carCreateDto, Car.class);
             
@@ -77,8 +83,10 @@ public class CarServiceImpl implements CarService {
             
             car.setAvailable(true);
             carRepository.save(car);
+            log.info("Car created successfully. ID: {}", car.getId());
             return true;
         } catch (Exception e) {
+            log.error("Error creating car", e);
             return false;
         }
 
@@ -86,10 +94,12 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     public boolean deleteCar(Long carId) {
+        log.info("Deleting car ID: {}", carId);
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı: " + carId));
         bookingRepository.deleteByCarId(carId);
         carRepository.delete(car);
+        log.info("Car deleted successfully. ID: {}", carId);
         return true;
     }
 
@@ -108,6 +118,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public boolean updateCar(Long id, CarUpdateDto carUpdateDto) {
+        log.info("Updating car ID: {}", id);
         Optional<Car> optionalCar = carRepository.findById(id);
         if(optionalCar.isPresent()){
             Car existCar = optionalCar.get();
@@ -121,8 +132,10 @@ public class CarServiceImpl implements CarService {
 
             existCar.setId(id);
             carRepository.save(existCar);
+            log.info("Car updated successfully. ID: {}", id);
             return true;
         }
+        log.warn("Car not found for update. ID: {}", id);
         return false;
     }
 
