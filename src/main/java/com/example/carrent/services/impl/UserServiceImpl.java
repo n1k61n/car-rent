@@ -14,6 +14,7 @@ import com.example.carrent.services.NotificationService;
 import com.example.carrent.services.OtpService;
 import com.example.carrent.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -43,22 +45,24 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean registerNewUser(UserRegistrationDto registrationDto) {
+        log.info("Attempting to register new user with email: {}", registrationDto.getEmail());
         try {
 
-            User user = modelMapper.map(registrationDto, User.class);
-            user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+            User newUser = modelMapper.map(registrationDto, User.class);
+            newUser.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
             Role userRole = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
-            user.setRole(userRole);
+            newUser.setRole(userRole);
 
             String otp = otpService.generateOTP();
 
             emailService.sendOtpEmail(registrationDto.getEmail(), otp);
-            System.out.println("OTP: " + otp);
+            log.info("OTP sent to email: {}", registrationDto.getEmail());
 
             Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
             otpService.saved(otpEntity);
-            User savedUser = userRepository.save(user);
+            newUser.setVerificationCode(otp);
+            User savedUser = userRepository.save(newUser);
 
             // Create notification
             notificationService.createNotification(
@@ -66,9 +70,10 @@ public class UserServiceImpl implements UserService {
                     "/dashboard/user/index",
                     "USER"
             );
-
+            log.info("User registered successfully: {}", savedUser.getEmail());
             return true;
         } catch (Exception e) {
+            log.error("Error registering user: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -76,6 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileDto findByEmail(String name) {
+        log.debug("Finding user by email: {}", name);
         User user = userRepository.findByEmail(name).orElseThrow(()->new UsernameNotFoundException("User not found"));
         return modelMapper.map(user, UserProfileDto.class);
     }
@@ -84,6 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UsersDashboardDto> findPaginated(int pageNo, int pageSize, String keyword) {
+        log.debug("Finding users paginated. Page: {}, Size: {}, Keyword: {}", pageNo, pageSize, keyword);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         if (keyword != null && !keyword.isEmpty()) {
@@ -100,6 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean updateProfile(String currentEmail, UserProfileUpdateDto dto) {
+        log.info("Updating profile for user: {}", currentEmail);
         User user = userRepository.findByEmail(currentEmail)
                 .orElseThrow(() -> new RuntimeException("İstifadəçi tapılmadı!"));
 
@@ -113,16 +121,19 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
+        log.info("Profile updated successfully for user: {}", currentEmail);
         return true;
     }
 
     @Override
     @Transactional
     public boolean deleteBooking(Long id, String email) {
+        log.info("Attempting to delete booking ID: {} for user: {}", id, email);
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sifariş tapılmadı!"));
 
         if (!booking.getUser().getEmail().equals(email)) {
+            log.warn("User {} tried to delete booking {} which belongs to another user", email, id);
             throw new RuntimeException("Bu sifarişi silmək icazəniz yoxdur!");
         }
 
@@ -133,7 +144,7 @@ public class UserServiceImpl implements UserService {
         }
 
         bookingRepository.delete(booking);
-
+        log.info("Booking {} deleted successfully", id);
         return true;
     }
 
@@ -145,20 +156,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void toggleUserStatus(Long id) {
+        log.info("Toggling status for user ID: {}", id);
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setEnabled(!user.isEnabled());
         userRepository.save(user);
+        log.info("User status toggled. New status: {}", user.isEnabled());
     }
 
 
     @Override
     public void enableUser(String email) {
+        log.info("Enabling user: {}", email);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         user.setEnabled(true);
         user.setCredentialsNonExpired(true);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         userRepository.save(user);
+        log.info("User enabled: {}", email);
     }
 
     @Override
@@ -169,12 +184,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void resetPasswordToRandom(String email) {
+        log.info("Resetting password for user: {}", email);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
 
         // Random şifrə yarat (8 simvol)
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
-        System.out.println("Yeni şifrə: " + newPassword);
+        log.debug("Generated new random password for user: {}", email);
         
         // Şifrəni kodlaşdır və yadda saxla
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -182,6 +198,7 @@ public class UserServiceImpl implements UserService {
 
         // Email göndər
         emailService.sendNewPasswordEmail(email, newPassword);
+        log.info("Password reset email sent to: {}", email);
     }
 
     @Override
