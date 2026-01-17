@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict xN4jJU7DZCaUuLsr4Fz7NGgLkNUIirQhFrHASScvMrnJlToD11GkWvCwEJlmTVh
+\restrict DOrQIBhnKMr4eaWVkaOmKqQYRsXuXSo5xxFCdNmj2MTL4HemZg1FWiFHhKxaqmh
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
--- Started on 2026-01-17 14:20:02
+-- Started on 2026-01-17 22:54:21
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -52,6 +52,7 @@ COPY public.users (id, email, first_name, last_name, password, phone, role, acco
 32	bowora7651@feanzier.com	EMİN	MƏMMƏDOV	$2a$10$m0xlH.zHVerIODXZvbli/.jtPNiiyG.32H5TIUIQ4xmryE8Ym/BIG	\N	USER	t	t	t	t	+994502222222	\N	\N	\N
 3	musik@gmail.com	Mustafa 	Imanov	$2a$10$ney0TQOMXVhksiG6YKll0uPczljW65qzvxmcthuvIOq6uAEG6.bxm	\N	USER	t	t	t	t	0502221111	\N	\N	\N
 7	denag31802@feanzier.com	EMİN	MƏMMƏDOV	$2a$10$97162VsWbBN4l2vP/h3IMeYclFZ6tRZCaUxgQglh1jAeMStC6gaC2	\N	USER	t	t	t	t	0505458811	b0457df0-4ee3-48f6-9fbe-ff701207b846	\N	\N
+40	daxiy87814@oremal.com	Emin	Mammadov	$2a$10$jt1XYlgERWUWLOthlvzcyeFObIjslkIvoVz4eH4cmZm0MToZq3jXG	\N	USER	f	f	f	f	0505458811	\N	\N	2026-01-17 16:19:45.190126
 36	vasoyaf496@feanzier.com	Emin	Mammadov	$2a$10$TSUzCUFHRVmv8KUgP2E1euweaeEHG9ryZaf9S99gVZLNZgG8vL1du	\N	USER	t	t	t	t	0505458811	\N	\N	\N
 26	wevelof975@feanzier.com	EMİN	MƏMMƏDOV	$2a$10$cPOMTpPTXAE2qKkqlRHyXeqqKQnSdE43peMChhJ9vLspoYPDTsXR.	\N	USER	t	t	t	t	+994502222222	\N	\N	\N
 27	dojec53549@feanzier.com	EMİN	MƏMMƏDOV	$2a$10$bjaTf29PAR7nd15GFjV8yesGYDmj5MRwnSL.KO3WjI3RESdn1QHga	\N	USER	t	t	t	t	+994502222222	\N	\N	\N
@@ -82,6 +83,10 @@ COPY public.users (id, email, first_name, last_name, password, phone, role, acco
 38	poreyis909@ixospace.com	Hacibala	Abudalibov	$2a$10$3qTTSzvLDYKnqeTi5PSy.OieExMJTj2lts5dkKl2gfRCx2QltcUXq	\N	USER	t	t	t	t	0502222222	\N	\N	2026-01-16 09:46:06.212193
 1	admin@gmail.com	Emin 	Memmedov	$2a$10$pmDegDjREhrTWGMA/dubQe9y.6Gn.ydoNX5Eizf8p3qLGkoNwPta.	\N	ADMIN	t	t	t	t	0505458811	\N	\N	\N
 37	fesoga9500@eubonus.com	Emin	Mammadov	$2a$10$15.Og7wDUlaUz6zj2TXqg.IH5ptKOq6XIGzIur/b5ga5B625kmaJ2	\N	USER	t	t	t	t	0505458811	\N	\N	2026-01-13 12:41:44.294394
+39	jedileh964@elafans.com	Emin	Mammadov	$2a$10$psxURDWy6fjbIre9Qfm4lufBHmke/aqAtqea8hspBjGnQCWjpWh02	\N	USER	f	f	f	f	0505458811	\N	\N	2026-01-17 16:13:11.143365
+41	vokixom976@oremal.com	Emin	Mammadov	$2a$10$cXCs3KmiPi11WGW/C2eizuhUjaTMV14FldVnJNgH/1VaitZKMqy3C	\N	USER	t	t	t	t	0505458811	\N	\N	2026-01-17 16:23:39.695739
+42	xerot18125@noihse.com	Hacibala	Abudalibov	$2a$10$D7/XDnRdZng6HjjCLjFW8Oj1sCGmoSXUShzdjwGPP1EAVRW/EiZ0q	\N	USER	t	t	t	t	+994502222222	\N	438478	2026-01-17 17:09:40.333116
+43	navidax225@noihse.com	Teymur	Recebov	$2a$10$/UGJdlcM4Zty7fkNRw9WuuqXAYpwNE3f0DP2AYcNPuCSbkmseC3h2	\N	USER	t	t	t	t	+994502222222	\N	729834	2026-01-17 18:43:31.579516
 \.
 
 
@@ -351,6 +356,7 @@ COPY public.chats (id, content, sender_name, session_id, receiver_name, email, c
 165	salam	ADMIN	Hacibala	Hacibala	ADMIN	2026-01-16 09:38:42.591015
 166	sizi dinleyirem	ADMIN	Hacibala	Hacibala	ADMIN	2026-01-16 09:38:50.012724
 167	salam	poreyis909@ixospace.com	poreyis909@ixospace.com	ADMIN	poreyis909@ixospace.com	2026-01-16 09:57:09.165963
+168	hi	xerot18125@noihse.com	xerot18125@noihse.com	ADMIN	xerot18125@noihse.com	2026-01-17 17:19:13.547134
 \.
 
 
@@ -442,6 +448,12 @@ COPY public.notifications (id, created_at, is_read, link, message, type) FROM st
 40	2026-01-16 09:48:01.578236	t	/dashboard/bookings/index	New booking for Bentley	BOOKING
 39	2026-01-16 09:46:06.215167	t	/dashboard/user/index	New user registered: Hacibala	USER
 41	2026-01-16 09:57:09.219228	t	/dashboard/chat?user=poreyis909@ixospace.com	New message from poreyis909@ixospace.com	CHAT
+42	2026-01-17 16:13:11.145364	f	/dashboard/user/index	New user registered: Emin	USER
+43	2026-01-17 16:19:45.193117	f	/dashboard/user/index	New user registered: Emin	USER
+44	2026-01-17 16:23:39.697744	f	/dashboard/user/index	New user registered: Emin	USER
+45	2026-01-17 17:09:40.33614	f	/dashboard/user/index	New user registered: Hacibala	USER
+46	2026-01-17 17:19:13.609711	f	/dashboard/chat?user=xerot18125@noihse.com	New message from xerot18125@noihse.com	CHAT
+47	2026-01-17 18:43:31.584513	f	/dashboard/user/index	New user registered: Teymur	USER
 \.
 
 
@@ -470,6 +482,8 @@ COPY public.otp (id, email, expires_at, otp_code) FROM stdin;
 19	hecenoy277@eubonus.com	2026-01-13 08:41:12.183379	270258
 20	nemeho6904@eubonus.com	2026-01-13 08:47:47.729124	832986
 21	eminelxanoglu@gmail.com	2026-01-13 08:49:50.514008	937800
+29	jedileh964@elafans.com	2026-01-17 16:18:10.61839	289039
+30	daxiy87814@oremal.com	2026-01-17 16:24:45.105126	906737
 \.
 
 
@@ -602,7 +616,7 @@ SELECT pg_catalog.setval('public.categories_id_seq', 6, false);
 -- Name: chats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.chats_id_seq', 167, true);
+SELECT pg_catalog.setval('public.chats_id_seq', 168, true);
 
 
 --
@@ -638,7 +652,7 @@ SELECT pg_catalog.setval('public.messages_id_seq', 5, true);
 -- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.notifications_id_seq', 41, true);
+SELECT pg_catalog.setval('public.notifications_id_seq', 47, true);
 
 
 --
@@ -647,7 +661,7 @@ SELECT pg_catalog.setval('public.notifications_id_seq', 41, true);
 -- Name: otp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.otp_id_seq', 28, true);
+SELECT pg_catalog.setval('public.otp_id_seq', 33, true);
 
 
 --
@@ -692,14 +706,14 @@ SELECT pg_catalog.setval('public.travel_routes_id_seq', 2, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 38, true);
+SELECT pg_catalog.setval('public.users_id_seq', 43, true);
 
 
--- Completed on 2026-01-17 14:20:02
+-- Completed on 2026-01-17 22:54:22
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict xN4jJU7DZCaUuLsr4Fz7NGgLkNUIirQhFrHASScvMrnJlToD11GkWvCwEJlmTVh
+\unrestrict DOrQIBhnKMr4eaWVkaOmKqQYRsXuXSo5xxFCdNmj2MTL4HemZg1FWiFHhKxaqmh
 
