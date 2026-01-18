@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             String otp = otpService.generateOTP();
 
             emailService.sendOtpEmail(registrationDto.getEmail(), otp);
-            log.info("OTP sent to email: {}", registrationDto.getEmail());
+            log.info("OTP sent to email: {}", registrationDto.getEmail() + " " + otp);
 
             Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
             otpService.saved(otpEntity);
