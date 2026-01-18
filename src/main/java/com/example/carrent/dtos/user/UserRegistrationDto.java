@@ -26,7 +26,7 @@ public class UserRegistrationDto {
 
     @NotBlank(message = "Şifrə boş ola bilməz")
     @Size(min = 8, message = "Şifrə ən az 8 simvol olmalıdır")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\\-_=+]).{8,}$",
             message = "Şifrədə ən az bir rəqəm, bir kiçik hərf, bir böyük hərf və bir xüsusi simvol olmalıdır")
     private String password;
 
