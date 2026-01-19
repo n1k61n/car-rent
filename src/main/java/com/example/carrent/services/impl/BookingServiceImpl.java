@@ -189,4 +189,9 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getRecentBookings() {
         return bookingRepository.findTop5ByOrderByCreatedAtDesc();
     }
+
+    @Override
+    public double getMonthEarnings() {
+        return  bookingRepository.getMonthEarnings();
+    }
 }

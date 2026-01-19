@@ -4,14 +4,11 @@ import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingOrdersDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.models.Booking;
-import org.jspecify.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface BookingService {
-
-
 
     List<BookingOrdersDto> getAllOrders();
 
@@ -22,4 +19,6 @@ public interface BookingService {
     long countActive();
 
     List<Booking> getRecentBookings();
+
+    double getMonthEarnings();
 }

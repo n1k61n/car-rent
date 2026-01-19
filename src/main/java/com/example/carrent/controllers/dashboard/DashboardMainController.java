@@ -28,6 +28,8 @@ public class DashboardMainController {
         model.addAttribute("carsCount", carService.countAll());
         model.addAttribute("bookingsCount", bookingService.countActive());
         model.addAttribute("usersCount", userService.countAll());
+        double monthEarning = bookingService.getMonthEarnings();
+        model.addAttribute("monthEarnings", monthEarning);
         return "dashboard/index";
     }
 
