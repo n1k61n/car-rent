@@ -221,4 +221,23 @@ public class BookingServiceImpl implements BookingService {
         return data;
     }
 
+    @Override
+    public Map<String, Long> getBookingStatusDistribution() {
+
+        List<Object[]> results = bookingRepository.getBookingStatusDistribution();
+
+        Map<String, Long> data = new LinkedHashMap<>();
+        data.put("APPROVED", 0L);
+        data.put("PENDING", 0L);
+        data.put("CANCELLED", 0L);
+
+        for (Object[] row : results) {
+            String status = row[0].toString();
+            Long count = (Long) row[1];
+            data.put(status, count);
+        }
+
+        return data;
+    }
+
 }

@@ -24,4 +24,6 @@ public interface BookingService {
     double getMonthEarnings();
 
     Map<String, Double> getMonthlyEarnings();
+
+    Map<String, Long> getBookingStatusDistribution();
 }

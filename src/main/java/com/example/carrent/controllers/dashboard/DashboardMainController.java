@@ -38,6 +38,12 @@ public class DashboardMainController {
         model.addAttribute("labels", monthlyEarnings.keySet());
         model.addAttribute("data", monthlyEarnings.values());
 
+        Map<String, Long> bookingStatusData =
+                bookingService.getBookingStatusDistribution();
+
+        model.addAttribute("statusLabels", bookingStatusData.keySet());
+        model.addAttribute("statusData", bookingStatusData.values());
+
         return "dashboard/index";
     }
 
