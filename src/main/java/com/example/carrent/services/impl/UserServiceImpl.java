@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public UserProfileDto findByEmail(String name) {
         log.debug("Finding user by email: {}", name);
         User user = userRepository.findByEmail(name).orElseThrow(()->new UsernameNotFoundException("User not found"));
-        return modelmapper.map(user, UserProfileDto.class);
+        return modelMapper.map(user, UserProfileDto.class);
     }
 
 
