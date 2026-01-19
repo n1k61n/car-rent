@@ -2,6 +2,8 @@ package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.dtos.booking.BookingUserDto;
+import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Booking;
@@ -20,12 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
                 dto.setCarId(booking.getCar().getId());
                 dto.setCarBrand(booking.getCar().getBrand());
                 dto.setCarModel(booking.getCar().getModel());
+                dto.setCar(booking.getCar());
             }
 
             if (booking.getUser() != null) {
@@ -67,6 +72,7 @@ public class BookingServiceImpl implements BookingService {
             dto.setEndDate(booking.getEndDate());
             dto.setStatus(booking.getStatus());
             dto.setLicenseFilePath(booking.getLicenseFilePath());
+            dto.setTotalPrice(booking.getTotalPrice());
 
             return dto;
         }).toList();
@@ -154,7 +160,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setPickupLocation(dto.getPickupLocation());
         booking.setNotes(dto.getNotes());
         booking.setStatus(BookingStatus.PENDING);
-        booking.setTotalPrice(days * car.getDailyPrice());
+        booking.setTotalPrice(car.getDailyPrice().multiply(BigDecimal.valueOf(days)));
 
 
         try {
@@ -218,4 +224,35 @@ public class BookingServiceImpl implements BookingService {
         log.info("Booking {} deleted successfully", id);
         return true;
     }
+
+    @Override
+    public List<BookingOrdersDto> findByUser(UserProfileDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        List<Booking> listBokings = bookingRepository.findByUser(user);
+        return listBokings.stream().map(booking -> modelMapper.map(booking, BookingOrdersDto.class)).toList();
+    }
+
+    @Override
+    public long countByUser(UserProfileDto user) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.countByUser(userEntity);
+    }
+
+    @Override
+    public long countByUserAndStatus(UserProfileDto user, BookingStatus bookingStatus) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.countByUserAndStatus(userEntity, bookingStatus);
+    }
+
+    @Override
+    public BigDecimal sumTotalPriceByUser(UserProfileDto user) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.sumTotalPriceByUser(userEntity);
+    }
+
+
 }

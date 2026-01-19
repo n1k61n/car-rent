@@ -2,6 +2,7 @@ package com.example.carrent.dtos.car;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -10,7 +11,7 @@ public class CarDto {
     private String brand;
     private String model;
     private String imageUrl;
-    private Double dailyPrice;
+    private BigDecimal dailyPrice;
     private Integer doorCount;
     private Integer passengerCount;
     private Integer luggageCapacity;

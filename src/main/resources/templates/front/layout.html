@@ -77,8 +77,8 @@
                                     <span th:text="${username}">İstifadəçi</span>
                                 </a>
                                 <ul class="dropdown">
-                                    <li><a href="/profile" th:text="#{user.profile}">Profilim</a></li>
-                                    <li><a href="/bookings" th:text="#{user.booking}">Sifarişlərim</a></li>
+                                    <li><a href="/account/profile" th:text="#{user.profile}">Profilim</a></li>
+                                    <li><a href="/account/bookings" th:text="#{user.booking}">Sifarişlərim</a></li>
                                     <li>
                                         <form th:action="@{/logout}" method="post" id="logoutForm" style="display:none;"></form>
                                         <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" class="nav-link">Çıxış</a>

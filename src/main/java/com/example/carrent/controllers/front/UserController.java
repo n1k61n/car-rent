@@ -1,7 +1,11 @@
 package com.example.carrent.controllers.front;
 
+import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.dtos.booking.BookingUserDto;
+import com.example.carrent.dtos.user.UserDashboardStatsDto;
 import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserProfileUpdateDto;
+import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
@@ -16,14 +20,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/account")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final BookingService bookingService;
+
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, Principal principal) {
+
+        UserProfileDto user = userService.findByEmail(principal.getName());
+
+        UserDashboardStatsDto stats = UserDashboardStatsDto.builder()
+                .totalBookings(bookingService.countByUser(user))
+                .activeBookings(
+                        bookingService.countByUserAndStatus(user, BookingStatus.ACTIVE)
+                )
+                .completedBookings(
+                        bookingService.countByUserAndStatus(user, BookingStatus.COMPLETED)
+                )
+                .totalSpent(
+                        bookingService.sumTotalPriceByUser(user)
+                )
+                .build();
+
+        model.addAttribute("user", user);
+        model.addAttribute("stats", stats);
+
+        return "front/account/dashboard";
+    }
+
+
+
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal) {
@@ -32,7 +65,10 @@ public class UserController {
         }
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-        
+
+        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
+        model.addAttribute("bookings", bookings);
+
         if (!model.containsAttribute("userProfileUpdateDto")) {
             UserProfileUpdateDto updateDto = new UserProfileUpdateDto();
             updateDto.setFirstName(user.getFirstName());
@@ -67,15 +103,15 @@ public class UserController {
         return "redirect:/profile";
     }
 
-
-
     @GetMapping("/bookings")
     public String showBookings(Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
         UserProfileDto user = userService.findByEmail(principal.getName());
-        model.addAttribute("bookings", user.getBookings());
+        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
+        model.addAttribute("user", user);
+        model.addAttribute("bookings", bookings);
         return "front/account/user_bookings";
     }
 
@@ -86,7 +122,7 @@ public class UserController {
             return "redirect:/login";
         }
         boolean result = bookingService.deleteBooking(id, principal.getName());
-        return "redirect:/bookings";
+        return "redirect:/account/bookings";
     }
 
 

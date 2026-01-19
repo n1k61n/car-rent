@@ -1,99 +1,135 @@
-<!doctype html>
-<html lang="en" layout:decorate="~{front/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/account/user-layout}">
+
 <head>
-    <title th:text="#{nav.dashboard} + ' - CarRental'">Dashboard - CarRental</title>
-    <meta charset="utf-8">
+    <title>Profilim</title>
 </head>
 
 <body>
+
 <div layout:fragment="content">
-    <!-- Hero Section -->
-    <div class="hero inner-page" style="background-image: url('/front/images/hero_1_a.jpg');">
-        <div class="container">
-            <div class="row align-items-end">
-                <div class="col-lg-5">
-                    <div class="intro">
-                        <h1 th:text="#{dashboard.title}">İstifadəçi Dashboard</h1>
-                        <p class="text" th:text="#{dashboard.desc}">Buradan bütün rezervasiyalarınızı və hesab məlumatlarınızı idarə edə bilərsiniz.</p>
-                        <div class="custom-breadcrumbs">
-                            <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
-                            <span class="mx-2">/</span>
-                            <strong th:text="#{dashboard.title}">Dashboard</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <!-- PAGE HEADER -->
+    <div class="mb-4">
+        <h2>Profil Məlumatları</h2>
+        <p class="text-muted">
+            Şəxsi məlumatlarını buradan yeniləyə bilərsən
+        </p>
     </div>
 
-    <!-- Main Dashboard Section -->
-    <div class="site-section bg-light">
-        <div class="container">
-            <div class="row">
-                <!-- Left Panel: User Info -->
-                <div class="col-lg-4 mb-5">
-                    <div class="p-4 bg-white shadow-sm rounded">
-                        <div class="text-center mb-4">
-                            <div class="display-1 text-primary"><span class="icon-user-circle"></span></div>
-                            <h3 th:text="${user.firstName + ' ' + user.lastName}">Ad Soyad</h3>
-                            <span class="badge badge-primary" th:text="${user?.role}">USER</span>
-                        </div>
-                        <hr>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><strong th:text="#{contact.email} + ':'">Email:</strong> <span th:text="${user.email}">email@example.com</span></li>
-                            <li class="mb-2"><strong th:text="#{register.phone} + ':'">Telefon:</strong> <span th:text="${user.phoneNumber}">+994 -- --- -- --</span></li>
-                        </ul>
-                    </div>
+    <div class="row g-4">
 
-                    <!-- Statistics -->
-                    <div class="p-4 bg-white shadow-sm rounded mt-4">
-                        <h5 th:text="#{dashboard.stats}">Statistika</h5>
-                        <ul class="list-unstyled mt-3">
-<!--                            <li><strong th:text="#{dashboard.total_bookings} + ':'">Ümumi Rezervasiya:</strong> <span th:text="${stats.totalBookings}">0</span></li>-->
-<!--                            <li><strong th:text="#{dashboard.active_bookings} + ':'">Aktiv Rezervasiya:</strong> <span th:text="${stats.activeBookings}">0</span></li>-->
-<!--                            <li><strong th:text="#{dashboard.completed_bookings} + ':'">Tamamlanmış:</strong> <span th:text="${stats.completedBookings}">0</span></li>-->
-                        </ul>
-                    </div>
+        <!-- LEFT : USER CARD -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm text-center p-4">
+
+                <div class="display-4 text-primary mb-2">
+                    <i class="bi bi-person-circle"></i>
                 </div>
 
-                <!-- Right Panel: Reservations Table -->
-                <div class="col-lg-8">
-                    <div class="bg-white p-5 shadow-sm rounded">
-                        <h4 class="mb-4" th:text="#{dashboard.recent_bookings}">Son Rezervasiyalar</h4>
+                <h4 th:text="${user.firstName + ' ' + user.lastName}">
+                    Ad Soyad
+                </h4>
 
-                        <div th:if="${bookings.size() == 0}" class="alert alert-info" th:text="#{dashboard.no_bookings}">Heç bir rezervasiya yoxdur.</div>
+                <span class="badge bg-primary mb-3"
+                      th:text="${user.role}">
+                    USER
+                </span>
 
-                        <table class="table table-bordered table-hover" th:if="${bookings.size() > 0}">
-                            <thead>
-                            <tr>
-                                <th th:text="#{dashboard.booking_id}">ID</th>
-                                <th th:text="#{dashboard.car}">Avtomobil</th>
-                                <th th:text="#{dashboard.date}">Tarix</th>
-                                <th th:text="#{dashboard.status}">Status</th>
-                                <th th:text="#{dashboard.actions}">Əməliyyatlar</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="booking : ${bookings}">
-                                <td th:text="${booking.id}">1</td>
-                                <td th:text="${booking.carName}">Car Model</td>
-                                <td th:text="${#dates.format(booking.date,'dd/MM/yyyy')}">01/01/2026</td>
-                                <td>
-                                    <span th:text="${booking.status}" th:classappend="${booking.status == 'ACTIVE'} ? 'badge badge-success' : 'badge badge-secondary'">ACTIVE</span>
-                                </td>
-                                <td>
-                                    <a th:href="@{'/bookings/' + ${booking.id}}" class="btn btn-sm btn-primary" th:text="#{dashboard.view}">Bax</a>
-                                    <a th:href="@{'/bookings/cancel/' + ${booking.id}}" class="btn btn-sm btn-danger" th:text="#{dashboard.cancel}">Ləğv et</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <hr>
 
-                    </div>
-                </div>
+                <p class="mb-1">
+                    <strong>Email:</strong>
+                    <span th:text="${user.email}">email@mail.com</span>
+                </p>
+
+                <p class="mb-0">
+                    <strong>Telefon:</strong>
+                    <span th:text="${user.phoneNumber}">
+                        +994 xx xxx xx xx
+                    </span>
+                </p>
+
             </div>
         </div>
+
+        <!-- RIGHT : UPDATE FORM -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm p-4">
+
+                <h4 class="mb-3">Məlumatları Yenilə</h4>
+
+                <!-- SUCCESS / ERROR -->
+                <div th:if="${message}" class="alert alert-success"
+                     th:text="${message}"></div>
+
+                <div th:if="${error}" class="alert alert-danger"
+                     th:text="${error}"></div>
+
+                <form th:action="@{/profile/update}"
+                      th:object="${userProfileUpdateDto}"
+                      method="post">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Ad</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{firstName}">
+                            <small class="text-danger"
+                                   th:if="${#fields.hasErrors('firstName')}"
+                                   th:errors="*{firstName}"></small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Soyad</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{lastName}">
+                            <small class="text-danger"
+                                   th:if="${#fields.hasErrors('lastName')}"
+                                   th:errors="*{lastName}"></small>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Telefon</label>
+                            <input type="text" class="form-control"
+                                   th:field="*{phoneNumber}">
+                            <small class="text-danger"
+                                   th:if="${#fields.hasErrors('phoneNumber')}"
+                                   th:errors="*{phoneNumber}"></small>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">
+                                Yeni Şifrə
+                                <span class="text-muted">(istəmirsinizsə boş buraxın)</span>
+                            </label>
+                            <input type="password" class="form-control"
+                                   th:field="*{password}">
+                            <small class="text-danger"
+                                   th:if="${#fields.hasErrors('password')}"
+                                   th:errors="*{password}"></small>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <button class="btn btn-primary px-4">
+                            Yadda Saxla
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
+
 </div>
+
 </body>
 </html>
