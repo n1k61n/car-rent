@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface BookingService {
 
-
-
     List<BookingOrdersDto> getAllOrders();
 
     boolean updateStatus(Long id, BookingStatus status);
