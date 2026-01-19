@@ -33,7 +33,6 @@ public class UserController {
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
         
-        // Flash atributdan gələn UserProfileUpdateDto varsa onu istifadə et, yoxsa yenisini yarat
         if (!model.containsAttribute("userProfileUpdateDto")) {
             UserProfileUpdateDto updateDto = new UserProfileUpdateDto();
             updateDto.setFirstName(user.getFirstName());
@@ -41,7 +40,6 @@ public class UserController {
             updateDto.setPhoneNumber(user.getPhoneNumber());
             model.addAttribute("userProfileUpdateDto", updateDto);
         }
-        
         return "front/account/profile";
     }
 
