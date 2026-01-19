@@ -195,4 +195,27 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getRecentBookings() {
         return bookingRepository.findTop5ByOrderByCreatedAtDesc();
     }
+
+    @Override
+    @Transactional
+    public boolean deleteBooking(Long id, String email) {
+        log.info("Attempting to delete booking ID: {} for user: {}", id, email);
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sifariş tapılmadı!"));
+
+        if (!booking.getUser().getEmail().equals(email)) {
+            log.warn("User {} tried to delete booking {} which belongs to another user", email, id);
+            throw new RuntimeException("Bu sifarişi silmək icazəniz yoxdur!");
+        }
+
+        Car car = booking.getCar();
+        if (car != null) {
+            car.setAvailable(true);
+            carRepository.save(car);
+        }
+
+        bookingRepository.delete(booking);
+        log.info("Booking {} deleted successfully", id);
+        return true;
+    }
 }

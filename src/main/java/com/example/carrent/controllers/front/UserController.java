@@ -2,6 +2,7 @@ package com.example.carrent.controllers.front;
 
 import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserProfileUpdateDto;
+import com.example.carrent.services.BookingService;
 import com.example.carrent.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final BookingService bookingService;
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal) {
@@ -85,7 +87,7 @@ public class UserController {
         if (principal == null) {
             return "redirect:/login";
         }
-        boolean result = userService.deleteBooking(id, principal.getName());
+        boolean result = bookingService.deleteBooking(id, principal.getName());
         return "redirect:/bookings";
     }
 

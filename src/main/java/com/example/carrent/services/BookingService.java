@@ -22,4 +22,6 @@ public interface BookingService {
     long countActive();
 
     List<Booking> getRecentBookings();
+
+    boolean deleteBooking(Long id, String username);
 }

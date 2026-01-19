@@ -23,8 +23,6 @@ public interface UserService {
 
     boolean updateProfile(String email, UserProfileUpdateDto userProfileUpdateDto);
 
-    boolean deleteBooking(Long id, String name);
-
     UsersDashboardDto findById(Long id);
 
     void toggleUserStatus(Long id);
