@@ -99,16 +99,13 @@ public class BookingServiceImpl implements BookingService {
             return null;
         }
 
-        // 1. Faylların saxlanacağı qovluq (məsələn: uploads/licenses)
         String uploadDir = "uploads/licenses/";
         Path uploadPath = Paths.get(uploadDir);
 
-        // 2. Qovluq yoxdursa, yaradırıq
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        // 3. Fayl adını unikal edirik (Məs: 550e8400-e29b-car.jpg)
         String originalFileName = file.getOriginalFilename();
         String extension = "";
         if (originalFileName != null && originalFileName.contains(".")) {
@@ -116,11 +113,9 @@ public class BookingServiceImpl implements BookingService {
         }
         String uniqueFileName = UUID.randomUUID().toString() + extension;
 
-        // 4. Faylı diskə kopyalayırıq
         Path filePath = uploadPath.resolve(uniqueFileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // 5. Verilənlər bazasında saxlamaq üçün fayl adını (və ya yolunu) qaytarırıq
         return uniqueFileName;
     }
 
@@ -168,7 +163,6 @@ public class BookingServiceImpl implements BookingService {
         car.setAvailable(false);
         Booking savedBooking = bookingRepository.save(booking);
 
-        // Create notification
         notificationService.createNotification(
                 "New booking for " + savedBooking.getCar().getBrand(),
                 "/dashboard/bookings/index",
