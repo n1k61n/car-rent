@@ -25,7 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -194,4 +196,29 @@ public class BookingServiceImpl implements BookingService {
     public double getMonthEarnings() {
         return  bookingRepository.getMonthEarnings();
     }
+
+    @Override
+    public Map<String, Double> getMonthlyEarnings() {
+
+        List<Object[]> results = bookingRepository.getMonthlyEarnings();
+        Map<String, Double> data = new LinkedHashMap<>();
+
+        String[] months = {
+                "Yan", "Fev", "Mar", "Apr", "May", "İyn",
+                "İyl", "Avq", "Sen", "Okt", "Noy", "Dek"
+        };
+
+        for (int i = 0; i < 12; i++) {
+            data.put(months[i], 0.0);
+        }
+
+        for (Object[] row : results) {
+            int monthIndex = ((Number) row[0]).intValue() - 1;
+            double amount = ((Number) row[1]).doubleValue();
+            data.put(months[monthIndex], amount);
+        }
+
+        return data;
+    }
+
 }

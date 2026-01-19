@@ -7,6 +7,7 @@ import com.example.carrent.models.Booking;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookingService {
 
@@ -21,4 +22,6 @@ public interface BookingService {
     List<Booking> getRecentBookings();
 
     double getMonthEarnings();
+
+    Map<String, Double> getMonthlyEarnings();
 }

@@ -29,4 +29,15 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
           AND YEAR(b.createdAt) = YEAR(CURRENT_DATE)
     """)
     double getMonthEarnings();
+
+    @Query("""
+   SELECT MONTH(b.createdAt), SUM(b.totalPrice)
+   FROM Booking b
+   WHERE b.status = 'APPROVED'
+     AND YEAR(b.createdAt) = YEAR(CURRENT_DATE)
+   GROUP BY MONTH(b.createdAt)
+   ORDER BY MONTH(b.createdAt)
+    """)
+    List<Object[]> getMonthlyEarnings();
+
 }

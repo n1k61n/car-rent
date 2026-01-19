@@ -160,7 +160,43 @@
             </div>
         </div>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    const labels = [[${labels}]];
+    const data = [[${data}]];
+
+    const ctx = document.getElementById("myAreaChart");
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Aylıq Qazanc (₼)",
+                data: data,
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </div>
+
+
+
 
 </body>
 </html>

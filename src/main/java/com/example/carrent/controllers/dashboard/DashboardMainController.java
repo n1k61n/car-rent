@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -30,6 +31,13 @@ public class DashboardMainController {
         model.addAttribute("usersCount", userService.countAll());
         double monthEarning = bookingService.getMonthEarnings();
         model.addAttribute("monthEarnings", monthEarning);
+
+
+        Map<String, Double> monthlyEarnings = bookingService.getMonthlyEarnings();
+
+        model.addAttribute("labels", monthlyEarnings.keySet());
+        model.addAttribute("data", monthlyEarnings.values());
+
         return "dashboard/index";
     }
 
