@@ -8,6 +8,7 @@ import com.example.carrent.dtos.user.UserProfileUpdateDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -33,41 +34,30 @@ public class UserController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
-
         UserProfileDto user = userService.findByEmail(principal.getName());
 
         UserDashboardStatsDto stats = UserDashboardStatsDto.builder()
                 .totalBookings(bookingService.countByUser(user))
-                .activeBookings(
-                        bookingService.countByUserAndStatus(user, BookingStatus.ACTIVE)
-                )
-                .completedBookings(
-                        bookingService.countByUserAndStatus(user, BookingStatus.COMPLETED)
-                )
-                .totalSpent(
-                        bookingService.sumTotalPriceByUser(user)
-                )
+                .activeBookings(bookingService.countByUserAndStatus(user, BookingStatus.ACTIVE))
+                .completedBookings(bookingService.countByUserAndStatus(user, BookingStatus.COMPLETED))
+                .totalSpent(bookingService.sumTotalPriceByUser(user))
                 .build();
 
         model.addAttribute("user", user);
         model.addAttribute("stats", stats);
+        // HTML xətasını həll edən sətir:
+        model.addAttribute("activePage", "dashboard");
 
         return "front/account/dashboard";
     }
 
-
-
-
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+        if (principal == null) return "redirect:/login";
+
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-
-        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
-        model.addAttribute("bookings", bookings);
+        model.addAttribute("activePage", "profile"); // Əlavə olundu
 
         if (!model.containsAttribute("userProfileUpdateDto")) {
             UserProfileUpdateDto updateDto = new UserProfileUpdateDto();
@@ -78,6 +68,23 @@ public class UserController {
         }
         return "front/account/profile";
     }
+
+    @GetMapping("/bookings")
+    public String showBookings(Model model, Principal principal) {
+        if (principal == null) return "redirect:/login";
+
+        UserProfileDto user = userService.findByEmail(principal.getName());
+        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("activePage", "bookings"); // Artıq var idi, saxlanıldı
+
+        return "front/account/user_bookings";
+    }
+
+
+
 
     @PostMapping("/profile/update")
     public String profileUpdate(Principal principal, 
@@ -103,17 +110,7 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    @GetMapping("/bookings")
-    public String showBookings(Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-        UserProfileDto user = userService.findByEmail(principal.getName());
-        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
-        model.addAttribute("user", user);
-        model.addAttribute("bookings", bookings);
-        return "front/account/user_bookings";
-    }
+
 
 
     @PostMapping("/bookings/delete")
