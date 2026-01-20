@@ -79,12 +79,27 @@
                                                 <a th:href="${'/dashboard/user/details/' + user.id}" class="btn btn-sm btn-info" title="Bax">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
+                                                <form th:action="${'/dashboard/user/make-admin/' + user.id}" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm"
+                                                            th:classappend="${user.role.name() == 'ADMIN'} ? 'btn-danger' : 'btn-dark'"
+                                                            th:title="${user.role.name() == 'ADMIN'} ? 'Rolu USER et' : 'Admin Et'">
+
+                                                        <i th:class="${user.role.name() == 'ADMIN'} ? 'fas fa-user-minus' : 'fas fa-user-shield'"></i>
+                                                    </button>
+                                                </form>
                                                 <form th:action="${'/dashboard/user/toggle-status/' + user.id}" method="post" style="display:inline;">
                                                     <button type="submit" class="btn btn-sm" th:classappend="${user.enabled} ? 'btn-warning' : 'btn-success'">
                                                         <i th:class="${user.enabled} ? 'fas fa-user-slash' : 'fas fa-user-check'"></i>
                                                     </button>
                                                 </form>
                                             </div>
+
+
+
+
+
+
+
                                         </td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(user)}">

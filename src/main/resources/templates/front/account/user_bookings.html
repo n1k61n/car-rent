@@ -54,7 +54,7 @@
                                     <td th:text="${booking.totalPrice + ' AZN'}">250 AZN</td>
 
                                     <td>
-                                        <span class="badge px-3 py-2"
+                                        <span class="badge px-3 py-2 text-black"
                                               th:classappend="
                                               ${booking.status.name() == 'COMPLETED'} ? 'badge-success' :
                                               (${booking.status.name() == 'CANCELLED'} ? 'badge-danger' : 'badge-warning')"

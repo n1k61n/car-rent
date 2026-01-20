@@ -176,4 +176,19 @@ public class UserServiceImpl implements UserService {
     public List<User> getRecentUsers() {
         return userRepository.findTop5ByOrderByCreatedAtDesc();
     }
+
+    @Override
+    @Transactional
+    public void assignAdminRole(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("İstifadəçi tapılmadı"));
+
+        if (user.getRole() != Role.ADMIN) {
+            user.setRole(Role.ADMIN);
+        } else {
+            user.setRole(Role.USER);
+        }
+
+        userRepository.save(user);
+    }
 }

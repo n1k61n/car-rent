@@ -32,4 +32,6 @@ public interface UserService {
     void resetPasswordToRandom(String email);
 
     List<User> getRecentUsers();
+
+    void assignAdminRole(Long id);
 }
