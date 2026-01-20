@@ -3,7 +3,7 @@
       xmlns:th="http://www.w3.org/1999/xhtml">
 
   <head>
-      <title th:text="#{nav.cars} + ' - CarRental'">Haqqımızda - CarRental</title>
+      <title th:text="#{nav.cars} + ' - CarRental'">Listing - CarRental</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -22,11 +22,11 @@
                   <div class="row align-items-end">
                       <div class="col-lg-5">
                           <div class="intro">
-                              <h1 th:text="#{nav.cars}">Haqqımızda</h1>
+                              <h1 th:text="#{nav.cars}">Listing</h1>
                               <div class="custom-breadcrumbs">
-                                  <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
+                                  <a href="/" th:text="#{nav.home}">Home</a>
                                   <span class="mx-2">/</span>
-                                  <strong th:text="#{nav.cars}">Haqqımızda</strong>
+                                  <strong th:text="#{nav.cars}">Listing</strong>
                               </div>
                           </div>
                       </div>
@@ -45,9 +45,9 @@
                   <!-- Maşın tapılmadı mesajı -->
                   <div class="row" th:if="${carPage.content.isEmpty()}">
                       <div class="col-12 text-center py-5">
-                          <h3 class="text-muted" th:text="#{car.not_found}">Təəssüf ki, axtarışınıza uyğun avtomobil tapılmadı.</h3>
-                          <p class="text-muted" th:text="#{car.not_found_parameter}">Zəhmət olmasa, fərqli parametrlərlə yenidən cəhd edin.</p>
-                          <a href="/listing" class="btn btn-primary mt-3" th:text="#{btn.show_all}">Bütün Maşınları Göstər</a>
+                          <h3 class="text-muted" th:text="#{car.not_found}">Unfortunately, no car was found matching your search.</h3>
+                          <p class="text-muted" th:text="#{car.not_found_parameter}">Please try again with different parameters.</p>
+                          <a href="/listing" class="btn btn-primary mt-3" th:text="#{btn.show_all}">Show All Cars</a>
                       </div>
                   </div>
 
@@ -60,10 +60,10 @@
                                   </a>
                               </div>
                               <div class="listing-contents h-100">
-                                  <h3 th:text="${car.brand + ' ' + car.model}">Model Adı</h3>
+                                  <h3 th:text="${car.brand + ' ' + car.model}">Model Name</h3>
                                   <div class="rent-price">
                                       <strong th:text="${'$' + car.dailyPrice}">$0.00</strong><span class="mx-1">/</span>
-                                      <span th:text="#{car.day}">gün</span>
+                                      <span th:text="#{car.day}">day</span>
                                   </div>
                                   <div class="d-block d-md-flex mb-3 border-bottom pb-3">
                                       <div class="listing-feature pr-4">
@@ -81,7 +81,7 @@
                                   </div>
                                   <div>
                                       <p th:text="${car.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                      <p><a th:href="${'/listing/car/' + car.id}"  class="btn btn-primary btn-sm" th:text="#{btn.rent_now}">İcarəyə götür</a></p>
+                                      <p><a th:href="${'/listing/car/' + car.id}"  class="btn btn-primary btn-sm" th:text="#{btn.rent_now}">Rent Now</a></p>
                                   </div>
                               </div>
                           </div>
@@ -111,8 +111,8 @@
               <div class="container">
                   <div class="row">
                       <div class="col-lg-7">
-                          <h2 class="section-heading"><strong th:text="#{reviews.title}">Rəylər</strong></h2>
-                          <p class="mb-5" th:text="#{reviews.description}">Müştərilərimizin bizim haqqımızda düşüncələri. Sizin məmnuniyyətiniz bizim üçün ən böyük mükafatdır.</p>
+                          <h2 class="section-heading"><strong th:text="#{reviews.title}">Reviews</strong></h2>
+                          <p class="mb-5" th:text="#{reviews.description}">What our customers think about us. Your satisfaction is our greatest reward.</p>
                       </div>
                   </div>
                   <div class="row">

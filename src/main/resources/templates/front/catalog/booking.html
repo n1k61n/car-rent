@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="section-title">CAR INFORMATION</div>
+                    <div class="section-title" th:text="#{booking.car_info}">CAR INFORMATION</div>
                     <div class="car-info-card">
                         <div class="car-body">
                             <img th:src="${car.imageUrl}" class="car-img" alt="Car Image">
@@ -22,30 +22,30 @@
                                 <h4 th:text="${car.brand} + ' ' + ${car.model} + (${car.year} != null ? ' (' + ${car.year} + ')' : '')">
                                     Toyota Camry
                                 </h4>
-                                <p class="text-muted">Or similar Class</p>
+                                <p class="text-muted" th:text="#{booking.or_similar}">Or similar Class</p>
 
                                 <div class="spec-grid">
-                                    <span><i class="icon-user"></i> <span th:text="${car.passengerCount}">5</span> Passengers</span>
-                                    <span><i class="icon-check"></i> Mileage: <span th:text="${car.mileage}">Unlimited</span></span>
+                                    <span><i class="icon-user"></i> <span th:text="${car.passengerCount}">5</span> <span th:text="#{car.passenger}">Passengers</span></span>
+                                    <span><i class="icon-check"></i> <span th:text="#{booking.mileage}">Mileage:</span> <span th:text="${car.mileage}">Unlimited</span></span>
                                     <span><i class="icon-briefcase"></i> <span th:text="${car.suitcases}">2 Large, 3 Small Suitcases</span></span>
-                                    <span><i class="icon-check"></i> Fuel policy: <span th:text="${car.fuelPolicy}">full to full</span></span>
+                                    <span><i class="icon-check"></i> <span th:text="#{booking.fuel_policy}">Fuel policy:</span> <span th:text="${car.fuelPolicy}">full to full</span></span>
                                     <span><i class="icon-cog"></i> <span th:text="${car.transmission}">Automatic</span></span>
-                                    <span><i class="icon-check"></i> 24h Road assistance</span>
-                                    <span><i class="icon-shield"></i> Insurance included</span>
-                                    <span><i class="icon-check"></i> Free cancellation</span>
+                                    <span><i class="icon-check"></i> <span th:text="#{booking.road_assistance}">24h Road assistance</span></span>
+                                    <span><i class="icon-shield"></i> <span th:text="#{booking.insurance_included}">Insurance included</span></span>
+                                    <span><i class="icon-check"></i> <span th:text="#{booking.free_cancellation}">Free cancellation</span></span>
                                 </div>
 
                                 <div class="price-box">
                                     <span class="old-price" th:text="${totalPrice + 50} + ' AZN'">450 AZN</span>
                                     <span class="new-price" th:text="${totalPrice} + ' AZN'">400 AZN</span>
-                                    <div class="text">Price for days: <span th:text="${days}">8</span></div>
-                                    <div class="text">Pick up location: <span th:text="${bookingDto.pickupLocation}">8</span></div>
+                                    <div class="text"><span th:text="#{booking.price_for_days}">Price for days:</span> <span th:text="${days}">8</span></div>
+                                    <div class="text"><span th:text="#{booking.pickup_location}">Pick up location:</span> <span th:text="${bookingDto.pickupLocation}">8</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="section-title">CUSTOMER INFORMATION</div>
+                    <div class="section-title" th:text="#{booking.customer_info}">CUSTOMER INFORMATION</div>
                     <div class="bg-white p-4 shadow-sm">
                         <form th:action="@{/booking/complete}" method="post" enctype="multipart/form-data">
 
@@ -60,35 +60,35 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="text" name="firstName" class="form-control form-input-custom"
-                                           placeholder="First Name" required
+                                           th:placeholder="#{booking.first_name_placeholder}" required
                                            th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.firstName : ''}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="email" name="email" class="form-control form-input-custom"
-                                           placeholder="Email Address" required
+                                           th:placeholder="#{booking.email_placeholder}" required
                                            th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.email : ''}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" name="lastName" class="form-control form-input-custom"
-                                           placeholder="Last Name" required
+                                           th:placeholder="#{booking.last_name_placeholder}" required
                                            th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.lastName : ''}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" name="phone" class="form-control form-input-custom"
-                                           placeholder="Phone Number" required
+                                           th:placeholder="#{booking.phone_placeholder}" required
                                            th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.phoneNumber : ''}">
                                 </div>
                             </div>
 
-                            <div class="section-title mt-4">DRIVING LICENSE DOCUMENT</div>
+                            <div class="section-title mt-4" th:text="#{booking.license_doc}">DRIVING LICENSE DOCUMENT</div>
                             <div class="p-3 mb-4" style="background: #e9ecef; border-radius: 5px;">
                                 <input type="file" id="licenseFile" name="licenseFile"
                                        class="form-control-file" accept="image/png, image/jpeg, image/jpg" required>
-                                <small id="fileError" style="color: red; display: none;">Faylın ölçüsü maksimum 10MB olmalıdır!</small>
+                                <small id="fileError" style="color: red; display: none;" th:text="#{booking.file_error}">File size must be maximum 10MB!</small>
                             </div>
 
                             <div class="text-right">
-                                <button type="submit" class="btn btn-book-now">BOOK NOW</button>
+                                <button type="submit" class="btn btn-book-now" th:text="#{booking.btn_book_now}">BOOK NOW</button>
                             </div>
                         </form>
                     </div>

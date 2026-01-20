@@ -5,7 +5,7 @@
       layout:decorate="~{front/account/user-layout}">
 
 <head>
-    <title>User Dashboard</title>
+    <title th:text="#{user.dashboard.title}">User Dashboard</title>
 </head>
 
 <body>
@@ -15,11 +15,11 @@
     <!-- Page Title -->
     <div class="mb-4">
         <h2>
-            Xoş gəldin,
+            <span th:text="#{user.dashboard.welcome}">Welcome,</span>
             <span class="text-primary" th:text="${user.firstName}">User</span> 👋
         </h2>
-        <p class="text-muted">
-            Buradan rezervasiyalarını və hesab məlumatlarını idarə edə bilərsən.
+        <p class="text-muted" th:text="#{user.dashboard.welcome_desc}">
+            You can manage your bookings and account information here.
         </p>
     </div>
 
@@ -28,21 +28,21 @@
 
         <div class="col-md-4">
             <div class="card shadow-sm text-center p-3">
-                <h6 class="text-muted">Ümumi Rezervasiya</h6>
+                <h6 class="text-muted" th:text="#{user.dashboard.total_bookings}">Total Bookings</h6>
                 <h2 th:text="${stats.totalBookings}">0</h2>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card shadow-sm text-center p-3">
-                <h6 class="text-muted">Aktiv</h6>
+                <h6 class="text-muted" th:text="#{user.dashboard.active}">Active</h6>
                 <h2 class="text-success" th:text="${stats.activeBookings}">0</h2>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card shadow-sm text-center p-3">
-                <h6 class="text-muted">Tamamlanmış</h6>
+                <h6 class="text-muted" th:text="#{user.dashboard.completed}">Completed</h6>
                 <h2 class="text-secondary" th:text="${stats.completedBookings}">0</h2>
             </div>
         </div>
@@ -53,11 +53,11 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <h4 class="mb-3">Son Rezervasiyalar</h4>
+            <h4 class="mb-3" th:text="#{user.dashboard.last_bookings}">Last Bookings</h4>
 
             <div th:if="${#lists.isEmpty(bookings)}"
-                 class="alert alert-info">
-                Hələ heç bir rezervasiyanız yoxdur.
+                 class="alert alert-info" th:text="#{user.dashboard.no_bookings}">
+                You have no bookings yet.
             </div>
 
             <table class="table table-hover"
@@ -66,9 +66,9 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Maşın</th>
-                    <th>Tarix</th>
-                    <th>Status</th>
+                    <th th:text="#{user.dashboard.car}">Car</th>
+                    <th th:text="#{user.dashboard.date}">Date</th>
+                    <th th:text="#{user.dashboard.status}">Status</th>
                 </tr>
                 </thead>
 

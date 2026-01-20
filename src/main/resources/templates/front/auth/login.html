@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Giriş et - CarRental</title>
+    <title th:text="#{login.title}">Login - CarRental</title>
 
     <link rel="stylesheet" href="/front/css/bootstrap.min.css">
 
@@ -19,10 +19,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="bg-white p-5 shadow-sm rounded">
-                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{login.title}">Sistemə Giriş</h2>
+                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{login.title}">Login to System</h2>
 
                         <div th:if="${param.error}" class="alert alert-danger p-2 mb-3 small" th:text="#{login.error_message}">
-                            E-poçt ünvanı və ya şifrə yanlışdır.
+                            Invalid email or password.
                         </div>
                         <div th:if="${message}" class="alert alert-success p-2 mb-3 small" th:text="${message}"></div>
 
@@ -32,13 +32,13 @@
                                 <input type="email" name="email" class="form-control" th:placeholder="#{login.email_placeholder}" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="text-black" th:text="#{login.password}">Şifrə</label>
+                                <label class="text-black" th:text="#{login.password}">Password</label>
                                 <input type="password" name="password" class="form-control" th:placeholder="#{login.password_placeholder}" required>
                             </div>
 
                             <div class="form-group d-flex align-items-center mb-4">
                                 <input type="checkbox" id="remember" name="remember-me" class="mr-2">
-                                <label for="remember" class="mb-0" th:text="#{login.remember_me}">Məni xatırla</label>
+                                <label for="remember" class="mb-0" th:text="#{login.remember_me}">Remember me</label>
                             </div>
 
                             <div class="form-group">
@@ -48,14 +48,14 @@
 
                         <div class="mt-4 text-center">
                             <p class="small">
-                                <a href="/forgot-password">Şifrəni unutmusunuz?</a>
+                                <a href="/forgot-password" th:text="#{login.forgot_password}">Forgot password?</a>
                             </p>
                             <p class="small">
-                                <span th:text="#{login.no_account}">Hesabınız yoxdur?</span>
-                                <a href="/register" th:text="#{login.register_link}">Qeydiyyatdan keçin</a>
+                                <span th:text="#{login.no_account}">Don't have an account?</span>
+                                <a href="/register" th:text="#{login.register_link}">Register here</a>
                             </p>
                             <p class="small">
-                                <a href="/" th:text="#{login.back_home}">Ana səhifəyə dön</a>
+                                <a href="/" th:text="#{login.back_home}">Back to home</a>
                             </p>
                         </div>
                     </div>

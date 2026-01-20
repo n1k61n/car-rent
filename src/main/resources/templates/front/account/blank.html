@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="~{front/user-layout}" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" layout:decorate="~{front/account/user-layout}" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <title>Dashboard</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>İstifadəçi Dashboard</h1>
-    <p>Burada profil, rezervasiyalar və statistika görünəcək.</p>
+    <h1 th:text="#{user.dashboard.title}">User Dashboard</h1>
+    <p>Profile, bookings and statistics will be displayed here.</p>
 
 
 

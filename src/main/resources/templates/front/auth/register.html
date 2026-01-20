@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Qeydiyyat - CarRental</title>
+    <title th:text="#{register.title}">Register - CarRental</title>
 
     <link rel="stylesheet" href="/front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/front/css/style.css">
@@ -17,7 +17,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="bg-white p-5 shadow-sm rounded">
-                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{register.title}">Hesab Yaradın</h2>
+                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{register.title}">Create an Account</h2>
 
                         <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}"></div>
 
@@ -25,14 +25,14 @@
 
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label class="text-black" th:text="#{register.first_name}">Ad</label>
+                                    <label class="text-black" th:text="#{register.first_name}">First Name</label>
                                     <input type="text" th:field="*{firstName}" class="form-control"
                                            th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''">
                                     <div class="text-danger small" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
                                 </div>
 
                                 <div class="col-md-6 form-group">
-                                    <label class="text-black" th:text="#{register.last_name}">Soyad</label>
+                                    <label class="text-black" th:text="#{register.last_name}">Last Name</label>
                                     <input type="text" th:field="*{lastName}" class="form-control"
                                            th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''">
                                     <div class="text-danger small" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
@@ -40,45 +40,45 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black" th:text="#{contact.email}">Email Ünvanı</label>
+                                <label class="text-black" th:text="#{contact.email}">Email Address</label>
                                 <input type="email" th:field="*{email}" class="form-control"
                                        th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
                                 <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black" th:text="#{register.phone}">Telefon nömrəsi</label>
+                                <label class="text-black" th:text="#{register.phone}">Phone Number</label>
                                 <input type="text" th:field="*{phoneNumber}" class="form-control"
                                        th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid' : ''">
                                 <div class="text-danger small" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black" th:text="#{login.password}">Şifrə</label>
+                                <label class="text-black" th:text="#{login.password}">Password</label>
                                 <input type="password" th:field="*{password}" class="form-control"
                                        th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
                                 <div class="text-danger small" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="text-black" th:text="#{register.confirm_password}">Şifrənin Təkrarı</label>
+                                <label class="text-black" th:text="#{register.confirm_password}">Confirm Password</label>
                                 <input type="password" th:field="*{confirmPassword}" class="form-control"
                                        th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''">
                                 <div class="text-danger small" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block text-white py-3">Qeydiyyatdan Keç</button>
+                            <button type="submit" class="btn btn-primary btn-block text-white py-3" th:text="#{register.btn_submit}">Register Now</button>
                         </form>
                         <div class="mt-4 text-center">
                             <p class="small">
-                                <a href="/forgot-password">Şifrəni unutmusunuz?</a>
+                                <a href="/forgot-password" th:text="#{login.forgot_password}">Forgot password?</a>
                             </p>
                             <p class="small">
-                                <span th:text="#{register.have_account}">Artıq hesabınız var?</span>
-                                <a href="/login" th:text="#{register.login_link}">Giriş edin</a>
+                                <span th:text="#{register.have_account}">Already have an account?</span>
+                                <a href="/login" th:text="#{register.login_link}">Login here</a>
                             </p>
                             <p class="small">
-                                <a href="/" th:text="#{login.back_home}">Ana səhifəyə dön</a>
+                                <a href="/" th:text="#{login.back_home}">Back to home</a>
                             </p>
                         </div>
                     </div>

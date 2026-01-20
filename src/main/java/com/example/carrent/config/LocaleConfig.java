@@ -17,7 +17,7 @@ public class LocaleConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("az"));
+        slr.setDefaultLocale(new Locale("az", "AZ"));
         return slr;
     }
 

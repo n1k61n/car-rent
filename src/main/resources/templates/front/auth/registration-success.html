@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Təbriklər - CarRental</title>
+    <title th:text="#{auth.success_title}">Congratulations - CarRental</title>
 
     <link rel="stylesheet" href="/front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/front/css/style.css">
@@ -23,21 +23,22 @@
                             <i class="fas fa-check-circle text-success" style="font-size: 80px;"></i>
                         </div>
 
-                        <h2 class="text-black mb-3 font-weight-bold">Təbriklər!</h2>
+                        <h2 class="text-black mb-3 font-weight-bold" th:text="#{auth.success_title}">Congratulations!</h2>
 
-                        <p class="text-muted mb-4">
-                            Hesabınız uğurla təsdiqləndi. Artıq **CarRental** xidmətlərindən tam şəkildə yararlana və arzunuzdakı avtomobili kirayələyə bilərsiniz.
+                        <p class="text-muted mb-4" th:text="#{auth.success_desc}">
+                            Your account has been successfully verified. You can now fully use **CarRental** services and rent the car of your dreams.
                         </p>
 
                         <div class="form-group mt-4">
-                            <a href="/login" class="btn btn-primary btn-block text-white py-3">
-                                Giriş Səhifəsinə Keç
+                            <a href="/login" class="btn btn-primary btn-block text-white py-3" th:text="#{auth.success_login_btn}">
+                                Go to Login Page
                             </a>
                         </div>
 
                         <div class="mt-4">
                             <p class="small text-muted">
-                                Hər hansı bir çətinliyiniz yaranarsa, <a href="/contact" class="text-primary">dəstək komandamızla</a> əlaqə saxlayın.
+                                <span th:text="#{auth.success_support_text}">If you have any difficulties, please contact our</span>
+                                <a href="/contact" class="text-primary" th:text="#{auth.success_support_link}">support team</a>.
                             </p>
                         </div>
                     </div>

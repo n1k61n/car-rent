@@ -13,11 +13,11 @@
             <div class="row align-items-end">
                 <div class="col-lg-5">
                     <div class="intro">
-                        <h1 th:text="#{nav.blog}">Bloq</h1>
+                        <h1 th:text="#{nav.blog}">Blog</h1>
                         <div class="custom-breadcrumbs">
-                            <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
+                            <a href="/" th:text="#{nav.home}">Home</a>
                             <span class="mx-2">/</span>
-                            <strong th:text="#{nav.blog}">Bloq</strong>
+                            <strong th:text="#{nav.blog}">Blog</strong>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <h2><a th:href="'/blog/single/' + ${blog.id}" th:text="${blog.title}">Blog Title</a></h2>
                             <span class="meta d-inline-block mb-3">
                                     <span th:text="${#temporals.format(blog.createdAt, 'dd MMMM, yyyy')}">July 17, 2019</span>
-                                    <span class="mx-2">by</span>
+                                    <span class="mx-2" th:text="#{blog.by}">by</span>
                                     <a href="#" th:text="${blog.author}">Admin</a>
                                 </span>
                             <p th:text="${#strings.abbreviate(blog.content, 120)}">Blog summary content goes here...</p>

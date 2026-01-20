@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layout}"> <head>
-    <title>Yardım Mərkəzi - CarRental</title>
+    <title th:text="#{privacy.title} + ' - CarRental'">Privacy Policy - CarRental</title>
 </head>
 
 <body>
@@ -13,9 +13,9 @@
             <div class="row align-items-end">
                 <div class="col-lg-5">
                     <div class="intro">
-                        <h1 class="text"><strong>Məxfilik</strong></h1>
+                        <h1 class="text"><strong th:text="#{privacy.title}">Privacy Policy</strong></h1>
                         <div class="custom-breadcrumbs">
-                            <a href="/">Ana Səhifə</a> <span class="mx-2">/</span> <strong>Məxfilik</strong>
+                            <a href="/" th:text="#{nav.home}">Home</a> <span class="mx-2">/</span> <strong th:text="#{privacy.breadcrumb}">Privacy</strong>
                         </div>
                     </div>
                 </div>
@@ -27,23 +27,24 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="p-5 bg-white shadow-sm border">
-                        <h2 class="text-black mb-4">Məxfilik Siyasəti</h2>
+                        <h2 class="text-black mb-4" th:text="#{privacy.policy_title}">Privacy Policy</h2>
                         <hr>
-                        <p>Sizin məxfiliyiniz bizim üçün çox vacibdir. CarRental olaraq şəxsi məlumatlarınızın təhlükəsizliyinə zəmanət veririk.</p>
+                        <p th:text="#{privacy.policy_desc}">Your privacy is very important to us. As CarRental, we guarantee the security of your personal data.</p>
 
-                        <h5 class="text-black mt-4">Hansı məlumatları toplayırıq?</h5>
-                        <p>Qeydiyyat və sifariş zamanı ad, soyad, əlaqə nömrəsi və e-poçt ünvanınız sistemimizdə saxlanılır.</p>
+                        <h5 class="text-black mt-4" th:text="#{privacy.collection_title}">What information do we collect?</h5>
+                        <p th:text="#{privacy.collection_desc}">Your name, surname, contact number and email address are stored in our system during registration and ordering.</p>
 
-                        <h5 class="text-black mt-4">Məlumatların istifadəsi</h5>
-                        <p>Toplanılan məlumatlar yalnız aşağıdakı məqsədlər üçün istifadə olunur:</p>
+                        <h5 class="text-black mt-4" th:text="#{privacy.usage_title}">Use of information</h5>
+                        <p th:text="#{privacy.usage_desc}">The collected information is used only for the following purposes:</p>
                         <ul>
-                            <li>Sifarişlərin təsdiqi və izlənilməsi.</li>
-                            <li>Yalnız sizin icazənizlə xüsusi kampaniyalar haqqında bildirişlərin göndərilməsi.</li>
-                            <li>Xidmət keyfiyyətinin artırılması.</li>
+                            <li th:text="#{privacy.usage_1}">Confirmation and tracking of orders.</li>
+                            <li th:text="#{privacy.usage_2}">Sending notifications about special campaigns only with your permission.</li>
+                            <li th:text="#{privacy.usage_3}">Improving service quality.</li>
                         </ul>
 
                         <div class="alert alert-info mt-5">
-                            Məxfiliyin qorunması ilə bağlı suallarınız yaranarsa, <a href="/contact">bizimlə əlaqə</a> saxlayın.
+                            <span th:text="#{privacy.contact_text}">If you have any questions regarding privacy protection, please</span>
+                            <a href="/contact" th:text="#{privacy.contact_link}">contact us</a>.
                         </div>
                     </div>
                 </div>

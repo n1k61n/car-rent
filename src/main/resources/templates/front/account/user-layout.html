@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="az" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="az" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,56 +56,8 @@
 
     <main class="content-area" layout:fragment="content">
     </main>
-
-
-    <button id="chatToggleBtn" style="position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, #0779e4, #1c2bde); color: white; border: none; box-shadow: 0 8px 25px rgba(7, 121, 228, 0.4); z-index: 9999; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; outline: none;">
-        <span style="font-size: 28px;">💬</span>
-    </button>
-
-    <div id="chatInterface" style="display: none; position: fixed; bottom: 110px; right: 30px; width: 380px; height: 550px; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); z-index: 9999; flex-direction: column; overflow: hidden; transition: all 0.4s ease;">
-
-        <div style="background: linear-gradient(to right, #0779e4, #1c2bde); color: white; padding: 25px 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h5 style="margin: 0; font-size: 16px; font-weight: 600;">Canlı Dəstək</h5>
-            <button id="chatCloseBtn" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
-        </div>
-
-        <div id="namePromptScreen" sec:authorize="isAnonymous()" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; background: #f8f9fa;">
-            <div style="font-size: 40px; margin-bottom: 20px;">👋</div>
-            <h6 style="margin-bottom: 10px; color: #333;">Xoş gəlmisiniz!</h6>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Sizə kömək edə bilməyimiz üçün zəhmət olmasa adınızı qeyd edin.</p>
-            <input type="text" id="anonymousUserName" placeholder="Adınız və Soyadınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
-            <input type="email" id="anonymousUserEmail" placeholder="Email ünvanınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
-            <button id="startChatBtn" style="width: 100%; padding: 12px; background: #0779e4; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s;">Çata Başla</button>
-        </div>
-
-        <div id="mainChatArea" style="flex: 1; display: none; flex-direction: column; overflow: hidden;">
-            <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 15px;">
-                <div style="text-align: center;"><small style="color: #aaa;">Söhbət başladı</small></div>
-            </div>
-
-            <div style="padding: 20px; background: white; border-top: 1px solid #f0f0f0;">
-                <div style="display: flex; background: #f1f3f4; border-radius: 25px; padding: 5px 15px; align-items: center;">
-                    <input type="text" id="chatInput" placeholder="Mesajınızı yazın..." style="flex: 1; border: none; background: transparent; outline: none; padding: 10px 0;">
-                    <button id="chatSendBtn" style="background: #0779e4; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer;">➤</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 </div>
 
-<script src="/front/js/jquery-3.3.1.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
-<script src="/front/js/chat.js"></script>
-
-<input type="hidden" id="isAuth" th:value="${#authorization.expression('isAuthenticated()')}">
-<input type="hidden" id="authUserName" th:value="${#authentication.name}">
-<input type="hidden" id="authUserEmail" th:value="${#authentication.name}">
-<script src="/front/js/main.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
