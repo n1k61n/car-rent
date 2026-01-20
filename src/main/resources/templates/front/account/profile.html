@@ -69,7 +69,7 @@
                 <div th:if="${error}" class="alert alert-danger"
                      th:text="${error}"></div>
 
-                <form th:action="@{/profile/update}"
+                <form th:action="@{/account/profile/update}"
                       th:object="${userProfileUpdateDto}"
                       method="post">
 

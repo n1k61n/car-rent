@@ -1,6 +1,7 @@
 package com.example.carrent.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -17,7 +18,6 @@ public class UserProfileUpdateDto {
     @Size(max = 15)
     private String phoneNumber;
 
-    // Şifrə boş ola bilər (dəyişdirmək istəmirsə)
-    @Size(min = 6, max = 100, message = "Şifrə 6 ilə 100 simvol arasında olmalıdır.")
+    @Pattern(regexp = "^$|.{6,100}", message = "Şifrə 6 ilə 100 simvol arasında olmalıdır.")
     private String password;
 }

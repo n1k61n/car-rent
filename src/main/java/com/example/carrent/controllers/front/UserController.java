@@ -94,18 +94,23 @@ public class UserController {
         }
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateDto", bindingResult);
-            redirectAttributes.addFlashAttribute("userProfileUpdateDto", userProfileUpdateDto);
-            return "redirect:/profile";
-        }
+            if (userProfileUpdateDto.getPassword() == null || userProfileUpdateDto.getPassword().isEmpty()) {
+                bindingResult.getFieldErrors("password").clear();
+            }
 
+            if (bindingResult.hasErrors()) {
+                redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateDto", bindingResult);
+                redirectAttributes.addFlashAttribute("userProfileUpdateDto", userProfileUpdateDto);
+                return "redirect:/account/profile";
+            }
+        }
         boolean result = userService.updateProfile(principal.getName(), userProfileUpdateDto);
         if (result) {
             redirectAttributes.addFlashAttribute("message", "Profiliniz uğurla yeniləndi.");
         } else {
             redirectAttributes.addFlashAttribute("error", "Profil yenilənərkən xəta baş verdi.");
         }
-        return "redirect:/profile";
+        return "redirect:/account/profile";
     }
 
 
