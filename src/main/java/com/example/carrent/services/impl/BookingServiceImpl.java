@@ -2,6 +2,8 @@ package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.dtos.booking.BookingUserDto;
+import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.exceptions.ResourceNotFoundException;
 import com.example.carrent.models.Booking;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -151,7 +154,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setPickupLocation(dto.getPickupLocation());
         booking.setNotes(dto.getNotes());
         booking.setStatus(BookingStatus.PENDING);
-        booking.setTotalPrice(days * car.getDailyPrice());
+        booking.setTotalPrice(car.getDailyPrice().multiply(BigDecimal.valueOf(days)));
 
 
         try {
@@ -190,6 +193,58 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getRecentBookings() {
         return bookingRepository.findTop5ByOrderByCreatedAtDesc();
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteBooking(Long id, String email) {
+        log.info("Attempting to delete booking ID: {} for user: {}", id, email);
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sifariş tapılmadı!"));
+
+        if (!booking.getUser().getEmail().equals(email)) {
+            log.warn("User {} tried to delete booking {} which belongs to another user", email, id);
+            throw new RuntimeException("Bu sifarişi silmək icazəniz yoxdur!");
+        }
+
+        Car car = booking.getCar();
+        if (car != null) {
+            car.setAvailable(true);
+            carRepository.save(car);
+        }
+
+        bookingRepository.delete(booking);
+        log.info("Booking {} deleted successfully", id);
+        return true;
+    }
+
+    @Override
+    public List<BookingUserDto> findByUser(UserProfileDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        List<Booking> listBokings = bookingRepository.findByUser(user);
+        return listBokings.stream().map(booking -> modelMapper.map(booking, BookingUserDto.class)).toList();
+    }
+
+    @Override
+    public long countByUser(UserProfileDto user) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.countByUser(userEntity);
+    }
+
+    @Override
+    public long countByUserAndStatus(UserProfileDto user, BookingStatus bookingStatus) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.countByUserAndStatus(userEntity, bookingStatus);
+    }
+
+    @Override
+    public BigDecimal sumTotalPriceByUser(UserProfileDto user) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return bookingRepository.sumTotalPriceByUser(userEntity);
     }
 
     @Override

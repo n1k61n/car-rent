@@ -1,6 +1,5 @@
 package com.example.carrent.controllers.front;
 
-import com.example.carrent.dtos.booking.BookingOrdersDto;
 import com.example.carrent.dtos.booking.BookingUserDto;
 import com.example.carrent.dtos.user.UserDashboardStatsDto;
 import com.example.carrent.dtos.user.UserProfileDto;
@@ -8,7 +7,6 @@ import com.example.carrent.dtos.user.UserProfileUpdateDto;
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -74,11 +72,11 @@ public class UserController {
         if (principal == null) return "redirect:/login";
 
         UserProfileDto user = userService.findByEmail(principal.getName());
-        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
+        List<BookingUserDto> bookings = bookingService.findByUser(user);
 
         model.addAttribute("user", user);
         model.addAttribute("bookings", bookings);
-        model.addAttribute("activePage", "bookings"); // Artıq var idi, saxlanıldı
+        model.addAttribute("activePage", "bookings");
 
         return "front/account/user_bookings";
     }
