@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Payment</title>
+    <title th:text="#{payment.title}">Payment</title>
 </head>
 <body>
 
@@ -17,39 +17,39 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Payment Details</h4>
+                        <h4 class="mb-0" th:text="#{payment.details}">Payment Details</h4>
                     </div>
                     <div class="card-body">
                         <form th:action="@{/booking/process-payment}" method="post">
                             <input type="hidden" name="bookingId" th:value="${bookingId}">
 
                             <div class="form-group">
-                                <label for="cardName">Card Holder Name</label>
-                                <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                                <label for="cardName" th:text="#{payment.card_holder}">Card Holder Name</label>
+                                <input type="text" class="form-control" id="cardName" th:placeholder="#{payment.card_holder_placeholder}" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="cardNumber">Card Number</label>
-                                <input type="text" class="form-control" id="cardNumber" placeholder="0000 0000 0000 0000" required>
+                                <label for="cardNumber" th:text="#{payment.card_number}">Card Number</label>
+                                <input type="text" class="form-control" id="cardNumber" th:placeholder="#{payment.card_number_placeholder}" required>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="expiryDate">Expiry Date</label>
-                                        <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                                        <label for="expiryDate" th:text="#{payment.expiry_date}">Expiry Date</label>
+                                        <input type="text" class="form-control" id="expiryDate" th:placeholder="#{payment.expiry_date_placeholder}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="cvv">CVV</label>
-                                        <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                                        <label for="cvv" th:text="#{payment.cvv}">CVV</label>
+                                        <input type="text" class="form-control" id="cvv" th:placeholder="#{payment.cvv_placeholder}" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-success btn-block btn-lg">Pay Now</button>
+                                <button type="submit" class="btn btn-success btn-block btn-lg" th:text="#{payment.btn_pay}">Pay Now</button>
                             </div>
                         </form>
                     </div>

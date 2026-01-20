@@ -62,40 +62,37 @@
 
                     <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                         <ul class="site-menu main-menu js-clone-nav ml-auto">
-                            <li class="active"><a th:text="#{nav.home}" href="/" class="nav-link">Ana Səhifə</a></li>
-                            <li><a th:text="#{nav.cars}" href="/listing" class="nav-link">Maşınlar</a></li>
-                            <li><a th:text="#{nav.reviews}" href="/testimonials" class="nav-link">Rəylər</a></li>
-                            <li><a th:text="#{nav.blog}" href="/blog" class="nav-link">Bloq</a></li>
-                            <li><a th:text="#{nav.about}" href="/about" class="nav-link">Haqqımızda</a></li>
-                            <li><a th:text="#{nav.contact}" href="/contact" class="nav-link">Əlaqə</a></li>
+                            <li class="active"><a th:text="#{nav.home}" href="/" class="nav-link">Home</a></li>
+                            <li><a th:text="#{nav.cars}" href="/listing" class="nav-link">Cars</a></li>
+                            <li><a th:text="#{nav.reviews}" href="/testimonials" class="nav-link">Reviews</a></li>
+                            <li><a th:text="#{nav.blog}" href="/blog" class="nav-link">Blog</a></li>
+                            <li><a th:text="#{nav.about}" href="/about" class="nav-link">About Us</a></li>
+                            <li><a th:text="#{nav.contact}" href="/contact" class="nav-link">Contact</a></li>
                             <li th:if="${!isLoggedIn}">
-                                <a th:text="#{nav.login}" href="/login" class="nav-link">Giriş</a>
+                                <a th:text="#{nav.login}" href="/login" class="nav-link">Login</a>
                             </li>
 
                             <li th:if="${isLoggedIn}" class="has-children">
                                 <a href="#" class="nav-link">
-                                    <span th:text="${username}">İstifadəçi</span>
+                                    <span th:text="${username}">User</span>
                                 </a>
                                 <ul class="dropdown">
-                                    <li><a href="/account/profile" th:text="#{user.profile}">Profilim</a></li>
-                                    <li><a href="/account/bookings" th:text="#{user.booking}">Sifarişlərim</a></li>
+                                    <li><a href="/account/profile" th:text="#{user.profile}">My Profile</a></li>
+                                    <li><a href="/account/bookings" th:text="#{user.booking}">My Bookings</a></li>
                                     <li>
                                         <form th:action="@{/logout}" method="post" id="logoutForm" style="display:none;"></form>
-                                        <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" class="nav-link">Çıxış</a>
+                                        <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();" class="nav-link" th:text="#{user.layout.logout}">Logout</a>
                                     </li>
                                 </ul>
                             </li>
 
                             <li class="has-children">
                                 <a href="#" class="nav-link">
-                                    <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Dil</span>
+                                    <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Lang</span>
                                 </a>
                                 <ul class="dropdown">
-                                    <li><a th:href="@{''(lang='az')}">AZ</a>
-
-                                    </li>
-                                    <li><a th:href="@{''(lang='en')}">EN</a>
-                                    </li>
+                                    <li><a th:href="@{''(lang='az')}">AZ</a></li>
+                                    <li><a th:href="@{''(lang='en')}">EN</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -118,27 +115,27 @@
     <div id="chatInterface" style="display: none; position: fixed; bottom: 110px; right: 30px; width: 380px; height: 550px; background: #ffffff; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); z-index: 9999; flex-direction: column; overflow: hidden; transition: all 0.4s ease;">
 
         <div style="background: linear-gradient(to right, #0779e4, #1c2bde); color: white; padding: 25px 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h5 style="margin: 0; font-size: 16px; font-weight: 600;">Canlı Dəstək</h5>
+            <h5 style="margin: 0; font-size: 16px; font-weight: 600;" th:text="#{chat.title}">Live Support</h5>
             <button id="chatCloseBtn" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
         </div>
 
         <div id="namePromptScreen" sec:authorize="isAnonymous()" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; background: #f8f9fa;">
             <div style="font-size: 40px; margin-bottom: 20px;">👋</div>
-            <h6 style="margin-bottom: 10px; color: #333;">Xoş gəlmisiniz!</h6>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Sizə kömək edə bilməyimiz üçün zəhmət olmasa adınızı qeyd edin.</p>
-            <input type="text" id="anonymousUserName" placeholder="Adınız və Soyadınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
-            <input type="email" id="anonymousUserEmail" placeholder="Email ünvanınız" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
-            <button id="startChatBtn" style="width: 100%; padding: 12px; background: #0779e4; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s;">Çata Başla</button>
+            <h6 style="margin-bottom: 10px; color: #333;" th:text="#{chat.welcome}">Welcome!</h6>
+            <p style="font-size: 13px; color: #666; margin-bottom: 20px;" th:text="#{chat.welcome_desc}">Please enter your name so we can help you.</p>
+            <input type="text" id="anonymousUserName" th:placeholder="#{chat.name_placeholder}" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
+            <input type="email" id="anonymousUserEmail" th:placeholder="#{chat.email_placeholder}" style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px;">
+            <button id="startChatBtn" style="width: 100%; padding: 12px; background: #0779e4; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s;" th:text="#{chat.start_btn}">Start Chat</button>
         </div>
 
         <div id="mainChatArea" style="flex: 1; display: none; flex-direction: column; overflow: hidden;">
             <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 15px;">
-                <div style="text-align: center;"><small style="color: #aaa;">Söhbət başladı</small></div>
+                <div style="text-align: center;"><small style="color: #aaa;" th:text="#{chat.started}">Chat started</small></div>
             </div>
 
             <div style="padding: 20px; background: white; border-top: 1px solid #f0f0f0;">
                 <div style="display: flex; background: #f1f3f4; border-radius: 25px; padding: 5px 15px; align-items: center;">
-                    <input type="text" id="chatInput" placeholder="Mesajınızı yazın..." style="flex: 1; border: none; background: transparent; outline: none; padding: 10px 0;">
+                    <input type="text" id="chatInput" th:placeholder="#{chat.input_placeholder}" style="flex: 1; border: none; background: transparent; outline: none; padding: 10px 0;">
                     <button id="chatSendBtn" style="background: #0779e4; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer;">➤</button>
                 </div>
             </div>
@@ -150,11 +147,11 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-7 mb-4 mb-md-0">
-                    <h2 class="mb-0 text-white" th:text="#{section.wait}" >Nəyi gözləyirsiniz?</h2>
-                    <p class="mb-0 opa-7" th:text="#{section.desc}" >Sərfəli qiymətlərlə arzuladığınız avtomobili elə indi icarəyə götürün.</p>
+                    <h2 class="mb-0 text-white" th:text="#{section.wait}" >What are you waiting for?</h2>
+                    <p class="mb-0 opa-7" th:text="#{section.desc}" >Rent the car of your dreams right now at affordable prices.</p>
                 </div>
                 <div class="col-lg-5 text-md-right">
-                    <a href="#" class="btn btn-primary btn-white" th:text="#{btn.rent_now}" >İndi icarələ</a>
+                    <a href="#" class="btn btn-primary btn-white" th:text="#{btn.rent_now}" >Rent Now</a>
                 </div>
             </div>
         </div>
@@ -164,8 +161,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <h2 class="footer-heading mb-4" th:text="#{layout.mission}">Misiyamiz</h2>
-                    <p th:text="#{layout.mission_content}">Biz sizə ən rahat və təhlükəsiz səyahəti təmin etmək üçün buradayıq.</p>
+                    <h2 class="footer-heading mb-4" th:text="#{layout.mission}">Our Mission</h2>
+                    <p th:text="#{layout.mission_content}">We are here to provide you with the most comfortable and safe travel experience.</p>
                     <ul class="list-unstyled social">
                         <li><a href="https://facebook.com/sizinsehife"><span class="icon-facebook"></span></a></li>
                         <li><a href="#"><span class="icon-instagram"></span></a></li>
@@ -176,19 +173,19 @@
                 <div class="col-lg-8 ml-auto">
                     <div class="row">
                         <div class="col-lg-3">
-                            <h2 class="footer-heading mb-4" th:text="#{nav.link}">Faydalı Linklər</h2>
+                            <h2 class="footer-heading mb-4" th:text="#{nav.link}">Useful Links</h2>
                             <ul class="list-unstyled">
-                                <li><a href="/about" th:text="#{nav.about}">Haqqımızda</a></li>
-                                <li><a href="/listing" th:text="#{nav.cars}">Maşınlar</a></li>
-                                <li><a href="/contact" th:text="#{nav.contact}">Əlaqə</a></li>
+                                <li><a href="/about" th:text="#{nav.about}">About Us</a></li>
+                                <li><a href="/listing" th:text="#{nav.cars}">Cars</a></li>
+                                <li><a href="/contact" th:text="#{nav.contact}">Contact</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-3">
-                            <h2 class="footer-heading mb-4" th:text="#{layout.footer}">Dəstək</h2>
+                            <h2 class="footer-heading mb-4" th:text="#{layout.footer}">Support</h2>
                             <ul class="list-unstyled">
-                                <li><a href="/help" th:text="#{layout.footer_help}">Yardım Mərkəzi</a></li>
-                                <li><a href="/term" th:text="#{layout.footer_term}">Şərtlər</a></li>
-                                <li><a href="/privacy" th:text="#{layout.footer_priv}">Məxfilik</a></li>
+                                <li><a href="/help" th:text="#{layout.footer_help}">Help Center</a></li>
+                                <li><a href="/term" th:text="#{layout.footer_term}">Terms & Conditions</a></li>
+                                <li><a href="/privacy" th:text="#{layout.footer_priv}">Privacy Policy</a></li>
                             </ul>
                         </div>
                     </div>

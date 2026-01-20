@@ -2,7 +2,7 @@
 <html lang="en" layout:decorate="~{front/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="#{nav.about} + ' - CarRental'">Haqqımızda - CarRental</title>
+    <title th:text="#{nav.about} + ' - CarRental'">About Us - CarRental</title>
     <meta charset="utf-8">
 </head>
 
@@ -15,11 +15,11 @@
             <div class="row align-items-end">
                 <div class="col-lg-5">
                     <div class="intro">
-                        <h1 th:text="#{nav.about}">Haqqımızda</h1>
+                        <h1 th:text="#{nav.about}">About Us</h1>
                         <div class="custom-breadcrumbs">
-                            <a href="/" th:text="#{nav.home}">Ana Səhifə</a>
+                            <a href="/" th:text="#{nav.home}">Home</a>
                             <span class="mx-2">/</span>
-                            <strong th:text="#{nav.about}">Haqqımızda</strong>
+                            <strong th:text="#{nav.about}">About Us</strong>
                         </div>
                     </div>
                 </div>
@@ -34,9 +34,9 @@
                     <img src="/front/images/hero_2.jpg" alt="Image" class="img-fluid rounded">
                 </div>
                 <div class="col-lg-4 mr-auto">
-                    <h2 th:text="#{about.company_title}">Avtomobil Şirkəti</h2>
-                    <p th:text="#{about.company_text1}">Şirkətimiz uzun illərdir ki, müştərilərinə ən yüksək keyfiyyətli xidmət təklif edir.</p>
-                    <p th:text="#{about.company_text2}">Bizim əsas məqsədimiz təhlükəsizlik və rahatlığı hər kəs üçün əlçatan etməkdir.</p>
+                    <h2 th:text="#{about.company_title}">Our Company</h2>
+                    <p th:text="#{about.company_text1}">As CarRental, we provide our customers with the most reliable car rental experience.</p>
+                    <p th:text="#{about.company_text2}">We are always at your service with our wide selection of cars and affordable prices.</p>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="container">
             <div class="row justify-content-center text-center mb-5 section-2-title">
                 <div class="col-md-6">
-                    <h2 class="mb-4" th:text="#{about.team_title}">Komandamızla Tanış Olun</h2>
+                    <h2 class="mb-4" th:text="#{about.team_title}">Meet Our Team</h2>
                 </div>
             </div>
             <div class="row align-items-stretch">
@@ -54,9 +54,9 @@
                     <div class="post-entry-1 h-100 person-1">
                         <img th:src="${member.imageUrl}" alt="Image" class="img-fluid">
                         <div class="post-entry-1-contents">
-                            <span class="meta" th:text="${member.role}">Təsisçi</span>
+                            <span class="meta" th:text="${member.role}">Founder</span>
                             <h2 th:text="${member.name}">James Doe</h2>
-                            <p th:text="${member.bio}">Peşəkar komandamız sizin xidmətinizdədir.</p>
+                            <p th:text="${member.bio}">Expert with more than 10 years of experience in the field.</p>
                         </div>
                     </div>
                 </div>
@@ -71,9 +71,9 @@
                     <img src="/front/images/hero_1.jpg" alt="Image" class="img-fluid rounded">
                 </div>
                 <div class="col-lg-4 ml-auto">
-                    <h2 th:text="#{about.history_title}">Tariximiz</h2>
-                    <p th:text="#{about.history_text1}">Kiçik bir qarajdan başlayaraq böyük bir donanmaya çevrildik.</p>
-                    <p th:text="#{about.history_text2}">İllər keçsə də, müştəri məmnuniyyəti prioritetimiz olaraq qalır.</p>
+                    <h2 th:text="#{about.history_title}">Our History</h2>
+                    <p th:text="#{about.history_text1}">We have been leading the Azerbaijani market since 2010.</p>
+                    <p th:text="#{about.history_text2}">We are expanding our service range with modern technologies and new car models.</p>
                 </div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Təsdiqləmə - CarRental</title>
+    <title th:text="#{auth.verify_email_title}">Email Verification - CarRental</title>
 
     <link rel="stylesheet" href="/front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/front/css/style.css">
@@ -17,14 +17,15 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="bg-white p-5 shadow-sm rounded">
-                        <h2 class="text-black mb-4 font-weight-bold">E-poçt Təsdiqləmə</h2>
+                        <h2 class="text-black mb-4 font-weight-bold" th:text="#{auth.verify_email_title}">Email Verification</h2>
 
                         <p class="mb-4 text-muted small">
-                            Zəhmət olmasa, <strong th:text="${email}">nümunə@mail.com</strong> ünvanına göndərilən 6 rəqəmli təsdiq kodunu daxil edin.
+                            <span th:text="#{auth.verify_email_desc}">Please enter the 6-digit verification code sent to</span>
+                            <strong th:text="${email}">example@mail.com</strong>
                         </p>
 
-                        <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="${error}">
-                            Daxil edilən kod yanlışdır və ya vaxtı bitib.
+                        <div th:if="${error}" class="alert alert-danger p-2 mb-3 small" th:text="#{auth.verify_code_error}">
+                            The code entered is incorrect or has expired.
                         </div>
                         <div th:if="${message}" class="alert alert-success p-2 mb-3 small" th:text="${message}"></div>
 
@@ -32,34 +33,34 @@
                             <input type="hidden" name="email" th:value="${email}" />
 
                             <div class="form-group mb-4">
-                                <label class="text-black">Təsdiq Kodu</label>
+                                <label class="text-black" th:text="#{auth.verify_code_label}">Verification Code</label>
                                 <input type="text"
                                        name="code"
                                        class="form-control text-center font-weight-bold"
                                        style="letter-spacing: 10px; font-size: 24px;"
-                                       placeholder="000000"
+                                       th:placeholder="#{auth.verify_code_placeholder}"
                                        required
                                        maxlength="6"
                                        pattern="\d{6}">
                                 <small class="form-text text-muted mt-2">
-                                    Kodun bitmə vaxtı: <span id="timer" class="text-danger font-weight-bold">05:00</span>
+                                    <span th:text="#{auth.verify_code_timer}">Code expiration time:</span> <span id="timer" class="text-danger font-weight-bold">05:00</span>
                                 </small>
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" value="Təsdiqlə" class="btn btn-primary btn-block text-white py-3">
+                                <input type="submit" th:value="#{auth.verify_btn}" class="btn btn-primary btn-block text-white py-3">
                             </div>
                         </form>
 
                         <div class="mt-4 text-center">
                             <!-- Timer bitəndə görünəcək hissə -->
                             <p class="small" id="resend-container" style="display: none;">
-                                <span>Kod gəlmədi?</span>
-                                <a th:href="@{/auth/resend(email=${email})}" class="font-weight-bold">Yenidən göndər</a>
+                                <span th:text="#{auth.verify_resend_text}">Didn't receive the code?</span>
+                                <a th:href="@{/auth/resend(email=${email})}" class="font-weight-bold" th:text="#{auth.verify_resend_link}">Resend</a>
                             </p>
 
                             <p class="small">
-                                <a href="/login" th:text="#{login.back_home}">Giriş səhifəsinə dön</a>
+                                <a href="/login" th:text="#{login.back_home}">Back to login page</a>
                             </p>
                         </div>
                     </div>

@@ -2,11 +2,11 @@
 <html lang="en" layout:decorate="~{front/account/user-layout}" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Dashboard</title>
+    <title th:text="#{user.bookings.title}">My Bookings</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>Sifarişlərim</h1>
+    <h1 th:text="#{user.bookings.title}">My Bookings</h1>
 
 
     <!-- DASHBOARD -->
@@ -24,11 +24,11 @@
                             <table class="table table-hover align-middle">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Avtomobil</th>
-                                    <th>Tarix</th>
-                                    <th>Qiymət</th>
-                                    <th>Status</th>
+                                    <th th:text="#{user.bookings.id}">#</th>
+                                    <th th:text="#{user.bookings.car}">Car</th>
+                                    <th th:text="#{user.bookings.date}">Date</th>
+                                    <th th:text="#{user.bookings.price}">Price</th>
+                                    <th th:text="#{user.bookings.status}">Status</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -68,8 +68,9 @@
                                               method="post">
                                             <input type="hidden" name="id" th:value="${booking.id}">
                                             <button class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Sifarişi ləğv etmək istəyirsiniz?')">
-                                                Ləğv et
+                                                    th:onclick="'return confirm(\'' + #{user.bookings.cancel_confirm} + '\')'"
+                                                    th:text="#{user.bookings.cancel}">
+                                                Cancel
                                             </button>
                                         </form>
                                     </td>
@@ -77,12 +78,12 @@
 
                                 <tr th:if="${#lists.isEmpty(bookings)}">
                                     <td colspan="6" class="text-center py-5">
-                                        <p class="text-muted mb-3">
-                                            Hələ heç bir sifarişiniz yoxdur
+                                        <p class="text-muted mb-3" th:text="#{user.bookings.no_bookings}">
+                                            You have no bookings yet
                                         </p>
                                         <a href="/listing"
-                                           class="btn btn-primary btn-sm text-white">
-                                            Avtomobil icarələ
+                                           class="btn btn-primary btn-sm text-white" th:text="#{user.bookings.rent_car}">
+                                            Rent a Car
                                         </a>
                                     </td>
                                 </tr>

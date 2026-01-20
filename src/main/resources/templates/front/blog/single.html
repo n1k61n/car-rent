@@ -21,12 +21,12 @@
             <div class="row align-items-end ">
                 <div class="col-lg-12">
                     <div class="intro">
-                        <h1 th:text="${blogSingle.title}">Blog Başlığı</h1>
+                        <h1 th:text="${blogSingle.title}">Blog Title</h1>
                         <div class="pb-4">
                             <strong class="text-black">
-                                Posted on
+                                <span th:text="#{blog.posted_on}">Posted on</span>
                                 <span th:text="${#temporals.format(blogSingle.createdAt, 'dd MMMM, yyyy')}">May 22, 2020</span>
-                                &bullet; By
+                                &bullet; <span th:text="#{blog.by}">By</span>
                                 <span th:text="${blogSingle.author}">Admin</span>
                             </strong>
                         </div>
@@ -42,30 +42,30 @@
                 <div class="col-md-8 blog-content">
 
                     <div class="main-content" th:utext="${blogSingle.post}">
-                        Məqalənin əsas mətni bura gələcək...
+                        Article content goes here...
                     </div>
 
                     <div class="pt-5" th:if="${blogSingle.categoryName != null}">
-                        <p>Category: <a href="#" th:text="${blogSingle.categoryName}">Design</a></p>
+                        <p><span th:text="#{blog.category}">Category:</span> <a href="#" th:text="${blogSingle.categoryName}">Design</a></p>
                     </div>
 
                     <div class="pt-5" id="comment-section">
-                        <h3 class="mb-5" th:text="${blogSingle.comments.size() + ' Comments'}">0 Comments</h3>
+                        <h3 class="mb-5" th:text="${blogSingle.comments.size() + ' ' + #messages.msg('blog.comments')}">0 Comments</h3>
                         <ul class="comment-list">
                             <li class="comment" th:each="comment : ${blogSingle.comments}">
                                 <div class="vcard bio">
                                     <img src="/front/images/person_1.jpg" alt="Image placeholder">
                                 </div>
                                 <div class="comment-body">
-                                    <h3 th:text="${comment.name}">İstifadəçi Adı</h3>
+                                    <h3 th:text="${comment.name}">User Name</h3>
                                     <div class="meta" th:text="${#temporals.format(comment.createdAt, 'dd MMMM yyyy HH:mm')}">Jan 2, 2026</div>
-                                    <p th:text="${comment.message}">Şərh mətni bura gələcək...</p>
+                                    <p th:text="${comment.message}">Comment text goes here...</p>
                                 </div>
                             </li>
                         </ul>
 
                         <div class="comment-form-wrap pt-5">
-                            <h3 class="mb-5">Şərh Yazın</h3>
+                            <h3 class="mb-5" th:text="#{blog.leave_comment}">Leave a Comment</h3>
 
                             <div th:if="${commentSuccess}" class="alert alert-success" th:text="${commentSuccess}"></div>
                             <div th:if="${commentError}" class="alert alert-danger" th:text="${commentError}"></div>
@@ -74,22 +74,22 @@
                                 <input type="hidden" name="blogId" th:value="${blogSingle.id}">
 
                                 <div class="form-group">
-                                    <label for="name">Ad *</label>
+                                    <label for="name" th:text="#{blog.name}">Name *</label>
                                     <input type="text" class="form-control" th:field="*{name}" id="name">
                                     <div class="text-danger small" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email *</label>
+                                    <label for="email" th:text="#{blog.email}">Email *</label>
                                     <input type="email" class="form-control" th:field="*{email}" id="email">
                                     <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message">Mesaj *</label>
+                                    <label for="message" th:text="#{blog.message}">Message *</label>
                                     <textarea th:field="*{message}" id="message" cols="30" rows="5" class="form-control"></textarea>
                                     <div class="text-danger small" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Şərhi Göndər" class="btn btn-primary">
+                                    <input type="submit" th:value="#{blog.btn_send}" class="btn btn-primary">
                                 </div>
                             </form>
                         </div>
@@ -100,8 +100,8 @@
                     <div class="sidebar-box">
                         <img th:src="${blogSingle.authorImageUrl != null ? blogSingle.authorImageUrl : '/front/images/person_1.jpg'}"
                              alt="Author" class="img-fluid mb-4 w-50 rounded-circle">
-                        <h3 class="text-black" th:text="'About ' + ${blogSingle.author}">About The Author</h3>
-                        <p th:text="${blogSingle.authorBio}">Müəllif haqqında qısa məlumat...</p>
+                        <h3 class="text-black" th:text="#{blog.about_author} + ' ' + ${blogSingle.author}">About The Author</h3>
+                        <p th:text="${blogSingle.authorBio}">Short bio about the author...</p>
                     </div>
                 </div>
             </div>

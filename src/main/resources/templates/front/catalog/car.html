@@ -6,7 +6,7 @@
     <title>CarRental &mdash; Free Website Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title th:text="${car.brand + ' ' + car.model}">Maşın Detalları</title>
+    <title th:text="${car.brand + ' ' + car.model}">Car Details</title>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-4 text-md-right">
                     <div class="price-tag">
-                        $<span th:text="${car.dailyPrice}">450</span><small class="font-gray-5" th:text="'/' + #{car.day}">/günlük</small>
+                        $<span th:text="${car.dailyPrice}">450</span><small class="font-gray-5" th:text="'/' + #{car.day}">/day</small>
                     </div>
                 </div>
             </div>
@@ -44,56 +44,56 @@
 
                     <div class="row mb-5 text-center">
                         <div class="col-3 border-right">
-                            <span class="spec-label" th:text="#{car.doors}">Qapı Sayı</span>
+                            <span class="spec-label" th:text="#{car.doors}">Doors</span>
                             <span class="spec-value" th:text="${car.doorCount}">4</span>
                         </div>
                         <div class="col-3 border-right">
-                            <span class="spec-label" th:text="#{car.passenger}">Sərnişin</span>
+                            <span class="spec-label" th:text="#{car.passenger}">Passengers</span>
                             <span class="spec-value" th:text="${car.passengerCount}">5</span>
                         </div>
                         <div class="col-3 border-right">
-                            <span class="spec-label" th:text="#{car.transmission}">Sürət Qutusu</span>
-                            <span class="spec-value" th:text="${car.transmission}">Avtomat</span>
+                            <span class="spec-label" th:text="#{car.transmission}">Transmission</span>
+                            <span class="spec-value" th:text="${car.transmission}">Automatic</span>
                         </div>
                         <div class="col-3">
-                            <span class="spec-label" th:text="#{car.fuel}">Yanacaq</span>
+                            <span class="spec-label" th:text="#{car.fuel}">Fuel</span>
                             <span class="spec-value" th:text="${car.fuelType}">Petrol</span>
                         </div>
                     </div>
-                    <h3 class="h4 text-black mb-4" th:text="#{car.about_title}">Maşın Haqqında</h3>
-                    <p class="font-gray-8" th:text="${car.description}">Təsvir...</p>
+                    <h3 class="h4 text-black mb-4" th:text="#{car.about_title}">About the Car</h3>
+                    <p class="font-gray-8" th:text="${car.description}">Description...</p>
 
-                    <h5 class="mt-5 mb-3" th:text="#{car.extra_features}">Əlavə Özəlliklər</h5>
+                    <h5 class="mt-5 mb-3" th:text="#{car.extra_features}">Additional Features</h5>
                     <ul class="list-unstyled ul-check primary">
                         <th:block th:if="${car.features != null and !car.features.isEmpty()}">
                             <li th:each="feature : ${car.features}" th:text="${feature}">Feature</li>
                         </th:block>
-                        <li th:text="#{car.insurance}">Hərtərəfli sığorta</li>
-                        <li th:text="#{car.roadside_assist}">7/24 Yol yardımı</li>
+                        <li th:text="#{car.insurance}">Comprehensive Insurance (CDW)</li>
+                        <li th:text="#{car.roadside_assist}">24/7 Roadside Assistance</li>
                     </ul>
                 </div>
 
                 <div class="col-lg-4">
                     <div class="booking-card bg-white shadow-sm p-4">
-                        <h3 class="h5 text-black mb-4" th:text="#{booking.title}">İndi Rezerv Et</h3>
+                        <h3 class="h5 text-black mb-4" th:text="#{booking.title}">Book Now</h3>
 
                         <form action="/booking/save" method="post">
                             <input type="hidden" name="carId" th:value="${car.id}">
 
                             <div class="form-group">
-                                <label th:text="#{booking.start_date}">Götürmə Tarixi</label>
+                                <label th:text="#{booking.start_date}">Pickup Date</label>
                                 <input type="date" id="startDate" name="startDate" class="form-control" required>
                             </div>
 
                             <div class="form-group">
-                                <label th:text="#{booking.end_date}">Qaytarma Tarixi</label>
+                                <label th:text="#{booking.end_date}">Return Date</label>
                                 <input type="date" id="endDate" name="endDate" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-4">
-                                <label th:text="#{booking.location}">Götürmə Məkanı</label>
+                                <label th:text="#{booking.location}">Pickup Location</label>
                                 <select name="pickupLocation" class="form-control" required>
-                                    <option value="" disabled selected th:text="#{booking.select_location}">Məkan seçin</option>
+                                    <option value="" disabled selected th:text="#{booking.select_location}">Select location</option>
                                     <option value="Heydar Aliyev Airport">Heydar Aliyev Airport</option>
                                     <option value="Baku City Center">Baku City Center</option>
                                     <option value="Baku Railway Station">Baku Railway Station</option>
@@ -101,7 +101,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-block py-3" th:text="#{booking.btn_confirm}">
-                                Sifarişi Təsdiqlə
+                                Confirm Booking
                             </button>
                         </form>
                     </div>

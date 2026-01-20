@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layout}"> <head>
-    <title>Yardım Mərkəzi - CarRental</title>
+    <title th:text="#{help.title} + ' - CarRental'">Help Center - CarRental</title>
 </head>
 
 <body>
@@ -13,9 +13,9 @@
             <div class="row align-items-end">
                 <div class="col-lg-5">
                     <div class="intro">
-                        <h1 class="text"><strong>Yardım Mərkəzi</strong></h1>
+                        <h1 class="text"><strong th:text="#{help.title}">Help Center</strong></h1>
                         <div class="custom-breadcrumbs">
-                            <a href="/">Ana Səhifə</a> <span class="mx-2">/</span> <strong>Yardım</strong>
+                            <a href="/" th:text="#{nav.home}">Home</a> <span class="mx-2">/</span> <strong th:text="#{help.breadcrumb}">Help</strong>
                         </div>
                     </div>
                 </div>
@@ -28,22 +28,22 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="mb-5">
-                        <h2 class="text-black">Tez-tez Verilən Suallar</h2>
-                        <p>Sizə necə kömək edə bilərik? Aşağıda ən çox verilən sualların cavablarını tapa bilərsiniz.</p>
+                        <h2 class="text-black" th:text="#{help.faq_title}">Frequently Asked Questions</h2>
+                        <p th:text="#{help.faq_desc}">How can we help you? Below you can find answers to the most frequently asked questions.</p>
                     </div>
 
                     <div class="accordion" id="accordionExample">
                         <div class="card mb-3 border-0 shadow-sm">
                             <div class="card-header bg-white" id="headingOne">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne">
-                                        Avtomobil icarəyə götürmək üçün nə lazımdır?
+                                    <button class="btn btn-link text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne" th:text="#{help.q1}">
+                                        What do I need to rent a car?
                                     </button>
                                 </h5>
                             </div>
                             <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    İcarə üçün etibarlı sürücülük vəsiqəsi, şəxsiyyət vəsiqəsi və minimum 21 yaş həddi tələb olunur.
+                                <div class="card-body" th:text="#{help.a1}">
+                                    A valid driver's license, ID card and a minimum age of 21 are required for rental.
                                 </div>
                             </div>
                         </div>
@@ -51,14 +51,14 @@
                         <div class="card mb-3 border-0 shadow-sm">
                             <div class="card-header bg-white" id="headingTwo">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseTwo">
-                                        Ödəniş üsulları hansılardır?
+                                    <button class="btn btn-link collapsed text-black font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseTwo" th:text="#{help.q2}">
+                                        What are the payment methods?
                                     </button>
                                 </h5>
                             </div>
                             <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    Biz həm onlayn kart ödənişlərini (Visa/Mastercard), həm də ofisimizdə nağd ödənişləri qəbul edirik.
+                                <div class="card-body" th:text="#{help.a2}">
+                                    We accept both online card payments (Visa/Mastercard) and cash payments at our office.
                                 </div>
                             </div>
                         </div>
@@ -67,15 +67,15 @@
 
                 <div class="col-lg-4">
                     <div class="bg-white p-4 shadow-sm">
-                        <h3 class="h5 text-black mb-3">Bizimlə Əlaqə</h3>
-                        <p>Sualınıza cavab tapa bilmədiniz?</p>
+                        <h3 class="h5 text-black mb-3" th:text="#{help.contact_us}">Contact Us</h3>
+                        <p th:text="#{help.contact_desc}">Couldn't find an answer to your question?</p>
                         <ul class="list-unstyled footer-link">
                             <li class="d-block mb-3">
-                                <span class="d-block text-black">Telefon:</span>
+                                <span class="d-block text-black" th:text="#{help.phone}">Phone:</span>
                                 <span>+994 50 123 45 67</span>
                             </li>
                             <li class="d-block mb-3">
-                                <span class="d-block text-black">E-poçt:</span>
+                                <span class="d-block text-black" th:text="#{help.email}">Email:</span>
                                 <span>support@carrental.az</span>
                             </li>
                         </ul>

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layout}"> <head>
-    <title>Yardım Mərkəzi - CarRental</title>
+    <title th:text="#{terms.title} + ' - CarRental'">Terms & Conditions - CarRental</title>
 </head>
 
 <body>
@@ -13,9 +13,9 @@
             <div class="row align-items-end">
                 <div class="col-lg-5">
                     <div class="intro">
-                        <h1 class="text"><strong>Şərtlər</strong></h1>
+                        <h1 class="text"><strong th:text="#{terms.title}">Terms & Conditions</strong></h1>
                         <div class="custom-breadcrumbs">
-                            <a href="/">Ana Səhifə</a> <span class="mx-2">/</span> <strong>Şərtlər</strong>
+                            <a href="/" th:text="#{nav.home}">Home</a> <span class="mx-2">/</span> <strong th:text="#{terms.breadcrumb}">Terms</strong>
                         </div>
                     </div>
                 </div>
@@ -26,22 +26,22 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <h2 class="text-black mb-4">İstifadə Şərtləri</h2>
-                    <p class="lead">CarRental xidmətlərindən istifadə edərək siz aşağıdakı şərtləri qəbul etmiş sayılırısınız.</p>
+                    <h2 class="text-black mb-4" th:text="#{terms.usage_terms}">Terms of Use</h2>
+                    <p class="lead" th:text="#{terms.usage_desc}">By using CarRental services, you are deemed to have accepted the following terms.</p>
 
                     <div class="content-text my-5">
-                        <h4 class="text-primary">1. Ümumi Müddəalar</h4>
-                        <p>Bu sayt vasitəsilə edilən bütün sifarişlər şirkətin daxili qaydalarına və Azərbaycan Respublikasının qanunvericiliyinə tabedir.</p>
+                        <h4 class="text-primary" th:text="#{terms.general}">1. General Provisions</h4>
+                        <p th:text="#{terms.general_desc}">All orders made through this site are subject to the company's internal rules and the legislation of the Republic of Azerbaijan.</p>
 
-                        <h4 class="text-primary mt-4">2. İcarə Şərtləri</h4>
+                        <h4 class="text-primary mt-4" th:text="#{terms.rental}">2. Rental Conditions</h4>
                         <ul class="list-unstyled">
-                            <li><i class="icon-check text-success mr-2"></i> Yanacaq istifadəsi müştəri tərəfindən qarşılanır.</li>
-                            <li><i class="icon-check text-success mr-2"></i> Avtomobil təhvil verildiyi vəziyyətdə qaytarılmalıdır.</li>
-                            <li><i class="icon-check text-success mr-2"></i> Gecikmələr üçün əlavə saatlıq ödəniş tətbiq edilir.</li>
+                            <li><i class="icon-check text-success mr-2"></i> <span th:text="#{terms.rental_fuel}">Fuel usage is covered by the customer.</span></li>
+                            <li><i class="icon-check text-success mr-2"></i> <span th:text="#{terms.rental_return}">The car must be returned in the condition it was delivered.</span></li>
+                            <li><i class="icon-check text-success mr-2"></i> <span th:text="#{terms.rental_delay}">Additional hourly fees apply for delays.</span></li>
                         </ul>
 
-                        <h4 class="text-primary mt-4">3. Ləğv Etmə Siyasəti</h4>
-                        <p>Sifarişin ləğvi 24 saat öncədən edildiyi təqdirdə heç bir cərimə tətbiq olunmur.</p>
+                        <h4 class="text-primary mt-4" th:text="#{terms.cancellation}">3. Cancellation Policy</h4>
+                        <p th:text="#{terms.cancellation_desc}">No penalty applies if the order is cancelled 24 hours in advance.</p>
                     </div>
                 </div>
             </div>
