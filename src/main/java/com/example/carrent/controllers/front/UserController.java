@@ -1,8 +1,14 @@
 package com.example.carrent.controllers.front;
 
+import com.example.carrent.dtos.booking.BookingOrdersDto;
+import com.example.carrent.dtos.booking.BookingUserDto;
+import com.example.carrent.dtos.user.UserDashboardStatsDto;
 import com.example.carrent.dtos.user.UserProfileDto;
 import com.example.carrent.dtos.user.UserProfileUpdateDto;
+import com.example.carrent.enums.BookingStatus;
+import com.example.carrent.services.BookingService;
 import com.example.carrent.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,23 +21,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/account")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final BookingService bookingService;
+
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, Principal principal) {
+        UserProfileDto user = userService.findByEmail(principal.getName());
+
+        UserDashboardStatsDto stats = UserDashboardStatsDto.builder()
+                .totalBookings(bookingService.countByUser(user))
+                .activeBookings(bookingService.countByUserAndStatus(user, BookingStatus.ACTIVE))
+                .completedBookings(bookingService.countByUserAndStatus(user, BookingStatus.COMPLETED))
+                .totalSpent(bookingService.sumTotalPriceByUser(user))
+                .build();
+
+        model.addAttribute("user", user);
+        model.addAttribute("stats", stats);
+        // HTML xətasını həll edən sətir:
+        model.addAttribute("activePage", "dashboard");
+
+        return "front/account/dashboard";
+    }
 
     @GetMapping("/profile")
     public String showProfile(Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
+        if (principal == null) return "redirect:/login";
+
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-        
-        // Flash atributdan gələn UserProfileUpdateDto varsa onu istifadə et, yoxsa yenisini yarat
+        model.addAttribute("activePage", "profile"); // Əlavə olundu
+
         if (!model.containsAttribute("userProfileUpdateDto")) {
             UserProfileUpdateDto updateDto = new UserProfileUpdateDto();
             updateDto.setFirstName(user.getFirstName());
@@ -39,9 +66,25 @@ public class UserController {
             updateDto.setPhoneNumber(user.getPhoneNumber());
             model.addAttribute("userProfileUpdateDto", updateDto);
         }
-        
         return "front/account/profile";
     }
+
+    @GetMapping("/bookings")
+    public String showBookings(Model model, Principal principal) {
+        if (principal == null) return "redirect:/login";
+
+        UserProfileDto user = userService.findByEmail(principal.getName());
+        List<BookingOrdersDto> bookings = bookingService.findByUser(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("activePage", "bookings"); // Artıq var idi, saxlanıldı
+
+        return "front/account/user_bookings";
+    }
+
+
+
 
     @PostMapping("/profile/update")
     public String profileUpdate(Principal principal, 
@@ -69,24 +112,14 @@ public class UserController {
 
 
 
-    @GetMapping("/bookings")
-    public String showBookings(Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-        UserProfileDto user = userService.findByEmail(principal.getName());
-        model.addAttribute("bookings", user.getBookings());
-        return "front/account/user_bookings";
-    }
-
 
     @PostMapping("/bookings/delete")
     public String deleteBooking(@RequestParam("id") Long id, Principal principal){
         if (principal == null) {
             return "redirect:/login";
         }
-        boolean result = userService.deleteBooking(id, principal.getName());
-        return "redirect:/bookings";
+        boolean result = bookingService.deleteBooking(id, principal.getName());
+        return "redirect:/account/bookings";
     }
 
 

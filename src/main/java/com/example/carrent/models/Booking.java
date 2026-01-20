@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -42,7 +43,7 @@ public class Booking {
 
     private String pickupLocation;
 
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

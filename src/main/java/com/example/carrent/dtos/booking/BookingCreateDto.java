@@ -16,6 +16,4 @@ public class BookingCreateDto {
     private Double totalPrice;
     private String licenseFilePath;
 
-
-
 }

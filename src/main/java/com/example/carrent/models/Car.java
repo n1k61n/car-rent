@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Car {
     private String model;
 
     @Column(name = "daily_price")
-    private Double dailyPrice;
+    private BigDecimal dailyPrice;
     private Integer year;
     private String transmission;
     @Column(name = "fuel_type")

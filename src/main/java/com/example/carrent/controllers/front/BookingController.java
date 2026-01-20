@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.temporal.ChronoUnit;
 
@@ -60,8 +61,8 @@ public class BookingController {
 
         model.addAttribute("car", car);
         model.addAttribute("days", days);
-        Double dailyPrice = car.getDailyPrice() != null ? car.getDailyPrice() : 0.0;
-        model.addAttribute("totalPrice", days * dailyPrice);
+        BigDecimal dailyPrice = car.getDailyPrice() != null ? car.getDailyPrice() : BigDecimal.ZERO;
+        model.addAttribute("totalPrice", dailyPrice.multiply(BigDecimal.valueOf(days)));
 
         return "front/catalog/booking";
     }

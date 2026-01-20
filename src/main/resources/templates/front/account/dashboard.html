@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/account/user-layout}">
+
+<head>
+    <title>User Dashboard</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- Page Title -->
+    <div class="mb-4">
+        <h2>
+            Xoş gəldin,
+            <span class="text-primary" th:text="${user.firstName}">User</span> 👋
+        </h2>
+        <p class="text-muted">
+            Buradan rezervasiyalarını və hesab məlumatlarını idarə edə bilərsən.
+        </p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-muted">Ümumi Rezervasiya</h6>
+                <h2 th:text="${stats.totalBookings}">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-muted">Aktiv</h6>
+                <h2 class="text-success" th:text="${stats.activeBookings}">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-muted">Tamamlanmış</h6>
+                <h2 class="text-secondary" th:text="${stats.completedBookings}">0</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LAST BOOKINGS -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h4 class="mb-3">Son Rezervasiyalar</h4>
+
+            <div th:if="${#lists.isEmpty(bookings)}"
+                 class="alert alert-info">
+                Hələ heç bir rezervasiyanız yoxdur.
+            </div>
+
+            <table class="table table-hover"
+                   th:if="${!#lists.isEmpty(bookings)}">
+
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Maşın</th>
+                    <th>Tarix</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.id}">1</td>
+                    <td th:text="${booking.carName}">BMW X5</td>
+                    <td th:text="${#temporals.format(booking.date,'dd.MM.yyyy')}">
+                        20.01.2026
+                    </td>
+                    <td>
+                        <span class="badge"
+                              th:text="${booking.status}"
+                              th:classappend="
+                                  ${booking.status == 'ACTIVE'} ? 'bg-success' :
+                                  ${booking.status == 'COMPLETED'} ? 'bg-secondary' :
+                                  'bg-danger'">
+                            ACTIVE
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

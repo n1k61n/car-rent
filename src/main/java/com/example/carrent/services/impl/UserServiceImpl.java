@@ -2,12 +2,8 @@ package com.example.carrent.services.impl;
 
 import com.example.carrent.dtos.user.*;
 import com.example.carrent.enums.Role;
-import com.example.carrent.models.Booking;
-import com.example.carrent.models.Car;
 import com.example.carrent.models.Otp;
 import com.example.carrent.models.User;
-import com.example.carrent.repositories.BookingRepository;
-import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.EmailService;
 import com.example.carrent.services.NotificationService;
@@ -35,8 +31,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private final BookingRepository bookingRepository;
-    private final CarRepository carRepository;
     private final OtpService otpService;
     private final EmailService emailService;
     private final NotificationService notificationService;
@@ -122,29 +116,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         log.info("Profile updated successfully for user: {}", currentEmail);
-        return true;
-    }
-
-    @Override
-    @Transactional
-    public boolean deleteBooking(Long id, String email) {
-        log.info("Attempting to delete booking ID: {} for user: {}", id, email);
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Sifariş tapılmadı!"));
-
-        if (!booking.getUser().getEmail().equals(email)) {
-            log.warn("User {} tried to delete booking {} which belongs to another user", email, id);
-            throw new RuntimeException("Bu sifarişi silmək icazəniz yoxdur!");
-        }
-
-        Car car = booking.getCar();
-        if (car != null) {
-            car.setAvailable(true);
-            carRepository.save(car);
-        }
-
-        bookingRepository.delete(booking);
-        log.info("Booking {} deleted successfully", id);
         return true;
     }
 
