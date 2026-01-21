@@ -5,10 +5,7 @@ import com.example.carrent.enums.Role;
 import com.example.carrent.models.Otp;
 import com.example.carrent.models.User;
 import com.example.carrent.repositories.UserRepository;
-import com.example.carrent.services.EmailService;
-import com.example.carrent.services.NotificationService;
-import com.example.carrent.services.OtpService;
-import com.example.carrent.services.UserService;
+import com.example.carrent.services.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -34,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final NotificationService notificationService;
+    private final SendGridEmailService sendGridEmailService;
 
 
     @Override
@@ -50,7 +48,9 @@ public class UserServiceImpl implements UserService {
 
             String otp = otpService.generateOTP();
 
-            emailService.sendOtpEmail(registrationDto.getEmail(), otp);
+//            emailService.sendOtpEmail(registrationDto.getEmail(), otp);
+            sendGridEmailService.sendOtpEmail(registrationDto.getEmail(), otp);//test
+
             log.info("OTP sent to email: {}", registrationDto.getEmail() + " " + otp);
 
             Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
