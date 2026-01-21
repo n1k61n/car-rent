@@ -36,10 +36,13 @@ public class UserController {
 
         UserDashboardStatsDto stats = UserDashboardStatsDto.builder()
                 .totalBookings(bookingService.countByUser(user))
-                .activeBookings(bookingService.countByUserAndStatus(user, BookingStatus.ACTIVE))
+                .activeBookings(bookingService.countByUserAndStatus(user, BookingStatus.APPROVED))
                 .completedBookings(bookingService.countByUserAndStatus(user, BookingStatus.COMPLETED))
                 .totalSpent(bookingService.sumTotalPriceByUser(user))
                 .build();
+
+        List<BookingUserDto> bookings = bookingService.findByUser(user);
+        model.addAttribute("bookings", bookings);
 
         model.addAttribute("user", user);
         model.addAttribute("stats", stats);
@@ -55,7 +58,7 @@ public class UserController {
 
         UserProfileDto user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
-        model.addAttribute("activePage", "profile"); // Əlavə olundu
+        model.addAttribute("activePage", "profile");
 
         if (!model.containsAttribute("userProfileUpdateDto")) {
             UserProfileUpdateDto updateDto = new UserProfileUpdateDto();

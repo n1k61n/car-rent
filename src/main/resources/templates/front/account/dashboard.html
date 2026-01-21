@@ -75,17 +75,17 @@
                 <tbody>
                 <tr th:each="booking : ${bookings}">
                     <td th:text="${booking.id}">1</td>
-                    <td th:text="${booking.carName}">BMW X5</td>
-                    <td th:text="${#temporals.format(booking.date,'dd.MM.yyyy')}">
+                    <td th:text="${booking.car.brand + ' ' + booking.car.model}">BMW X5</td>
+                    <td th:text="${#temporals.format(booking.startDate,'dd.MM.yyyy')}">
                         20.01.2026
                     </td>
                     <td>
                         <span class="badge"
                               th:text="${booking.status}"
                               th:classappend="
-                                  ${booking.status == 'ACTIVE'} ? 'bg-success' :
-                                  ${booking.status == 'COMPLETED'} ? 'bg-secondary' :
-                                  'bg-danger'">
+                                  ${booking.status.name() == 'APPROVED'} ? 'bg-success' :
+                                  (${booking.status.name() == 'COMPLETED'} ? 'bg-secondary' :
+                                  'bg-danger')">
                             ACTIVE
                         </span>
                     </td>

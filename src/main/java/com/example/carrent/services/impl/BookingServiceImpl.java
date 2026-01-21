@@ -96,7 +96,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public long countActive() {
-        return bookingRepository.countByStatus(BookingStatus.ACTIVE);
+        return bookingRepository.countByStatus(BookingStatus.APPROVED);
     }
 
 
