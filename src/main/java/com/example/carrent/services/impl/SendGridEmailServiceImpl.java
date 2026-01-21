@@ -22,7 +22,7 @@ public class SendGridEmailServiceImpl implements SendGridEmailService {
     @Async("taskExecutor")
     @Override
     public void sendOtpEmail(String toEmail, String otp) {
-        Email from = new Email("eminelxanoglu@gmail.com");
+        Email from = new Email("admin@rentacar.com");
         Email to = new Email(toEmail);
         String subject = "Doğrulama Kodu (OTP)";
         String htmlBody = "<html><body>" +
