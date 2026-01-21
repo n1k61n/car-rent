@@ -2,6 +2,7 @@ package com.example.carrent.dtos.booking;
 
 import com.example.carrent.enums.BookingStatus;
 import com.example.carrent.models.Car;
+import com.example.carrent.models.User;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -25,4 +26,6 @@ public class BookingOrdersDto {
     private String notes;
     private String licenseFilePath;
     private Car car;
+    private User user;
+    private String phone;
 }

@@ -72,6 +72,7 @@ public class BookingServiceImpl implements BookingService {
             dto.setEndDate(booking.getEndDate());
             dto.setStatus(booking.getStatus());
             dto.setLicenseFilePath(booking.getLicenseFilePath());
+            dto.setPhone(booking.getUser().getPhoneNumber());
 
             return dto;
         }).toList();

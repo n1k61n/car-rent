@@ -22,8 +22,8 @@
                             <th>Car ID</th>
                             <th>Müştəri (Ad Soyad)</th>
                             <th>Avtomobil</th>
-                            <th>Götürmə Tarixi</th>
-                            <th>Qaytarma Tarixi</th>
+                            <th>Telefon</th>
+                            <th>Tarix Götürmə - Qaytarma (Gün)</th>
                             <th>Status</th>
                             <th>Əməliyyatlar</th>
                         </tr>
@@ -33,9 +33,10 @@
                             <td th:text="${booking.carId}"></td>
                             <td th:text="${booking.userFirstName + ' ' + booking.userLastName}"></td>
                             <td th:text="${booking.carBrand + ' ' + booking.carModel}"></td>
-                            <td th:text="${booking.startDate}"></td>
-                            <td th:text="${booking.endDate}"></td>
-
+                            <td th:text="${booking.phone}"></td>
+                            <td th:text="${booking.startDate + ' - ' + booking.endDate +
+                                                ' (' + T(java.time.temporal.ChronoUnit).DAYS.between(booking.startDate, booking.endDate) + ')'}">
+                            </td>
                             <td>
                                 <span th:if="${booking.status.name() == 'PENDING'}" class="badge badge-warning">Gözləyir</span>
                                 <span th:if="${booking.status.name() == 'APPROVED'}" class="badge badge-success">Təsdiqlənib</span>
