@@ -26,4 +26,5 @@ public class CarUpdateDto {
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;
     private Long categoryId;
+    private Boolean available;
 }

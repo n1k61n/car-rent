@@ -25,4 +25,5 @@ public class CarCreateDto {
     private Boolean insuranceIncluded ;
     private Boolean freeCancellation;
     private Long categoryId;
+    private Boolean available;
 }
