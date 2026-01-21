@@ -22,6 +22,13 @@ public class RegisterController {
     private final UserService userService;
     private final OtpService otpService;
 
+    private String sanitizeEmail(String email) {
+        if (email != null && email.contains(",")) {
+            return email.split(",")[0].trim();
+        }
+        return email;
+    }
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "front/auth/login";
@@ -37,31 +44,25 @@ public class RegisterController {
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("userDto") UserRegistrationDto registrationDto,
                                BindingResult bindingResult,
-                               Model model, RedirectAttributes redirectAttributes) {
+                               Model model) {
 
         if (bindingResult.hasErrors()) {
             return "front/auth/register";
         }
 
-        // 2. Şifrələrin eyniliyini yoxla
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
-            // Xüsusi xəta mesajını confirmPassword sahəsinə bağlayırıq
             bindingResult.rejectValue("confirmPassword", "error.userDto", "Şifrələr bir-biri ilə eyni deyil!");
             return "front/auth/register";
         }
 
-        // 3. Email-in unikal olmasını yoxla
         if (userService.existsByEmail(registrationDto.getEmail())) {
             bindingResult.rejectValue("email", "error.userDto", "Bu email artıq qeydiyyatdan keçib!");
             return "front/auth/register";
         }
 
-        // 4. Qeydiyyat prosesi
         try {
-
             userService.registerNewUser(registrationDto);
-            redirectAttributes.addFlashAttribute("email", registrationDto.getEmail());
-            return "redirect:/verify-otp";
+            return "redirect:/verify-otp?email=" + registrationDto.getEmail();
         } catch (Exception e) {
             model.addAttribute("error", "Qeydiyyat zamanı gözlənilməz xəta baş verdi.");
             return "front/auth/register";
@@ -69,7 +70,12 @@ public class RegisterController {
     }
 
     @GetMapping("/verify-otp")
-    public String showVerifyOtpForm(Model model) {
+    public String showVerifyOtpForm(@RequestParam(name = "email", required = false) String email, Model model) {
+        String sanitizedEmail = sanitizeEmail(email);
+        if (sanitizedEmail != null && !sanitizedEmail.isEmpty()) {
+            model.addAttribute("email", sanitizedEmail);
+        }
+
         if (!model.containsAttribute("email")) {
             return "redirect:/register";
         }
@@ -78,29 +84,37 @@ public class RegisterController {
 
 
     @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam String email, @RequestParam String code, Model model) {
-        boolean isValid = otpService.verifyOtp(email, code);
-
-        if (isValid) {
-            userService.enableUser(email);
+    public String verifyOtp(@RequestParam String email, @RequestParam String code, RedirectAttributes redirectAttributes) {
+        String sanitizedEmail = sanitizeEmail(email);
+        try {
+            otpService.verifyOtp(sanitizedEmail, code);
+            userService.enableUser(sanitizedEmail);
             return "front/auth/registration-success";
-        } else {
-            model.addAttribute("error", "Kod yanlışdır.");
-            model.addAttribute("email", email);
-            return "front/auth/verify-otp";
+        } catch (RuntimeException e) {
+            String errorMsg;
+            if ("EXPIRED_CODE".equals(e.getMessage())) {
+                errorMsg = "Bu kodun istifadə vaxtı bitib. Zəhmət olmasa yeni kod istəyin.";
+            } else if ("INVALID_CODE".equals(e.getMessage())) {
+                errorMsg = "Daxil etdiyiniz kod yanlışdır.";
+            } else {
+                errorMsg = "Xəta baş verdi. Yenidən yoxlayın.";
+            }
+
+            redirectAttributes.addFlashAttribute("error", errorMsg);
+            return "redirect:/verify-otp?email=" + sanitizedEmail;
         }
     }
 
     @GetMapping("/auth/resend")
     public String resendOtp(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        String sanitizedEmail = sanitizeEmail(email);
         try {
-            otpService.createAndSendOtp(email);
-            redirectAttributes.addFlashAttribute("email", email);
+            otpService.createAndSendOtp(sanitizedEmail);
             redirectAttributes.addFlashAttribute("message", "Yeni kod göndərildi.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Kod göndərilərkən xəta baş verdi.");
         }
-        return "redirect:/verify-otp";
+        return "redirect:/verify-otp?email=" + sanitizedEmail;
     }
 
     @GetMapping("/forgot-password")
@@ -110,6 +124,10 @@ public class RegisterController {
 
     @PostMapping("/forgot-password")
     public String processForgotPassword(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+        if (email == null || email.trim().isEmpty()) {
+            model.addAttribute("error", "Email ünvanı boş ola bilməz.");
+            return "front/auth/forgot_password";
+        }
         try {
             userService.resetPasswordToRandom(email);
             redirectAttributes.addFlashAttribute("message", "Yeni şifrə emailinizə göndərildi. Zəhmət olmasa emailinizi yoxlayın.");

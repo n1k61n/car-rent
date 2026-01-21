@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -22,18 +21,19 @@ public class OtpServiceImpl implements OtpService {
     private final SendGridEmailService sendGridEmailService;
 
 
-    public boolean verifyOtp(String email, String code) {
-        Optional<Otp> otpOpt = otpRepository.findByEmail(email);
-
-        if (otpOpt.isPresent()) {
-            Otp otp = otpOpt.get();
-            if (otp.getExpiresAt().isAfter(LocalDateTime.now()) && otp.getOtpCode().equals(code)) {
-                otpRepository.delete(otp);
-                return true;
-            }
+    public void verifyOtp(String email, String code) {
+        Otp otp = otpRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("INVALID_CODE"));
+        if (!otp.getOtpCode().equals(code)) {
+            throw new RuntimeException("INVALID_CODE");
         }
-        return false;
+        if (otp.getExpiresAt().isBefore(LocalDateTime.now())) {
+            otpRepository.delete(otp);
+            throw new RuntimeException("EXPIRED_CODE");
+        }
+        otpRepository.delete(otp);
     }
+
 
     @Override
     public String generateOTP() {
@@ -50,6 +50,7 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
+    @Transactional
     public void createAndSendOtp(String email) {
         otpRepository.deleteByEmail(email);
 
@@ -57,7 +58,6 @@ public class OtpServiceImpl implements OtpService {
         Otp otp = new Otp(email, code);
         otpRepository.save(otp);
 
-//        emailService.sendOtpEmail(email, code);
         String subject = "Doğrulama Kodu (OTP)";
         sendGridEmailService.sendOtpEmail(email, subject, code);
     }
