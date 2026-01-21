@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             String otp = otpService.generateOTP();
 
 //            emailService.sendOtpEmail(registrationDto.getEmail(), otp);
-            sendGridEmailService.sendOtpEmail(registrationDto.getEmail(), otp);//test
+            sendGridEmailService.sendOtpEmail(registrationDto.getEmail(),"Doğrulama Kodu (OTP)",  otp);
 
             log.info("OTP sent to email: {}", registrationDto.getEmail() + " " + otp);
 
@@ -168,7 +168,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // Email göndər
-        emailService.sendNewPasswordEmail(email, newPassword);
+//        emailService.sendNewPasswordEmail(email, newPassword);
+        sendGridEmailService.sendOtpEmail(email,"Yeni Şifrəniz", newPassword);
         log.info("Password reset email sent to: {}", email);
     }
 

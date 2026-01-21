@@ -4,6 +4,7 @@ import com.example.carrent.models.Otp;
 import com.example.carrent.repositories.OtpRepository;
 import com.example.carrent.services.EmailService;
 import com.example.carrent.services.OtpService;
+import com.example.carrent.services.SendGridEmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class OtpServiceImpl implements OtpService {
 
     private final OtpRepository otpRepository;
     private final EmailService emailService;
+    private final SendGridEmailService sendGridEmailService;
 
 
     public boolean verifyOtp(String email, String code) {
@@ -49,15 +51,14 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public void createAndSendOtp(String email) {
-        // 1. Əgər bu email üçün əvvəlki kod varsa, onu silirik
         otpRepository.deleteByEmail(email);
 
-        // 2. Yeni OTP yaradılır
-        String code = String.valueOf(100000 + new Random().nextInt(900000));
+        String code = generateOTP() ;
         Otp otp = new Otp(email, code);
         otpRepository.save(otp);
 
-        // 3. Email göndərilir
-        emailService.sendOtpEmail(email, code);
+//        emailService.sendOtpEmail(email, code);
+        String subject = "Doğrulama Kodu (OTP)";
+        sendGridEmailService.sendOtpEmail(email, subject, code);
     }
 }

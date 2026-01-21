@@ -7,6 +7,7 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -21,13 +22,10 @@ public class SendGridEmailServiceImpl implements SendGridEmailService {
 
     @Async("taskExecutor")
     @Override
-    public void sendOtpEmail(String toEmail, String otp) {
+    public void sendOtpEmail(String toEmail, String subject, String otp) {
         Email from = new Email("eminelxanoglu@gmail.com");
         Email to = new Email(toEmail);
-        String subject = "Doğrulama Kodu (OTP)";
         String htmlBody = "<html><body>" +
-                "<h2 style='color: #2e6da4;'>Doğrulama Kodu</h2>" +
-                "<p>Sizin təhlükəsizlik kodunuz:</p>" +
                 "<h1 style='letter-spacing: 5px; background: #f4f4f4; padding: 10px; display: inline-block;'>" + otp + "</h1>" +
                 "<p style='color: gray; font-size: 12px;'>Bu kodu heç kimlə bölüşməyin.</p>" +
                 "</body></html>";
