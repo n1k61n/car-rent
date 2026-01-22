@@ -17,6 +17,4 @@ public class MessageController {
         boolean result = messageService.createUserMessage(messageDto);
         return "front/pages/contact";
     }
-
-
 }
