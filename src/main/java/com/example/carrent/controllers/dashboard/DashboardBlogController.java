@@ -12,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.naming.Binding;
 
 @Controller
 @RequestMapping("/dashboard/blog")
@@ -43,8 +46,11 @@ public class DashboardBlogController {
     }
 
     @PostMapping("/create")
-    public String createCar(@Valid @ModelAttribute BlogDahboardCreateDto blogDahboardCreateDto) {
-        boolean result = blogService.createBlog(blogDahboardCreateDto);
+    public String createCar(@Valid @ModelAttribute BlogDahboardCreateDto blogDahboardCreateDto, BindingResult result) {
+        if (result.hasErrors()) {
+            return "dashboard/blog/create";
+        }
+        boolean resultBlog = blogService.createBlog(blogDahboardCreateDto);
         return "redirect:/dashboard/blog/index";
     }
 

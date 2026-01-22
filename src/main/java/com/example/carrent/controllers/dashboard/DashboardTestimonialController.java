@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -43,8 +44,11 @@ public class DashboardTestimonialController {
     }
 
     @PostMapping("/create")
-    public String createTesstimonial(@Valid @ModelAttribute TestimonialCreateDto testimonialCreateDto){
-        boolean result = testimonialService.create(testimonialCreateDto);
+    public String createTesstimonial(@Valid @ModelAttribute TestimonialCreateDto dto, BindingResult result){
+        if(result.hasErrors()){
+            return "dashboard/testimonial/create";
+        }
+        boolean resultTestimonial = testimonialService.create(dto);
         return "redirect:/dashboard/testimonial/index";
     }
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -44,8 +45,11 @@ public class DashboardTeamController {
     }
 
     @PostMapping("/create")
-    public String createTeamMember(@Valid @ModelAttribute TeamMemberCreateDto teamMemberCreateDto){
-        boolean result = teamMemberService.createTeamMember(teamMemberCreateDto);
+    public String createTeamMember(@Valid @ModelAttribute TeamMemberCreateDto teamMemberCreateDto, BindingResult result){
+        if(result.hasErrors()){
+            return "dashboard/team/create";
+        }
+        boolean resultTeam = teamMemberService.createTeamMember(teamMemberCreateDto);
         return "redirect:/dashboard/team/index";
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,8 +64,11 @@ public class DashboardCarController {
     }
 
     @PostMapping("/create")
-    public String createCar(@Valid @ModelAttribute CarCreateDto carCreateDto) {
-        boolean result = carService.createCar(carCreateDto);
+    public String createCar(@Valid @ModelAttribute CarCreateDto carCreateDto, BindingResult result) {
+        if (result.hasErrors()) {
+            return "dashboard/car/create";
+        }
+        boolean hasCreateCar = carService.createCar(carCreateDto);
         return "redirect:/dashboard/car/index";
     }
 
