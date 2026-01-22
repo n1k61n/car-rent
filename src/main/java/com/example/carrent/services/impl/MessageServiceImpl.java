@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +32,19 @@ public class MessageServiceImpl implements MessageService {
 
         messageRepository.save(message);
         return true;
+    }
+
+    @Override
+    public List<MessageDto> getRecentMessages() {
+        return messageRepository.findTop5ByOrderByCreatedAtDesc()
+                .stream()
+                .map(message -> {
+                    MessageDto dto = modelMapper.map(message, MessageDto.class);
+                    if (message.getUser() != null) {
+                        dto.setUserId(message.getUser().getId());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
