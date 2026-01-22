@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rəyi Redaktə Et</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-edit text-warning mr-2"></i>Rəyi Redaktə Et
+            </h1>
+        </div>
+
+        <form th:object="${testimonialUpdateDto}" method="post">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Məzmunu Yenilə</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label font-weight-bold">Müəllif Adı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" th:field="*{authorName}" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label font-weight-bold">Vəzifə</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                        </div>
+                                        <input type="text" th:field="*{authorRole}" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label font-weight-bold">Rəy Mətni</label>
+                                <textarea th:field="*{content}" class="form-control" rows="6"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Status və Ayarlar</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="form-label font-weight-bold">Reytinq</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text text-warning"><i class="fas fa-star"></i></span>
+                                    </div>
+                                    <input type="number" th:field="*{rating}" min="1" max="5" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label font-weight-bold">Şəkil URL</label>
+                                <input type="text" th:field="*{imageUrl}" class="form-control">
+                            </div>
+
+                            <div class="custom-control custom-switch mb-4">
+                                <input type="checkbox" th:field="*{approved}" class="custom-control-input" id="isApproved">
+                                <label class="custom-control-label font-weight-bold" for="isApproved">Təsdiqlənib</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning btn-block text-white font-weight-bold">
+                                <i class="fas fa-sync-alt mr-1"></i> Yenilə
+                            </button>
+                            <a th:href="@{/dashboard/testimonial/index}" class="btn btn-light btn-block">Ləğv et</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

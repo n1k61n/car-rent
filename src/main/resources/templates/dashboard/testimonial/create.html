@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Yeni Rəy Əlavə Et</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-comment-medical text-primary mr-2"></i>Yeni Rəy Əlavə Et
+            </h1>
+            <a href="/dashboard/testimonial/index" class="btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Siyahıya Qayıt
+            </a>
+        </div>
+
+        <form  method="post">
+            <div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Rəy Detalları</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label font-weight-bold">Müəllif Adı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" name="authorName" class="form-control" placeholder="Məs: Əli Məmmədov" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label font-weight-bold">Müəllif Rolu / Vəzifəsi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                        </div>
+                                        <input type="text" name="authorRole" class="form-control" placeholder="Məs: Menecer" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label font-weight-bold">Rəy Mətni</label>
+                                <textarea name="content" class="form-control" rows="6" placeholder="Müştəri məmnuniyyəti və ya rəyini bura daxil edin..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Status və Media</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="form-label font-weight-bold">Reytinq (1-5)</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text text-warning"><i class="fas fa-star"></i></span>
+                                    </div>
+                                    <input type="number" name="rating" min="1" max="5" class="form-control" placeholder="5">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label font-weight-bold">Şəkil URL</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                    </div>
+                                    <input type="text" name="imageUrl" class="form-control" placeholder="https://...">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="custom-control custom-switch custom-switch-md">
+                                <input type="checkbox" name="isApproved" class="custom-control-input" id="available" checked>
+                                <label class="custom-control-label font-weight-bold" for="available">Təsdiqlənsin</label>
+                                <small class="form-text text-muted">Aktiv etsəniz rəy saytda dərhal görünəcək.</small>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-save mr-1"></i> Yadda Saxla
+                                </button>
+                                <a href="/dashboard/testimonial/index" class="btn btn-light btn-block">Ləğv et</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
