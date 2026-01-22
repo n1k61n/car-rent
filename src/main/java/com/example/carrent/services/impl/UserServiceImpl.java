@@ -152,19 +152,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void resetPasswordToRandom(String email) {
-        String normalizedEmail = email.toLowerCase();
-        log.info("Resetting password for user: {}", normalizedEmail);
-        User user = userRepository.findByEmail(normalizedEmail)
+        log.info("Resetting password for user: {}", email);
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
 
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
-        log.debug("Generated new random password for user: {}", normalizedEmail);
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        sendGridEmailService.sendOtpEmail(normalizedEmail, "Yeni Şifrəniz", newPassword);
-        log.info("Password reset email sent to: {}", normalizedEmail);
+        sendGridEmailService.sendOtpEmail(email, "Yeni Şifrəniz", newPassword);
+        log.info("Password reset email sent to: {} - New password: {}", email, newPassword);
     }
 
     @Override
