@@ -1,6 +1,5 @@
 package com.example.carrent.controllers.dashboard;
 
-import com.example.carrent.dtos.blog.BlogDahboardUpdateDto;
 import com.example.carrent.dtos.testimonial.TestimonialCreateDto;
 import com.example.carrent.dtos.testimonial.TestimonialDto;
 import com.example.carrent.dtos.testimonial.TestimonialUpdateDto;
@@ -67,5 +66,4 @@ public class DashboardTestimonialController {
         boolean result = testimonialService.delete(id);
         return "redirect:/dashboard/testimonial/index";
     }
-
 }
