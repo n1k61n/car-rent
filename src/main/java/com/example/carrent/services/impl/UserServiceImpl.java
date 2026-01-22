@@ -5,10 +5,7 @@ import com.example.carrent.enums.Role;
 import com.example.carrent.models.Otp;
 import com.example.carrent.models.User;
 import com.example.carrent.repositories.UserRepository;
-import com.example.carrent.services.EmailService;
-import com.example.carrent.services.NotificationService;
-import com.example.carrent.services.OtpService;
-import com.example.carrent.services.UserService;
+import com.example.carrent.services.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -34,31 +31,31 @@ public class UserServiceImpl implements UserService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final NotificationService notificationService;
+    private final SendGridEmailService sendGridEmailService;
 
 
     @Override
     @Transactional
     public boolean registerNewUser(UserRegistrationDto registrationDto) {
-        log.info("Attempting to register new user with email: {}", registrationDto.getEmail());
+        String normalizedEmail = registrationDto.getEmail().toLowerCase();
+        log.info("Attempting to register new user with email: {}", normalizedEmail);
         try {
-
             User newUser = modelMapper.map(registrationDto, User.class);
+            newUser.setEmail(normalizedEmail); // Use normalized email
             newUser.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
             Role userRole = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
             newUser.setRole(userRole);
 
             String otp = otpService.generateOTP();
+            sendGridEmailService.sendOtpEmail(normalizedEmail, "Doğrulama Kodu (OTP)", otp);
+            log.info("OTP sent to email: {}", normalizedEmail);
 
-            emailService.sendOtpEmail(registrationDto.getEmail(), otp);
-            log.info("OTP sent to email: {}", registrationDto.getEmail() + " " + otp);
-
-            Otp otpEntity = new Otp(registrationDto.getEmail(), otp);
+            Otp otpEntity = new Otp(normalizedEmail, otp);
             otpService.saved(otpEntity);
             newUser.setVerificationCode(otp);
             User savedUser = userRepository.save(newUser);
 
-            // Create notification
             notificationService.createNotification(
                     "New user registered: " + savedUser.getFirstName(),
                     "/dashboard/user/index",
@@ -74,13 +71,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserProfileDto findByEmail(String name) {
-        log.debug("Finding user by email: {}", name);
-        User user = userRepository.findByEmail(name).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    public UserProfileDto findByEmail(String email) {
+        String normalizedEmail = email.toLowerCase();
+        log.debug("Finding user by email: {}", normalizedEmail);
+        User user = userRepository.findByEmail(normalizedEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return modelMapper.map(user, UserProfileDto.class);
     }
-
-
 
     @Override
     public Page<UsersDashboardDto> findPaginated(int pageNo, int pageSize, String keyword) {
@@ -101,8 +97,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean updateProfile(String currentEmail, UserProfileUpdateDto dto) {
-        log.info("Updating profile for user: {}", currentEmail);
-        User user = userRepository.findByEmail(currentEmail)
+        String normalizedEmail = currentEmail.toLowerCase();
+        log.info("Updating profile for user: {}", normalizedEmail);
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new RuntimeException("İstifadəçi tapılmadı!"));
 
         user.setFirstName(dto.getFirstName());
@@ -115,7 +112,7 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
-        log.info("Profile updated successfully for user: {}", currentEmail);
+        log.info("Profile updated successfully for user: {}", normalizedEmail);
         return true;
     }
 
@@ -134,42 +131,40 @@ public class UserServiceImpl implements UserService {
         log.info("User status toggled. New status: {}", user.isEnabled());
     }
 
-
     @Override
     public void enableUser(String email) {
-        log.info("Enabling user: {}", email);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String normalizedEmail = email.toLowerCase();
+        log.info("Enabling user: {}", normalizedEmail);
+        User user = userRepository.findByEmail(normalizedEmail).orElseThrow(() -> new RuntimeException("User not found"));
         user.setEnabled(true);
         user.setCredentialsNonExpired(true);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         userRepository.save(user);
-        log.info("User enabled: {}", email);
+        log.info("User enabled: {}", normalizedEmail);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return userRepository.findByEmail(email.toLowerCase()).isPresent();
     }
 
     @Override
     @Transactional
     public void resetPasswordToRandom(String email) {
-        log.info("Resetting password for user: {}", email);
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = email.toLowerCase();
+        log.info("Resetting password for user: {}", normalizedEmail);
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
 
-        // Random şifrə yarat (8 simvol)
         String newPassword = UUID.randomUUID().toString().substring(0, 8);
-        log.debug("Generated new random password for user: {}", email);
-        
-        // Şifrəni kodlaşdır və yadda saxla
+        log.debug("Generated new random password for user: {}", normalizedEmail);
+
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        // Email göndər
-        emailService.sendNewPasswordEmail(email, newPassword);
-        log.info("Password reset email sent to: {}", email);
+        sendGridEmailService.sendOtpEmail(normalizedEmail, "Yeni Şifrəniz", newPassword);
+        log.info("Password reset email sent to: {}", normalizedEmail);
     }
 
     @Override

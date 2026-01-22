@@ -26,6 +26,6 @@ public class Otp {
     public Otp(String email, String otpCode) {
         this.email = email;
         this.otpCode = otpCode;
-        this.expiresAt = LocalDateTime.now().plusMinutes(5);
+        this.expiresAt = LocalDateTime.now().plusMinutes(2);
     }
 }

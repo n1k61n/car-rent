@@ -34,8 +34,7 @@
                             <td th:text="${booking.userFirstName + ' ' + booking.userLastName}"></td>
                             <td th:text="${booking.carBrand + ' ' + booking.carModel}"></td>
                             <td th:text="${booking.phone}"></td>
-                            <td th:text="${booking.startDate + ' - ' + booking.endDate +
-                                                ' (' + T(java.time.temporal.ChronoUnit).DAYS.between(booking.startDate, booking.endDate) + ')'}">
+                            <td th:text="|${booking.startDate} - ${booking.endDate} (${T(java.time.temporal.ChronoUnit).DAYS.between(booking.startDate, booking.endDate) + 1} gün)|">
                             </td>
                             <td>
                                 <span th:if="${booking.status.name() == 'PENDING'}" class="badge badge-warning">Gözləyir</span>

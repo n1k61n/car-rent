@@ -43,7 +43,7 @@
                                        maxlength="6"
                                        pattern="\d{6}">
                                 <small class="form-text text-muted mt-2">
-                                    <span th:text="#{auth.verify_code_timer}">Code expiration time:</span> <span id="timer" class="text-danger font-weight-bold">05:00</span>
+                                    <span th:text="#{auth.verify_code_timer}">Code expiration time:</span> <span id="timer" class="text-danger font-weight-bold">02:00</span>
                                 </small>
                             </div>
 
@@ -58,7 +58,6 @@
                                 <span th:text="#{auth.verify_resend_text}">Didn't receive the code?</span>
                                 <a th:href="@{/auth/resend(email=${email})}" class="font-weight-bold" th:text="#{auth.verify_resend_link}">Resend</a>
                             </p>
-
                             <p class="small">
                                 <a href="/login" th:text="#{login.back_home}">Back to login page</a>
                             </p>

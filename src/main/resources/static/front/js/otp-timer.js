@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // 5 dəqiqə = 300 saniyə
-    let timeLeft = 300;
+    let timeLeft = 120;
     const timerElement = document.getElementById('timer');
     const resendContainer = document.getElementById('resend-container');
 
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
 
-        // Saniyə tək rəqəmlidirsə qarşısına 0 əlavə et (məs: 05:09)
         seconds = seconds < 10 ? '0' + seconds : seconds;
 
         timerElement.innerHTML = `0${minutes}:${seconds}`;

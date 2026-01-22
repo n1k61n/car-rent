@@ -1,4 +1,7 @@
 // Pie Chart - Booking Status Distribution
+$(document).ready(function() {
+    // Qrafik kodlarınız bura...
+
 if (document.getElementById("myPieChart")) {
 
     // Buraya DB-dən gələn data əlavə et
@@ -61,3 +64,4 @@ if (document.getElementById("myPieChart")) {
         }
     });
 }
+});

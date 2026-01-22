@@ -4,6 +4,7 @@ import com.example.carrent.models.Otp;
 import com.example.carrent.repositories.OtpRepository;
 import com.example.carrent.services.EmailService;
 import com.example.carrent.services.OtpService;
+import com.example.carrent.services.SendGridEmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,24 @@ public class OtpServiceImpl implements OtpService {
 
     private final OtpRepository otpRepository;
     private final EmailService emailService;
+    private final SendGridEmailService sendGridEmailService;
 
 
     public boolean verifyOtp(String email, String code) {
-        Optional<Otp> otpOpt = otpRepository.findByEmail(email);
+        Otp otp = otpRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("INVALID_CODE"));
 
-        if (otpOpt.isPresent()) {
-            Otp otp = otpOpt.get();
-            if (otp.getExpiresAt().isAfter(LocalDateTime.now()) && otp.getOtpCode().equals(code)) {
-                otpRepository.delete(otp);
-                return true;
-            }
+        if (!otp.getOtpCode().equals(code)) {
+            throw new RuntimeException("INVALID_CODE"); // The code does not match
         }
-        return false;
+
+        if (otp.getExpiresAt().isBefore(LocalDateTime.now())) {
+            otpRepository.delete(otp); // Remove expired OTP
+            throw new RuntimeException("EXPIRED_CODE"); // The code has expired
+        }
+
+        otpRepository.delete(otp); // Delete OTP after successful verification
+        return true;
     }
 
     @Override
@@ -48,16 +54,21 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
+    @Transactional
     public void createAndSendOtp(String email) {
-        // 1. Əgər bu email üçün əvvəlki kod varsa, onu silirik
-        otpRepository.deleteByEmail(email);
-
-        // 2. Yeni OTP yaradılır
-        String code = String.valueOf(100000 + new Random().nextInt(900000));
-        Otp otp = new Otp(email, code);
+        String code = generateOTP();
+        Optional<Otp> existingOtp = otpRepository.findByEmail(email);
+        Otp otp;
+        if (existingOtp.isPresent()) {
+            otp = existingOtp.get();
+        } else {
+            otp = new Otp();
+            otp.setEmail(email);
+        }
+        otp.setOtpCode(code);
+        otp.setExpiresAt(LocalDateTime.now().plusMinutes(2));
         otpRepository.save(otp);
-
-        // 3. Email göndərilir
-        emailService.sendOtpEmail(email, code);
+        String subject = "Doğrulama Kodu (OTP)";
+        sendGridEmailService.sendOtpEmail(email, subject, code);
     }
 }
