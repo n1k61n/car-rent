@@ -15,7 +15,7 @@ public class MessageController {
     @PostMapping("/contact")
     public String messageCreate(MessageDto messageDto){
         boolean result = messageService.createUserMessage(messageDto);
-        return "front/contact";
+        return "front/pages/contact";
     }
 
 
