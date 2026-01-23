@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">SB Admin 2 - Dashboard</title>
+
+
+
+</head>
+
+<body id="page-top">
+
+
+
+
+<div layout:fragment="content">
+
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Sistem Monitorinqi</h1>
+            <a href="/actuator/health" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-heartbeat fa-sm text-white-50"></i> Health JSON</a>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Server Status</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="serverStatus">Yüklənir...</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-server fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">PostgreSQL Connection</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="dbStatus">Active</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-database fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">RAM İstifadəsi (MB)</div>
+                                <div id="ramUsage" class="h5 mb-0 font-weight-bold text-gray-800">0 MB</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-microchip fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">JVM Yaddaş İstifadəsi (RAM)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="memoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block layout:fragment="script">
+        <script src="/dashboard/js/monitoring.js"></script>
+    </th:block>
+
+</div>
+
+
+
+</body>
+
+</html>
