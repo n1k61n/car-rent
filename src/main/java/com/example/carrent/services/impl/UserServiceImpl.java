@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
             String otp = otpService.generateOTP();
             sendGridEmailService.sendOtpEmail(normalizedEmail, "Doğrulama Kodu (OTP)", otp);
-            log.info("OTP sent to email: {}", normalizedEmail);
+            log.info("OTP sent to email: {} {}", normalizedEmail, otp);
 
             Otp otpEntity = new Otp(normalizedEmail, otp);
             otpService.saved(otpEntity);

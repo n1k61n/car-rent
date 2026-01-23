@@ -1,6 +1,7 @@
 package com.example.carrent.config;
 
 import com.example.carrent.handler.CustomAuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,13 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    public SecurityConfig(CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
-        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,7 +33,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/dashboard/chat/history/**", "/dashboard/chat/active-sessions").permitAll();
                     auth.requestMatchers("/ws-chat/**").permitAll();
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
-                    auth.requestMatchers("/", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**", "/login/**", "/oauth2/**").permitAll();
+                    auth.requestMatchers("/", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**", "/login/**", "/oauth2/**", "/register/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(form -> {
