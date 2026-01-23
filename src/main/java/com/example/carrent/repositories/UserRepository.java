@@ -22,7 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<User> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    // Əgər keyword yoxdursa standart səhifələmə
     Page<User> findAll(Pageable pageable);
 
     boolean existsByEmail(String email);

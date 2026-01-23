@@ -37,11 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean registerNewUser(UserRegistrationDto registrationDto) {
-        String normalizedEmail = registrationDto.getEmail().toLowerCase();
+        String normalizedEmail = registrationDto.getEmail();
         log.info("Attempting to register new user with email: {}", normalizedEmail);
         try {
             User newUser = modelMapper.map(registrationDto, User.class);
-            newUser.setEmail(normalizedEmail); // Use normalized email
+            newUser.setEmail(normalizedEmail);
             newUser.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
             Role userRole = userRepository.count() == 0 ? Role.ADMIN : Role.USER;
@@ -72,9 +72,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileDto findByEmail(String email) {
-        String normalizedEmail = email.toLowerCase();
-        log.debug("Finding user by email: {}", normalizedEmail);
-        User user = userRepository.findByEmail(normalizedEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        log.debug("Finding user by email: {}", email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return modelMapper.map(user, UserProfileDto.class);
     }
 
@@ -96,10 +95,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean updateProfile(String currentEmail, UserProfileUpdateDto dto) {
-        String normalizedEmail = currentEmail.toLowerCase();
-        log.info("Updating profile for user: {}", normalizedEmail);
-        User user = userRepository.findByEmail(normalizedEmail)
+    public boolean updateProfile(String email, UserProfileUpdateDto dto) {
+        log.info("Updating profile for user: {}", email);
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("İstifadəçi tapılmadı!"));
 
         user.setFirstName(dto.getFirstName());
@@ -112,7 +110,7 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(user);
-        log.info("Profile updated successfully for user: {}", normalizedEmail);
+        log.info("Profile updated successfully for user: {}", email);
         return true;
     }
 
@@ -133,20 +131,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void enableUser(String email) {
-        String normalizedEmail = email.toLowerCase();
-        log.info("Enabling user: {}", normalizedEmail);
-        User user = userRepository.findByEmail(normalizedEmail).orElseThrow(() -> new RuntimeException("User not found"));
+        log.info("Enabling user: {}", email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         user.setEnabled(true);
         user.setCredentialsNonExpired(true);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         userRepository.save(user);
-        log.info("User enabled: {}", normalizedEmail);
+        log.info("User enabled: {}", email);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email.toLowerCase()).isPresent();
+        return userRepository.findByEmail(email).isPresent();
     }
 
     @Override
@@ -181,7 +178,6 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setRole(Role.USER);
         }
-
         userRepository.save(user);
     }
 }
