@@ -34,7 +34,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/dashboard/chat/history/**", "/dashboard/chat/active-sessions").permitAll();
                     auth.requestMatchers("/ws-chat/**").permitAll();
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
-                    auth.requestMatchers("/*", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**").permitAll();
+                    auth.requestMatchers("/", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**", "/login/**", "/oauth2/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(form -> {
@@ -49,6 +49,11 @@ public class SecurityConfig {
                     form.failureHandler((request, response, exception) -> {
                         response.sendRedirect("/login?error=true");
                     });
+                })
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login");
+                    oauth2.defaultSuccessUrl("/", true);
+                    oauth2.successHandler(customAuthenticationSuccessHandler);
                 })
                 .rememberMe(remember -> remember
                         .key("uniqueAndSecretKey")
