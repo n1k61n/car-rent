@@ -75,7 +75,7 @@ public class DashboardCarController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         CarUpdateDto carUpdateDto = carService.getUpdateCar(id);
-        model.addAttribute("car", carUpdateDto);
+        model.addAttribute("updateCar", carUpdateDto);
         List<CategoryDto> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         return "dashboard/car/update";

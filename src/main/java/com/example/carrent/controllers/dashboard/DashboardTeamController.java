@@ -54,14 +54,14 @@ public class DashboardTeamController {
     }
 
     @GetMapping("/update/{id}")
-    public String showUpdae(@PathVariable Long id, Model model){
+    public String showUpdate(@PathVariable Long id, Model model){
         TeamMemberUpdateDto teamMemberUpdateDto = teamMemberService.getTeamMemberById(id);
         model.addAttribute("updateMember", teamMemberUpdateDto);
         return "dashboard/team/update";
     }
 
     @PostMapping("/update/{id}")
-    public String ureateTeamMember(@PathVariable Long id, @Valid TeamMemberUpdateDto teamMemberUpdateDto){
+    public String updateTeamMember(@PathVariable Long id, @Valid TeamMemberUpdateDto teamMemberUpdateDto){
         boolean result = teamMemberService.updateTeamMember(id , teamMemberUpdateDto);
         return "redirect:/dashboard/team/index";
     }
