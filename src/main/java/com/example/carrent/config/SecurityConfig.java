@@ -16,6 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    String[] endPoints = {
+            "/", "/front/**", "/blog/**", "/listing/**", "/auth/**", "/login/**", "/register/**",
+            "/forgot-password", "/verify-otp", "/oauth2/**",
+            "/ws-chat/**", "/actuator/**", "/dashboard/chat/history/**", "/dashboard/chat/active-sessions"
+    };
+
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
 
@@ -30,10 +36,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/dashboard/chat/history/**", "/dashboard/chat/active-sessions").permitAll();
-                    auth.requestMatchers("/ws-chat/**").permitAll();
+                    auth.requestMatchers(endPoints).permitAll();
                     auth.requestMatchers("/dashboard/**").hasRole("ADMIN");
-                    auth.requestMatchers("/", "/front/**", "/blog/**", "/listing/**", "/forgot-password", "/verify-otp", "/auth/**", "/login/**", "/oauth2/**", "/register/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(form -> {
