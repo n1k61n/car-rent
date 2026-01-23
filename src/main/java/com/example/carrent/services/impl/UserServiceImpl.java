@@ -180,4 +180,12 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
+
+    @Override
+    public UserBookingDto getUserByEmail(String name) {
+        User user = userRepository.findByEmail(name)
+                .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
+        return modelMapper.map(user, UserBookingDto.class);
+
+    }
 }

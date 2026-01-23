@@ -55,28 +55,29 @@
                             <input type="hidden" name="pickupLocation" th:value="${bookingDto.pickupLocation}">
 
                             <input type="hidden" name="userId"
-                                   th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.id : ''}">
+                                   th:if="${#authentication.principal != 'anonymousUser' and #authentication.principal instanceof T(com.example.carrent.models.User)}"
+                                   th:value="${#authentication.principal.id}">
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="text" name="firstName" class="form-control form-input-custom"
                                            th:placeholder="#{booking.first_name_placeholder}" required
-                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.firstName : ''}">
+                                           th:value="${user != null ? user.firstName : (oauthUser != null ? oauthUser.attributes.get('given_name') : '')}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="email" name="email" class="form-control form-input-custom"
                                            th:placeholder="#{booking.email_placeholder}" required
-                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.email : ''}">
+                                           th:value="${user != null ? user.email : (oauthUser != null ? oauthUser.attributes.get('email') : '')}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" name="lastName" class="form-control form-input-custom"
                                            th:placeholder="#{booking.last_name_placeholder}" required
-                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.lastName : ''}">
+                                           th:value="${user != null ? user.lastName : (oauthUser != null ? oauthUser.attributes.get('family_name') : '')}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" name="phone" class="form-control form-input-custom"
                                            th:placeholder="#{booking.phone_placeholder}" required
-                                           th:value="${#authentication.principal != 'anonymousUser' ? #authentication.principal.phoneNumber : ''}">
+                                           th:value="${user != null ? user.phoneNumber : ''}">
                                 </div>
                             </div>
 

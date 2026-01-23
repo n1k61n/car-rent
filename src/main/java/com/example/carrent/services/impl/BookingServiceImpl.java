@@ -139,8 +139,15 @@ public class BookingServiceImpl implements BookingService {
         Car car = carRepository.findById(dto.getCarId())
                 .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı. ID: " + dto.getCarId()));
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("İstifadəçi tapılmadı. ID: " + dto.getUserId()));
+        User user;
+        if (dto.getUserId() != null) {
+            user = userRepository.findById(dto.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("İstifadəçi tapılmadı. ID: " + dto.getUserId()));
+        } else {
+            // Əgər userId null gələrsə (məsələn, OAuth2 istifadəçisi), e-poçt ilə axtarırıq
+            user = userRepository.findByEmail(dto.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("İstifadəçi tapılmadı. Email: " + dto.getEmail()));
+        }
 
 
         long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());

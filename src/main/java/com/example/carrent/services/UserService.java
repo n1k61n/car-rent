@@ -1,9 +1,6 @@
 package com.example.carrent.services;
 
-import com.example.carrent.dtos.user.UserProfileDto;
-import com.example.carrent.dtos.user.UserProfileUpdateDto;
-import com.example.carrent.dtos.user.UserRegistrationDto;
-import com.example.carrent.dtos.user.UsersDashboardDto;
+import com.example.carrent.dtos.user.*;
 import com.example.carrent.models.User;
 import org.springframework.data.domain.Page;
 
@@ -34,4 +31,6 @@ public interface UserService {
     List<User> getRecentUsers();
 
     void assignAdminRole(Long id);
+
+    UserBookingDto getUserByEmail(String name);
 }
