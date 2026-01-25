@@ -19,28 +19,28 @@
         <img src="https://ui-avatars.com/api/?name=User&background=fff&color=4A90E2" alt="User">
         <div>
             <div style="font-weight: bold;" th:text="${user.firstName + ' ' + user.lastName}">İstifadəçi Adı</div>
-            <div style="font-size: 0.8rem; opacity: 0.8;">Müştəri Profili</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;" th:text="#{user.layout.customer_profile}">Müştəri Profili</div>
         </div>
     </div>
 
     <nav class="nav flex-column">
         <a class="nav-link" th:href="@{/}" th:classappend="${activePage == 'home' ? 'active' : ''}">
-            <i class="fas fa-home"></i> <span>Ana Səhifə</span>
+            <i class="fas fa-home"></i> <span th:text="#{user.layout.home}">Ana Səhifə</span>
         </a>
         <a class="nav-link" th:href="@{/account/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}">
-            <i class="fas fa-chart-line"></i> <span>Dashboard</span>
+            <i class="fas fa-chart-line"></i> <span th:text="#{user.layout.dashboard}">Dashboard</span>
         </a>
         <a class="nav-link" th:href="@{/account/profile}" th:classappend="${activePage == 'profile' ? 'active' : ''}">
-            <i class="fas fa-user-cog"></i> <span>Profilim</span>
+            <i class="fas fa-user-cog"></i> <span th:text="#{user.layout.profile}">Profilim</span>
         </a>
         <a class="nav-link" th:href="@{/account/bookings}" th:classappend="${activePage == 'bookings' ? 'active' : ''}">
-            <i class="fas fa-calendar-alt"></i> <span>Rezervasiyalar</span>
+            <i class="fas fa-calendar-alt"></i> <span th:text="#{user.layout.bookings}">Rezervasiyalar</span>
         </a>
 
         <div style="position: absolute; bottom: 20px; width: 100%;">
             <form th:action="@{/logout}" method="post" class="px-3">
                 <button type="submit" class="nav-link w-100 border-0 bg-transparent text-start p-0">
-                    <i class="fas fa-sign-out-alt"></i> <span>Çıxış</span>
+                    <i class="fas fa-sign-out-alt"></i> <span th:text="#{user.layout.logout}">Çıxış</span>
                 </button>
             </form>
         </div>
@@ -53,12 +53,21 @@
             <button class="btn d-lg-none me-2 p-0" id="sidebarToggle" type="button">
                 <i class="fas fa-bars fa-lg"></i>
             </button>
-            <h4 class="m-0" style="color: #333; font-weight: 600;">Hesab Ayarları</h4>
+            <h4 class="m-0" style="color: #333; font-weight: 600;" th:text="#{user.layout.account_settings}">Hesab Ayarları</h4>
         </div>
 
         <div class="d-flex align-items-center">
-            <a href="/help" class="text-decoration-none"><span class="text-muted small me-3">Yardım</span></a>
-            <a href="/logout" class="text-decoration-none"><span class="text-muted small">Çıxış</span></a>
+            <div class="dropdown me-3">
+                <a href="#" class="text-decoration-none dropdown-toggle text-muted small" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span th:text="${#locale.language == 'az' ? 'AZ' : 'EN'}">Lang</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item" th:href="@{''(lang='az')}">AZ</a></li>
+                    <li><a class="dropdown-item" th:href="@{''(lang='en')}">EN</a></li>
+                </ul>
+            </div>
+            <a href="/help" class="text-decoration-none"><span class="text-muted small me-3" th:text="#{user.layout.help}">Yardım</span></a>
+            <a href="/logout" class="text-decoration-none"><span class="text-muted small" th:text="#{user.layout.logout}">Çıxış</span></a>
         </div>
     </header>
 

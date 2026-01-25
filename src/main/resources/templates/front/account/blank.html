@@ -2,12 +2,12 @@
 <html lang="en" layout:decorate="~{front/account/user-layout}" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Dashboard</title>
+    <title th:text="#{user.dashboard.title}">Dashboard</title>
 </head>
 <body>
 <div layout:fragment="content">
     <h1 th:text="#{user.dashboard.title}">User Dashboard</h1>
-    <p>Profile, bookings and statistics will be displayed here.</p>
+    <p th:text="#{user.dashboard.welcome_desc}">Profile, bookings and statistics will be displayed here.</p>
 
 
 
