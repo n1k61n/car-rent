@@ -17,8 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     String[] endPoints = {
-            "/", "/front/**", "/blog/**", "/listing/**", "/auth/**", "/login/**", "/register/**",
-            "/forgot-password", "/verify-otp", "/oauth2/**", "/testimonials/**", "/contact/**", "/about/**",
+            "/", "/front/**", "/blog/**", "/listing/**", "/auth/**", "/login", "/register", "/help", "/privacy", "/term",
+            "/forgot-password", "/verify-otp", "/oauth2/**", "/testimonials", "/contact", "/about",
             "/ws-chat/**", "/actuator/**", "/dashboard/chat/history/**", "/dashboard/chat/active-sessions"
     };
 
