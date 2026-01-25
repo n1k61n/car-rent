@@ -1,36 +1,39 @@
+/* --- Dəyişənlər --- */
 :root {
     --sidebar-color: #4A90E2; /* Şəkildəki parlaq göy rəng */
     --sidebar-hover: rgba(255, 255, 255, 0.15);
     --main-bg: #F5F7FB;
     --text-light: #ffffff;
+    --sidebar-width: 280px;
 }
 
+/* --- Ümumi Tənzimləmələr --- */
 body {
     background-color: var(--main-bg);
     margin: 0;
+    font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
 }
 
-/* Sidebar tam şəkildəki kimi */
+/* --- Sidebar Dizaynı --- */
 .sidebar {
-    width: 280px;
+    width: var(--sidebar-width);
     background-color: var(--sidebar-color);
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    padding-top: 20px;
-    z-index: 1000;
+    z-index: 1100;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
 }
 
-/* Sidebar Başlığı (Şəkildəki John Snow hissəsi kimi) */
 .sidebar-header {
-    padding: 20px;
+    padding: 25px 20px;
     display: flex;
     align-items: center;
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
 }
 
 .sidebar-header img {
@@ -41,21 +44,21 @@ body {
     border: 2px solid white;
 }
 
-/* Düymələrin stili */
 .nav-link {
     color: rgba(255, 255, 255, 0.9) !important;
-    padding: 15px 25px !important;
-    margin: 5px 0;
+    padding: 12px 25px !important;
+    margin: 4px 0;
     font-weight: 500;
     display: flex;
     align-items: center;
-    transition: all 0.3s;
-    border-left: 5px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    border-left: 4px solid transparent;
 }
 
 .nav-link i {
-    font-size: 1.2rem;
-    width: 30px;
+    width: 25px;
+    font-size: 1.1rem;
 }
 
 .nav-link:hover {
@@ -63,35 +66,70 @@ body {
     color: white !important;
 }
 
-/* Aktiv düymə (Şəkildəki tünd göy effekt) */
 .nav-link.active {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.15) !important;
     border-left-color: white;
     color: white !important;
 }
 
-/* Sağ tərəf (Content) */
+/* --- Əsas Məzmun Sahəsi (Wrapper) --- */
 .wrapper {
-    margin-left: 280px;
-    padding: 40px;
-    min-height: 100vh;
-}
-
-/* Kartların dizaynı */
-.card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    padding: 30px;
-    background: white;
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
 .top-navbar {
     background: white;
-    padding: 15px 40px;
-    margin-bottom: 30px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* --- Mobil Uyğunluq (Responsive) --- */
+@media (max-width: 991.98px) {
+    .sidebar {
+        left: calc(-1 * var(--sidebar-width)); /* Menyu solda gizlənir */
+    }
+
+    /* JavaScript "active" class-ı əlavə edəndə menyu gəlir */
+    .sidebar.active {
+        left: 0 !important;
+    }
+
+    .wrapper {
+        margin-left: 0 !important;
+    }
+
+    /* Arxa fon qaralması (Overlay) */
+    #sidebarOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+    }
+
+    #sidebarOverlay.active {
+        display: block;
+    }
+}
+
+/* --- Kartlar və Profili Yenilə Bölməsi --- */
+.content-area .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    background: white;
+    padding: 20px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
 }

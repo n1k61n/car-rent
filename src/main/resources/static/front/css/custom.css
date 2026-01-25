@@ -20,3 +20,19 @@
     background: #f89d13;
     color: #fff;
 }
+
+@media (max-width: 576px) {
+    #chatInterface {
+        width: 90% !important; /* Ekranın 90%-ni tutsun */
+        right: 5% !important;  /* Ortalanmış kimi görünsün */
+        bottom: 80px !important;
+        height: 70vh !important; /* Ekranın hündürlüyünə uyğunlaşsın */
+    }
+
+    #chatToggleBtn {
+        width: 55px !important;
+        height: 55px !important;
+        bottom: 15px !important;
+        right: 15px !important;
+    }
+}
