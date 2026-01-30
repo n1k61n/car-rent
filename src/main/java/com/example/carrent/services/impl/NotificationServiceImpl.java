@@ -4,6 +4,7 @@ import com.example.carrent.models.Notification;
 import com.example.carrent.repositories.NotificationRepository;
 import com.example.carrent.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public Notification createNotification(String message, String link, String type) {
@@ -22,7 +24,12 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setLink(link);
         notification.setType(type);
         notification.setRead(false);
-        return notificationRepository.save(notification);
+        Notification savedNotification = notificationRepository.save(notification);
+
+        // Send notification to WebSocket topic
+        messagingTemplate.convertAndSend("/topic/notifications", savedNotification);
+
+        return savedNotification;
     }
 
     @Override

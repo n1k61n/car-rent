@@ -53,6 +53,10 @@ function connectAdmin() {
             // Əgər mesaj admin-dən gəlibsə, heç nə etmə (öz mesajımızdır)
             if (guestName === "ADMIN") return;
 
+            // Play notification sound
+            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+            audio.play().catch(e => console.log("Could not play notification sound.", e));
+
             // 1. İstifadəçi siyahıda yoxdursa, əlavə et
             if ($(`[data-email="${guestId}"]`).length === 0) {
                 addUserToSidebar(guestId, guestName);
