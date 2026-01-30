@@ -17,6 +17,7 @@ import com.example.carrent.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -313,5 +315,27 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
     }
 
+
+//@Scheduled(cron = "*/10 * * * * ?") // hər 10 saniyə
+@Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Baku")
+@Transactional
+    public void checkExpiredBookings() {
+        log.info("Checking for expired bookings...");
+        LocalDate today = LocalDate.now();
+        List<Booking> expiredBookings = bookingRepository.findExpiredBookingsWithUnavailableCars(today);
+
+        for (Booking booking : expiredBookings) {
+            log.info("Found expired booking ID: {}. Making car ID: {} available.", booking.getId(), booking.getCar().getId());
+            Car car = booking.getCar();
+            car.setAvailable(true);
+            carRepository.save(car);
+
+            if (booking.getStatus() != BookingStatus.COMPLETED && booking.getStatus() != BookingStatus.CANCELLED) {
+                booking.setStatus(BookingStatus.COMPLETED);
+                bookingRepository.save(booking);
+            }
+        }
+        log.info("Expired bookings check completed.");
+    }
 
 }

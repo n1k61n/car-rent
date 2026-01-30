@@ -19,7 +19,6 @@ public class DashboardBookingController {
 
     @GetMapping("/index")
     public String index(Model model) {
-//        List<BookingOrdersDto> bookingOrdersDto =  bookingService.getAllOrders();
         List<BookingOrdersDto> bookingOrdersDto =  bookingService.getAllActiveOrders();
         model.addAttribute("bookings", bookingOrdersDto);
         return "dashboard/bookings/index";

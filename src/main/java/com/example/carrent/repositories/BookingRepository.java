@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -54,5 +55,8 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
     AND b.endDate >= CURRENT_DATE
 """)
     List<Booking> findAllActiveBookings();
+
+    @Query("SELECT b FROM Booking b WHERE b.endDate < :today AND b.car.available = false")
+    List<Booking> findExpiredBookingsWithUnavailableCars(@Param("today") LocalDate today);
 
 }
