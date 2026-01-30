@@ -303,4 +303,15 @@ public class BookingServiceImpl implements BookingService {
         return data;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookingOrdersDto> getAllActiveOrders() {
+
+        return bookingRepository.findAllActiveBookings()
+                .stream()
+                .map(b -> modelMapper.map(b, BookingOrdersDto.class))
+                .toList();
+    }
+
+
 }

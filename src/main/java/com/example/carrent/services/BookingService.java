@@ -39,4 +39,6 @@ public interface BookingService {
     Map<String, Double> getMonthlyEarnings();
 
     Map<String, Long> getBookingStatusDistribution();
+
+    List<BookingOrdersDto> getAllActiveOrders();
 }
