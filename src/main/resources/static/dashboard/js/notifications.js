@@ -44,6 +44,6 @@ function handleNewNotification(notification) {
     dropdown.find('.dropdown-header').after(notificationHtml);
 
     // 3. Play a sound
-    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-    audio.play().catch(e => console.log("Could not play notification sound.", e));
+//    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+//    audio.play().catch(e => console.log("Could not play notification sound.", e));
 }
