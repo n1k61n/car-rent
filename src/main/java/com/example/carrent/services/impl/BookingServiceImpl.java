@@ -332,21 +332,15 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public void checkExpiredBookings() {
         log.info("Checking for expired bookings...");
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Baku"));
-        List<Booking> expiredBookings = bookingRepository.findExpiredBookingsWithUnavailableCars(today);
+        List<Booking> expiredBookings = bookingRepository.findExpiredBookingsWithUnavailableCars();
 
         for (Booking booking : expiredBookings) {
             log.info("Found expired booking ID: {}. Making car ID: {} available.", booking.getId(), booking.getCar().getId());
-            
-            Car car = carRepository.findById(booking.getCar().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Car not found"));
-
+            Car car = booking.getCar();
             car.setAvailable(true);
-            carRepository.save(car);
 
             if (booking.getStatus() != BookingStatus.COMPLETED && booking.getStatus() != BookingStatus.CANCELLED) {
                 booking.setStatus(BookingStatus.COMPLETED);
-                bookingRepository.save(booking);
             }
         }
         log.info("Expired bookings check completed.");

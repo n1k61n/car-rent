@@ -56,7 +56,7 @@ public interface BookingRepository  extends JpaRepository<Booking, Long> {
 """)
     List<Booking> findAllActiveBookings();
 
-    @Query("SELECT b FROM Booking b WHERE b.endDate < :today AND b.car.available = false")
-    List<Booking> findExpiredBookingsWithUnavailableCars(@Param("today") LocalDate today);
+    @Query("SELECT b FROM Booking b WHERE b.endDate < CURRENT_DATE AND b.car.available = false")
+    List<Booking> findExpiredBookingsWithUnavailableCars();
 
 }
