@@ -338,9 +338,11 @@ public class BookingServiceImpl implements BookingService {
             log.info("Found expired booking ID: {}. Making car ID: {} available.", booking.getId(), booking.getCar().getId());
             Car car = booking.getCar();
             car.setAvailable(true);
+            carRepository.save(car);
 
             if (booking.getStatus() != BookingStatus.COMPLETED && booking.getStatus() != BookingStatus.CANCELLED) {
                 booking.setStatus(BookingStatus.COMPLETED);
+                bookingRepository.save(booking);
             }
         }
         log.info("Expired bookings check completed.");
