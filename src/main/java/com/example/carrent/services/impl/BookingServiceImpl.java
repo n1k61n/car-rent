@@ -29,8 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -143,9 +141,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public Long completeBooking(BookingCompleteDto dto, MultipartFile licenseFile) {
         log.info("Attempting to complete booking for Car ID: {}, User ID: {}", dto.getCarId(), dto.getUserId());
-        if (licenseFile == null || licenseFile.isEmpty()) {
-            throw new IllegalArgumentException("Sürücülük vəsiqəsi faylı mütləqdir!");
-        }
+
         validateLicenseFile(licenseFile);
 
 
@@ -200,6 +196,9 @@ public class BookingServiceImpl implements BookingService {
 
 
     private void validateLicenseFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Sürücülük vəsiqəsi faylı mütləqdir!");
+        }
         long maxSize = 10 * 1024 * 1024;
         if (file.getSize() > maxSize) {
             throw new RuntimeException("Fayl çox böyükdür! Maksimum 10MB.");

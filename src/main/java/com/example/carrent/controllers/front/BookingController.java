@@ -122,6 +122,19 @@ public class BookingController {
             return redirectUrl;
         }
 
+        long maxSize = 10 * 1024 * 1024;
+        if (file.getSize() > maxSize) {
+            redirectAttributes.addFlashAttribute("error","Fayl çox böyükdür! Maksimum 10MB.");
+            return redirectUrl;
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            redirectAttributes.addFlashAttribute("error","Yalnız şəkil formatları (JPG, PNG) qəbul edilir.");
+            return redirectUrl;
+        }
+
+
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getAllErrors().stream()
                     .map(e -> e.getDefaultMessage())
