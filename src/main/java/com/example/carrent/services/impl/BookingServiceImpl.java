@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -326,17 +327,20 @@ public class BookingServiceImpl implements BookingService {
     }
 
 
-//@Scheduled(cron = "*/10 * * * * ?") // hər 10 saniyə
-@Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Baku")
-@Transactional
+//    @Scheduled(cron = "*/10 * * * * ?") // hər 10 saniyə
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Baku")
+    @Transactional
     public void checkExpiredBookings() {
         log.info("Checking for expired bookings...");
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Baku"));
         List<Booking> expiredBookings = bookingRepository.findExpiredBookingsWithUnavailableCars(today);
 
         for (Booking booking : expiredBookings) {
             log.info("Found expired booking ID: {}. Making car ID: {} available.", booking.getId(), booking.getCar().getId());
-            Car car = booking.getCar();
+            
+            Car car = carRepository.findById(booking.getCar().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Car not found"));
+
             car.setAvailable(true);
             carRepository.save(car);
 
