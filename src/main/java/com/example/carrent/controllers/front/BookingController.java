@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.temporal.ChronoUnit;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -106,19 +107,29 @@ public class BookingController {
     }
 
     @PostMapping("/booking/complete")
-    public String completeBooking(@ModelAttribute BookingCompleteDto bookingDto,
+    public String completeBooking(@Valid @ModelAttribute BookingCompleteDto bookingDto,
+                                  BindingResult bindingResult,
                                   @RequestParam("licenseFile") MultipartFile file,
-                                  Principal principal,
                                   RedirectAttributes redirectAttributes) {
 
-        // Əgər fayl yoxdursa (GET sorğusu və ya fayl seçilməyib), geri qaytarırıq
+        String redirectUrl = "redirect:/booking/save?carId=" + bookingDto.getCarId() +
+                "&startDate=" + bookingDto.getStartDate() +
+                "&endDate=" + bookingDto.getEndDate() +
+                "&pickupLocation=" + (bookingDto.getPickupLocation() != null ? bookingDto.getPickupLocation() : "");
+
         if (file == null || file.isEmpty()) {
-            // Parametrləri URL-ə əlavə edirik ki, istifadəçi yenidən daxil etməsin
-            return "redirect:/booking/save?carId=" + bookingDto.getCarId() +
-                   "&startDate=" + bookingDto.getStartDate() +
-                   "&endDate=" + bookingDto.getEndDate() +
-                   "&pickupLocation=" + (bookingDto.getPickupLocation() != null ? bookingDto.getPickupLocation() : "");
+            redirectAttributes.addFlashAttribute("error", "Sürücülük vəsiqəsi yüklənməlidir.");
+            return redirectUrl;
         }
+
+        if (bindingResult.hasErrors()) {
+            String errors = bindingResult.getAllErrors().stream()
+                    .map(e -> e.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            redirectAttributes.addFlashAttribute("error", "Xəta: " + errors);
+            return redirectUrl;
+        }
+
 
         try {
             Long bookingId = bookingService.completeBooking(bookingDto, file);
@@ -127,7 +138,7 @@ public class BookingController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Xəta baş verdi: " + e.getMessage());
         }
-        return "redirect:/booking/save?carId=" + bookingDto.getCarId();
+        return redirectUrl;
     }
 
     @GetMapping("/booking/payment/{id}")
