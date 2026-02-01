@@ -14,6 +14,7 @@ import com.example.carrent.repositories.CarRepository;
 import com.example.carrent.repositories.UserRepository;
 import com.example.carrent.services.BookingService;
 import com.example.carrent.services.NotificationService;
+import com.example.carrent.services.SendGridEmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -45,6 +46,7 @@ public class BookingServiceImpl implements BookingService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final SendGridEmailService emailService;
 
 
 
@@ -92,6 +94,14 @@ public class BookingServiceImpl implements BookingService {
             booking.getCar().setAvailable(true);
         }
         bookingRepository.save(booking);
+
+        if (status == BookingStatus.APPROVED) {
+            emailService.sendBookingConfirmationEmail(booking.getId());
+        }
+        if(status == BookingStatus.CANCELLED){
+            emailService.sendOtpEmail(booking.getUser().getEmail(), "Ugursuz Sifariş", "Sifarisiniz qebul olunmadi teesuf edirik! Her hansi bir sualiniz varsada adminle elaqe saxlaya bilersiniz.");
+        }
+
         log.info("Booking status updated successfully. ID: {}", id);
         return true;
     }
