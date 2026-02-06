@@ -240,7 +240,7 @@
     function fetchCarDetailsAndAppend(msg, contentHtml) {
         let carsHtml = '<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px;">';
         msg.recommendedCarIds.forEach(id => {
-            carsHtml += `<a href="/listing/${id}" target="_blank" style="display: block; padding: 5px 10px; background: #f1f3f4; color: #0779e4; border-radius: 5px; text-decoration: none; font-size: 12px;">🚗 Avtomobilə bax (ID: ${id})</a>`;
+            carsHtml += `<a href="/listing/car/${id}" target="_blank" style="display: block; padding: 5px 10px; background: #f1f3f4; color: #0779e4; border-radius: 5px; text-decoration: none; font-size: 12px;">🚗 Avtomobilə bax (ID: ${id})</a>`;
         });
         carsHtml += '</div>';
 
