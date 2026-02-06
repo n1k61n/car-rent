@@ -44,63 +44,41 @@ public class DashboardChatController {
     public void sendMessage(@Payload ChatDto chat) {
 
         if (chat.getEmail() == null) chat.setEmail(chat.getFrom());
-        if ("ADMIN".equals(chat.getTo()) && chat.getSessionId() == null) chat.setSessionId(chat.getFrom());
-        if ("AI".equals(chat.getTo()) && chat.getSessionId() == null) chat.setSessionId(chat.getFrom());
+        if (chat.getSessionId() == null) chat.setSessionId(chat.getFrom());
 
-        // 1. Check if it's the initial hidden trigger "Salam"
         boolean isAiTrigger = "Salam".equalsIgnoreCase(chat.getContent());
+        boolean isExplicitAi = "AI".equals(chat.getTo());
+        boolean isAdminOnline = adminPresenceHandler.isAdminOnline();
 
-        // 2. Save User Message (unless it's the hidden trigger)
+        // Trigger mesajı DB-yə yazılmasın (AI sanki özü başlayıb görünsün)
         if (!isAiTrigger) {
             chatService.saveChat(chat);
         }
 
-        // 3. Determine Routing Logic
-        boolean isAdminOnline = adminPresenceHandler.isAdminOnline();
-        boolean isExplicitlyForAi = "AI".equals(chat.getTo());
-
-        // LOGIC:
-        // - If explicit AI request OR Trigger -> AI
-        // - If Admin is OFFLINE -> AI
-        // - If Admin is ONLINE -> Admin
-
-        if (isExplicitlyForAi || isAiTrigger || !isAdminOnline) {
-            // --- AI HANDLES IT ---
+        // AI route:
+        // - user özü AI seçibsə OR trigger-dirsə OR admin offline-dırsa
+        if (isExplicitAi || isAiTrigger || !isAdminOnline) {
             ChatDto aiReply = chatService.generateAiReply(chat);
-            
-            // Check if AI failed (quota exceeded)
-            if (aiReply.getContent() != null && aiReply.getContent().contains("Hazırda sistem çox yüklüdür")) {
-                // Send the apology to the user
-                chatService.saveChat(aiReply);
-                messagingTemplate.convertAndSend("/topic/user/" + chat.getFrom(), aiReply);
+            chatService.saveChat(aiReply);
+            messagingTemplate.convertAndSend("/topic/user/" + chat.getFrom(), aiReply);
+            return;
+        }
 
-                // ALSO forward the original user message to ADMIN so they can take over
-                messagingTemplate.convertAndSend("/topic/admin", chat);
-                String link = "/dashboard/chat?user=" + chat.getSessionId();
-                Notification notification = notificationService.createNotification(
-                        "AI Quota Exceeded - Message from " + chat.getFrom(), link, "CHAT"
-                );
-                messagingTemplate.convertAndSend("/topic/notifications", notification);
-            } else {
-                // Normal AI success
-                chatService.saveChat(aiReply);
-                messagingTemplate.convertAndSend("/topic/user/" + chat.getFrom(), aiReply);
-            }
+        // Admin online olduqda adminə göndər
+        if ("ADMIN".equals(chat.getTo())) {
+            messagingTemplate.convertAndSend("/topic/admin", chat);
+
+            String link = "/dashboard/chat?user=" + chat.getSessionId();
+            Notification notification = notificationService.createNotification(
+                    "New message from " + chat.getFrom(), link, "CHAT"
+            );
+            messagingTemplate.convertAndSend("/topic/notifications", notification);
         } else {
-            // --- ADMIN HANDLES IT ---
-            if ("ADMIN".equals(chat.getTo())) {
-                messagingTemplate.convertAndSend("/topic/admin", chat);
-                String link = "/dashboard/chat?user=" + chat.getSessionId();
-                Notification notification = notificationService.createNotification(
-                        "New message from " + chat.getFrom(), link, "CHAT"
-                );
-                messagingTemplate.convertAndSend("/topic/notifications", notification);
-            } else {
-                // Admin replying to User
-                messagingTemplate.convertAndSend("/topic/user/" + chat.getTo(), chat);
-            }
+            // Admin user-a yazanda
+            messagingTemplate.convertAndSend("/topic/user/" + chat.getTo(), chat);
         }
     }
+
 
 
     @GetMapping("/history/{id}")
