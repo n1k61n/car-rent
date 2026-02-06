@@ -1,5 +1,6 @@
 package com.example.carrent.services.impl;
 
+
 import com.example.carrent.services.GeminiService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,14 +15,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class GeminiServiceImpl implements GeminiService {
+
     @Value("${google.api.key:}")
     private String apiKey;
-
-
 
     @Value("${gemini.base-url:https://generativelanguage.googleapis.com/v1/models}")
     private String baseUrl;
@@ -29,19 +31,17 @@ public class GeminiServiceImpl implements GeminiService {
     @Value("${gemini.model:gemini-2.5-flash}")
     private String model;
 
-
-
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Override
     public String generate(String systemPrompt, String inventoryJson, String userMessage) {
         if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException("GOOGLE_API_KEY is not configured");
+            return wrapReplyJson("GOOGLE_API_KEY konfiqurasiya olunmayıb. Zəhmət olmasa adminlə əlaqə saxlayın.");
         }
 
         String url = String.format("%s/%s:generateContent?key=%s", baseUrl, model, apiKey);
 
-        // Gemini contents: system + context + user
         Map<String, Object> body = Map.of(
                 "contents", List.of(
                         Map.of("role", "user", "parts", List.of(Map.of("text", "SYSTEM:\n" + systemPrompt))),
@@ -55,17 +55,26 @@ public class GeminiServiceImpl implements GeminiService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         try {
-            String resp = restTemplate.postForObject(url, entity, String.class);
-            return resp;
+            return restTemplate.postForObject(url, entity, String.class);
+
         } catch (HttpClientErrorException.TooManyRequests e) {
-            // Fallback JSON response when quota is exceeded
-            return "{\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"{\\\"reply\\\": \\\"Hazırda sistem çox yüklüdür. Zəhmət olmasa adminin cavabini gozleyin və yenidən cəhd edin.\\\"}\"}]}}]}";
+            // 429 -> serverin dediyi retryDelay varsa, 1 dəfə gözlə və yenidən sınama
+            long waitMs = extractRetryDelayMs(e.getResponseBodyAsString(), 20000); // default 20s
+
+            try { Thread.sleep(waitMs); } catch (InterruptedException ignored) {}
+
+            try {
+                return restTemplate.postForObject(url, entity, String.class);
+            } catch (Exception secondFail) {
+                return wrapReplyJson("Hazırda sistem çox yüklüdür. Zəhmət olmasa 20-30 saniyə sonra yenidən cəhd edin və ya adminin cavabını gözləyin.");
+            }
+
         } catch (Exception e) {
-            // General error fallback
-            return "{\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"{\\\"reply\\\": \\\"Xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin.\\\"}\"}]}}]}";
+            return wrapReplyJson("Xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin.");
         }
     }
 
+    @Override
     public String extractText(String geminiRawJson) {
         try {
             JsonNode root = objectMapper.readTree(geminiRawJson);
@@ -73,5 +82,23 @@ public class GeminiServiceImpl implements GeminiService {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private String wrapReplyJson(String reply) {
+        // elə formatla ki, extractText() içindən JSON kimi gəlsin
+        String safe = reply.replace("\"", "\\\"");
+        return "{\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"{\\\"reply\\\":\\\"" + safe + "\\\",\\\"recommended_car_ids\\\":[],\\\"follow_up_questions\\\":[]}\"}]}}]}";
+    }
+
+    private long extractRetryDelayMs(String body, long defaultMs) {
+        if (body == null) return defaultMs;
+        // body-də "retryDelay": "19s" kimi olur
+        Pattern p = Pattern.compile("\"retryDelay\"\\s*:\\s*\"(\\d+)s\"");
+        Matcher m = p.matcher(body);
+        if (m.find()) {
+            long seconds = Long.parseLong(m.group(1));
+            return Math.min(60000, Math.max(1000, seconds * 1000)); // 1s-60s arası
+        }
+        return defaultMs;
     }
 }

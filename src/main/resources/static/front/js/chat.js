@@ -6,6 +6,7 @@
     let currentUserName = null;
     let sessionId = null;
     let isAuth = false;
+    let isConnecting = false; // Flag to prevent double connection attempts
 
     /**
      * Main initialization function, runs when the DOM is ready.
@@ -72,6 +73,10 @@
             startChatBtn.onclick = () => {
                 const nameInput = document.getElementById('anonymousUserName');
                 if (nameInput && nameInput.value.trim() !== "") {
+                    // Disable button to prevent double clicks
+                    startChatBtn.disabled = true;
+                    startChatBtn.innerText = "Qoşulur...";
+
                     currentUserName = nameInput.value.trim();
                     sessionId = currentUserName; // Use email as session ID
                     localStorage.setItem('chat_session_id', sessionId);
@@ -103,11 +108,24 @@
             console.error("Cannot connect chat: sessionId is missing.");
             return;
         }
+
+        // Prevent multiple connections
+        if (stompClient && stompClient.connected) {
+            console.log("Chat already connected.");
+            return;
+        }
+        if (isConnecting) {
+            console.log("Chat connection already in progress.");
+            return;
+        }
+
+        isConnecting = true;
         const socket = new SockJS('/ws-chat');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
 
         stompClient.connect({}, function (frame) {
+            isConnecting = false;
             console.log("Connected to chat with sessionId: " + sessionId);
 
             stompClient.subscribe('/topic/user/' + sessionId, function (payload) {
@@ -117,7 +135,14 @@
 
             fetchHistory();
         }, function(error) {
+            isConnecting = false;
             console.error("STOMP connection error: " + error);
+            // Re-enable start button if connection fails
+            const startChatBtn = document.getElementById('startChatBtn');
+            if (startChatBtn) {
+                startChatBtn.disabled = false;
+                startChatBtn.innerText = "Start Chat"; // Or localized text
+            }
         });
     }
 
@@ -204,20 +229,6 @@
 
         // Check if there are recommended cars
         if (msg.recommendedCarIds && msg.recommendedCarIds.length > 0) {
-            // Create a "View Cars" button or link
-            // Since we don't have full car details here, we can link to the listing page with a filter,
-            // or ideally, fetch the car details. For simplicity, let's add a button to view them.
-            // Or better, let's just append a text for now, or fetch details if possible.
-            // Given the current setup, the simplest way to show "cards" is to construct HTML if we had the data.
-            // But we only have IDs.
-            // Let's create a link to the listing page for each car or a general link.
-
-            // However, the user asked for the list of cars to appear.
-            // Since we only have IDs in the DTO, we can't show names/images without fetching them.
-            // BUT, the AI reply text usually contains the names/recommendations in text format too.
-            // If we want a visual "card", we need to fetch car details by ID.
-
-            // Let's try to fetch car details via AJAX if IDs are present.
             fetchCarDetailsAndAppend(msg, contentHtml);
             return; // Async handling
         }
@@ -227,20 +238,9 @@
     }
 
     function fetchCarDetailsAndAppend(msg, contentHtml) {
-        // We need an endpoint to get cars by IDs.
-        // Assuming we don't have one, we might need to create one or use existing listing.
-        // For now, let's assume we can't easily fetch details without a new endpoint.
-        // But wait, the user wants the list to appear.
-        // Let's create a simple visual representation if we can't fetch details,
-        // OR better, let's add a client-side fetch if we can.
-
-        // Since I cannot easily add a new controller endpoint in this step without user permission (though I can edit files),
-        // I will try to use the existing listing page or just rely on the text.
-        // BUT, to make it "cool", I will add a "View Car" link for each ID.
-
         let carsHtml = '<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px;">';
         msg.recommendedCarIds.forEach(id => {
-            carsHtml += `<a href="/listing/car/${id}" target="_blank" style="display: block; padding: 5px 10px; background: #f1f3f4; color: #0779e4; border-radius: 5px; text-decoration: none; font-size: 12px;">🚗 Avtomobilə bax (ID: ${id})</a>`;
+            carsHtml += `<a href="/listing/${id}" target="_blank" style="display: block; padding: 5px 10px; background: #f1f3f4; color: #0779e4; border-radius: 5px; text-decoration: none; font-size: 12px;">🚗 Avtomobilə bax (ID: ${id})</a>`;
         });
         carsHtml += '</div>';
 

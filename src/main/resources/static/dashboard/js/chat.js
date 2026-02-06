@@ -151,9 +151,13 @@ function selectGuest(email, name) {
 
 function sendMessageToUser() {
     const input = document.getElementById('messageInput');
+    const sendBtn = document.querySelector('#messageForm button'); // Buttonu tap
     const text = input.value.trim();
 
     if (text && selectedGuestId && stompClient) {
+        // 1. Buttonu disable et ki, 2 dəfə basılmasın
+        if (sendBtn) sendBtn.disabled = true;
+
         const chatMessage = {
             from: "ADMIN",
             to: selectedGuestId,      // Mesajın gedəcəyi istifadəçi ID-si
@@ -170,6 +174,12 @@ function sendMessageToUser() {
         });
 
         input.value = '';
+
+        // 2. Bir az sonra buttonu yenidən aktiv et (məsələn 500ms)
+        setTimeout(() => {
+            if (sendBtn) sendBtn.disabled = false;
+            input.focus();
+        }, 500);
     }
 }
 
