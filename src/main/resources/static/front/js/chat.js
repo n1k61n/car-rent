@@ -239,9 +239,12 @@
 
     function fetchCarDetailsAndAppend(msg, contentHtml) {
         let carsHtml = '<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px;">';
-        msg.recommendedCarIds.forEach(id => {
-            carsHtml += `<a href="/listing/car/${id}" target="_blank" style="display: block; padding: 5px 10px; background: #f1f3f4; color: #0779e4; border-radius: 5px; text-decoration: none; font-size: 12px;">🚗 Avtomobilə bax (ID: ${id})</a>`;
-        });
+         msg.recommendedCarIds.forEach(id => {
+           carsHtml += `<a href="/listing/car/${id}" target="_blank"
+             style="display:block; padding:5px 10px; background:#f1f3f4; color:#0779e4; border-radius:5px; text-decoration:none; font-size:12px;">
+             🚗 Avtomobilə bax (ID: ${id})
+           </a>`;
+         });
         carsHtml += '</div>';
 
         const msgHtml = `<div style="align-self: flex-start; background: white; color: #333; padding: 10px 15px; border-radius: 15px 15px 15px 0; max-width: 80%; font-size: 14px; border: 1px solid #eee; box-shadow: 0 3px 10px rgba(0,0,0,0.02);">
