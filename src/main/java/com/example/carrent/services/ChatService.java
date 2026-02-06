@@ -9,4 +9,6 @@ public interface ChatService {
     boolean saveChat(ChatDto chatDto);
     List<ChatDto> getHistoryBySessionId(String sessionId);
     List<ChatDto> getUniqueChatSessionsAfter(LocalDateTime date);
+
+    ChatDto generateAiReply(ChatDto chat);
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,7 @@ public class ChatDto {
 
     private LocalDateTime createdAt;
     private String sessionId;
+
+    // AI tövsiyələri üçün yeni sahə
+    private List<Long> recommendedCarIds;
 }

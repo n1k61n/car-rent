@@ -33,4 +33,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Page<Car> findByBrandContainingIgnoreCaseOrModelContainingIgnoreCase(String keyword, String keyword1, Pageable pageable);
 
     Page<Car> findByAvailableTrue(Pageable pageable);
+
+    List<Car> findTop15ByAvailableTrueOrderByDailyPriceAsc();
 }
