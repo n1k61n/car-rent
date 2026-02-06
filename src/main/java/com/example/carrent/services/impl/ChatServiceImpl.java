@@ -2,7 +2,6 @@ package com.example.carrent.services.impl;
 
 
 import com.example.carrent.dtos.chat.ChatDto;
-import com.example.carrent.models.AiPrompts;
 import com.example.carrent.models.Car;
 import com.example.carrent.models.Chat;
 import com.example.carrent.repositories.CarRepository;
@@ -114,11 +113,16 @@ Sonda yalnız bu JSON formatında cavab qaytar (başqa heç nə yazma):
         }
 
         // 3) Gemini call (DTO-da content var!)
-        String raw = geminiService.generate(
-                AI_SYSTEM_PROMPT,
-                inventoryJson,
-                safe(userMsg.getContent())
-        );
+        String raw;
+        try {
+            raw = geminiService.generate(
+                    AI_SYSTEM_PROMPT,
+                    inventoryJson,
+                    safe(userMsg.getContent())
+            );
+        } catch (Exception e) {
+            return buildFailAiDto(userMsg, "Hazırda sistem çox yüklüdür. Mesajınız adminə yönləndirildi ✅");
+        }
 
         String text = geminiService.extractText(raw);
 
@@ -171,6 +175,17 @@ Sonda yalnız bu JSON formatında cavab qaytar (başqa heç nə yazma):
         return ai;
     }
 
+    private ChatDto buildFailAiDto(ChatDto userMsg, String msg) {
+        ChatDto ai = new ChatDto();
+        ai.setFrom("AI");
+        ai.setTo(userMsg.getFrom());
+        ai.setEmail(userMsg.getEmail());
+        ai.setSessionId(userMsg.getSessionId());
+        ai.setCreatedAt(LocalDateTime.now());
+        ai.setContent(msg);
+        ai.setRecommendedCarIds(Collections.emptyList());
+        return ai;
+    }
 
     private String safe(String s) {
         return s == null ? "" : s.trim();

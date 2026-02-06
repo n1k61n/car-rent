@@ -39,11 +39,14 @@ public class DashboardChatController {
     private final Map<String, Long> recentFallbacks = new ConcurrentHashMap<>();
     private static final long FALLBACK_DEDUP_WINDOW_MS = 10000; // 10 saniyə
 
+
     @GetMapping
     public String index(Model model) {
         model.addAttribute("users", userService.getRecentUsers());
         return "dashboard/chat/index";
     }
+
+
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
@@ -55,12 +58,10 @@ public class DashboardChatController {
         boolean isExplicitAi = "AI".equals(chat.getTo());
         boolean isAdminOnline = adminPresenceHandler.isAdminOnline();
 
-        // =========================
-        // AI ROUTE
-        // =========================
+        // 1) AI ROUTE yalnız system mesajları üçün
         if (isToSystem && (isExplicitAi || !isAdminOnline)) {
 
-            // 1️⃣ User mesajını DB-yə YALNIZ BURDA yaz
+            // user mesajını yaz
             chatService.saveChat(chat);
 
             ChatDto aiReply = null;
@@ -74,31 +75,25 @@ public class DashboardChatController {
                             aiReply.getContent().trim().isEmpty() ||
                             aiReply.getContent().contains("Hazırda sistem çox yüklüdür") ||
                             aiReply.getContent().toLowerCase().contains("quota") ||
-                            aiReply.getContent().toLowerCase().contains("xəta");
+                            aiReply.getContent().toLowerCase().contains("xəta") ||
+                            aiReply.getContent().toLowerCase().contains("error");
 
-            // 2️⃣ AI normal cavab veribsə
+            // AI normal cavab
             if (!aiFailed) {
                 if (aiReply.getTo() == null) aiReply.setTo(chat.getFrom());
-
                 chatService.saveChat(aiReply);
                 messagingTemplate.convertAndSend("/topic/user/" + chat.getFrom(), aiReply);
-                return; // ⛔ BURASI ÇOX VACİBDİR
+                return;
             }
 
-            // =========================
-            // 3️⃣ AI FAIL → ADMINƏ YÖNLƏNDİR
-            // =========================
-            
-            // Adminə forward (HƏMİŞƏ - user nə yazırsa admin görsün)
+            // 2) AI FAIL -> adminə yönləndir (amma user-ə fallback 1 dəfə getsin)
             messagingTemplate.convertAndSend("/topic/admin", chat);
 
-            // Dedup: Eyni userə tez-tez fallback göndərmə
-            String dedupKey = chat.getSessionId(); // Sadece user ID-yə görə
+            String dedupKey = chat.getSessionId(); // session üzrə 1 dəfə
             long now = System.currentTimeMillis();
-
             Long last = recentFallbacks.get(dedupKey);
             if (last != null && (now - last) < FALLBACK_DEDUP_WINDOW_MS) {
-                return; // Fallback göndərmə, amma adminə mesaj getdi
+                return; // adminə getdi, fallback təkrarlanmasın
             }
             recentFallbacks.put(dedupKey, now);
 
@@ -122,7 +117,7 @@ public class DashboardChatController {
             return;
         }
 
-
+        // 3) ADMIN ROUTE
         chatService.saveChat(chat);
 
         if ("ADMIN".equals(chat.getTo())) {
@@ -136,13 +131,14 @@ public class DashboardChatController {
             return;
         }
 
-        // Admin → User
+        // Admin -> User
         String userTopicId = chat.getTo();
         if (userTopicId != null && userTopicId.startsWith("user_")) {
             userTopicId = userTopicId.substring("user_".length());
         }
         messagingTemplate.convertAndSend("/topic/user/" + userTopicId, chat);
     }
+
 
     @GetMapping("/history/{id}")
     @ResponseBody

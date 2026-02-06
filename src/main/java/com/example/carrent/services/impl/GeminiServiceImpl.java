@@ -56,23 +56,14 @@ public class GeminiServiceImpl implements GeminiService {
 
         try {
             return restTemplate.postForObject(url, entity, String.class);
-
         } catch (HttpClientErrorException.TooManyRequests e) {
-            // 429 -> serverin dediyi retryDelay varsa, 1 dəfə gözlə və yenidən sınama
-            long waitMs = extractRetryDelayMs(e.getResponseBodyAsString(), 20000); // default 20s
-
-            try { Thread.sleep(waitMs); } catch (InterruptedException ignored) {}
-
-            try {
-                return restTemplate.postForObject(url, entity, String.class);
-            } catch (Exception secondFail) {
-                return wrapReplyJson("Hazırda sistem çox yüklüdür. Zəhmət olmasa 20-30 saniyə sonra yenidən cəhd edin və ya adminin cavabını gözləyin.");
-            }
-
+            // 429: sleep etmə, dərhal fallback qaytar
+            return wrapReplyJson("Hazırda sistem çox yüklüdür. 20-30 saniyə sonra yenidən cəhd edin və ya adminin cavabını gözləyin.");
         } catch (Exception e) {
             return wrapReplyJson("Xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin.");
         }
     }
+
 
     @Override
     public String extractText(String geminiRawJson) {
