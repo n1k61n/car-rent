@@ -347,4 +347,30 @@ public class BookingServiceImpl implements BookingService {
         log.info("Expired bookings check completed.");
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public BookingOrdersDto getBookingById(Long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
+
+        BookingOrdersDto dto = new BookingOrdersDto();
+        dto.setId(booking.getId());
+        if (booking.getCar() != null) {
+            dto.setCarId(booking.getCar().getId());
+            dto.setCarBrand(booking.getCar().getBrand());
+            dto.setCarModel(booking.getCar().getModel());
+            dto.setDailyPrice(booking.getCar().getDailyPrice());
+        }
+        if (booking.getUser() != null) {
+            dto.setUserFirstName(booking.getUser().getFirstName());
+            dto.setUserLastName(booking.getUser().getLastName());
+        }
+        dto.setStartDate(booking.getStartDate());
+        dto.setEndDate(booking.getEndDate());
+        dto.setStatus(booking.getStatus());
+        dto.setTotalPrice(booking.getTotalPrice());
+        
+        return dto;
+    }
+
 }

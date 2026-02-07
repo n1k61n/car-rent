@@ -22,6 +22,7 @@ public class BookingOrdersDto {
     private LocalDate endDate;
     private String pickupLocation;
     private BigDecimal totalPrice;
+    private BigDecimal dailyPrice;
     private BookingStatus status;
     private String notes;
     private String licenseFilePath;

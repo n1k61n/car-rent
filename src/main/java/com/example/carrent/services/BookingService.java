@@ -41,4 +41,6 @@ public interface BookingService {
     Map<String, Long> getBookingStatusDistribution();
 
     List<BookingOrdersDto> getAllActiveOrders();
+
+    BookingOrdersDto getBookingById(Long id);
 }

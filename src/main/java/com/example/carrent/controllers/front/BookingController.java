@@ -2,6 +2,7 @@ package com.example.carrent.controllers.front;
 
 import com.example.carrent.dtos.booking.BookingCompleteDto;
 import com.example.carrent.dtos.booking.BookingDto;
+import com.example.carrent.dtos.booking.BookingOrdersDto;
 import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.user.UserBookingDto;
 import com.example.carrent.enums.BookingStatus;
@@ -164,7 +165,7 @@ public class BookingController {
     public String processPayment(@RequestParam("bookingId") Long bookingId, RedirectAttributes redirectAttributes) {
         try {
             bookingService.updateStatus(bookingId, BookingStatus.PENDING);
-            return "redirect:/booking/success";
+            return "redirect:/booking/success/" + bookingId;
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Payment failed: " + e.getMessage());
             return "redirect:/booking/payment/" + bookingId;
@@ -172,8 +173,10 @@ public class BookingController {
     }
 
 
-    @GetMapping("/booking/success")
-    public String showSuccessPage() {
+    @GetMapping("/booking/success/{id}")
+    public String showSuccessPage(@PathVariable Long id, Model model) {
+        BookingOrdersDto booking = bookingService.getBookingById(id);
+        model.addAttribute("booking", booking);
         return "front/catalog/success";
     }
 }
