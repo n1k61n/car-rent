@@ -198,7 +198,7 @@
 
 </div>
 
-<a class="qr-float" href="https://car-rent-ulpq.onrender.com/" target="_blank">
+<a class="qr-float" th:href="@{${#authorization.expression('hasRole(''ADMIN'')') ? '/dashboard' : '/'}}" >
     <img src="/front/images/qr.png" alt="QR Code">
 </a>
 
