@@ -5,11 +5,9 @@ import com.example.carrent.dtos.car.CarDto;
 import com.example.carrent.dtos.car.CarUpdateDto;
 import com.example.carrent.models.Car;
 import jakarta.validation.Valid;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Set;
 
 public interface CarService {

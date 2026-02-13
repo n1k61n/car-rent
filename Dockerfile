@@ -1,11 +1,16 @@
-# 1. Merhele: Build
-FROM maven:3.8.5-openjdk-17 AS build
-COPY . .
-# Burada -Dmaven.test.skip=true əlavə etdik
+# 1) Build stage
+FROM maven:3.8.5-eclipse-temurin-17 AS build
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
 RUN mvn clean package -Dmaven.test.skip=true
 
-# 2. Merhele: Run
-FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/*.jar app.jar
+# 2) Run stage
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]

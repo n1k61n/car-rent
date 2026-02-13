@@ -11,7 +11,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class BookingControllerTest {
@@ -40,7 +39,7 @@ class BookingControllerTest {
         bookingDto.setCarId(1L);
         MockMultipartFile licenseFile = new MockMultipartFile("licenseFile", "license.jpg", "image/jpeg", "test data".getBytes());
 
-        when(bookingService.completeBooking(any(BookingCompleteDto.class), any(MockMultipartFile.class))).thenReturn(true);
+        when(bookingService.completeBooking(any(BookingCompleteDto.class), any(MockMultipartFile.class))).thenReturn(1L);
 
         // Act
 //        String result = bookingController.completeBooking(bookingDto, licenseFile, model);
@@ -57,7 +56,7 @@ class BookingControllerTest {
         bookingDto.setCarId(1L);
         MockMultipartFile licenseFile = new MockMultipartFile("licenseFile", "license.jpg", "image/jpeg", "test data".getBytes());
 
-        when(bookingService.completeBooking(any(BookingCompleteDto.class), any(MockMultipartFile.class))).thenReturn(false);
+        when(bookingService.completeBooking(any(BookingCompleteDto.class), any(MockMultipartFile.class))).thenReturn(0L);
 
         // Act
 //        String result = bookingController.completeBooking(bookingDto, licenseFile, model);
