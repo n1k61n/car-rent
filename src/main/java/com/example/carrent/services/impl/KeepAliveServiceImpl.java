@@ -13,7 +13,7 @@ public class KeepAliveServiceImpl {
     public void keepServerAlive() {
         try {
             // Render-dəki saytınızın URL-ni bura yazın
-            String url = "https://car-rent-ulpq.onrender.com/actuator/health";
+            String url = "https://car-rent-bb57.onrender.com/actuator/health";
             String response = restTemplate.getForObject(url, String.class);
             System.out.println("Ping uğurlu oldu, server oyaqdır!");
         } catch (Exception e) {
