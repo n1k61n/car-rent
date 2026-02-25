@@ -2,6 +2,8 @@ package com.example.carrent.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +30,9 @@ public class Car {
     @Column(name = "model", nullable = false)
     private String model;
 
-    @Column(name = "daily_price")
+    @Column(name = "daily_price", nullable = false)
+    @Positive(message = "Günlük qiymət 0-dan böyük olmalıdır")
+    @NotNull(message = "Qiymət boş ola bilməz")
     private BigDecimal dailyPrice;
     private Integer year;
     private String transmission;
