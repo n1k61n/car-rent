@@ -44,6 +44,7 @@ public class Booking {
     private String pickupLocation;
 
     private BigDecimal totalPrice;
+    private BigDecimal dailyPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
