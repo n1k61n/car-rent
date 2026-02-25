@@ -1,7 +1,7 @@
 package com.example.carrent.dtos.car;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
@@ -10,8 +10,8 @@ public class CarListingDto {
     private String brand;
     private String model;
     private String imageUrl;
-    @NotNull(message = "Daily price is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Daily price must be greater than 0")
+    @NotNull(message = "Qiymət boş ola bilməz")
+    @Positive(message = "Günlük qiymət 0-dan böyük olmalıdır")
     private Double dailyPrice;
     private Integer doorCount;
     private Integer passengerCount;
