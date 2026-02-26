@@ -185,10 +185,12 @@ function sendMessageToUser() {
 
 function renderMessage(data) {
     const chatWin = document.getElementById('chat-windows');
-    const align = data.isMe ? 'flex-end' : 'flex-start';
-    const bg = data.isMe ? '#007bff' : '#f1f1f1';
-    const color = data.isMe ? 'white' : '#333';
-    const radius = data.isMe ? '15px 15px 0 15px' : '15px 15px 15px 0';
+    // Admin (isMe) sola, müştəri sağa
+    const align = data.isMe ? 'flex-start' : 'flex-end';
+    const bg = data.isMe ? '#f1f1f1' : '#007bff';
+    const color = data.isMe ? '#333' : 'white';
+    // Baloncuk görünüşünü qoruyaq
+    const radius = data.isMe ? '15px 15px 15px 0' : '15px 15px 0 15px';
 
     const html = `
         <div style="display: flex; justify-content: ${align}; margin-bottom: 10px;">
