@@ -66,6 +66,72 @@ public class GeminiServiceImpl implements GeminiService {
 
 
     @Override
+    public String extractDataFromImage(byte[] imageBytes, String mimeType, String prompt) {
+        if (apiKey == null || apiKey.isBlank()) {
+            return "{\"error\":\"API_KEY_MISSING\"}";
+        }
+
+        String url = String.format("%s/%s:generateContent?key=%s", baseUrl, model, apiKey);
+        String base64Image = java.util.Base64.getEncoder().encodeToString(imageBytes);
+
+        Map<String, Object> body = Map.of(
+                "contents", List.of(
+                        Map.of(
+                                "role", "user",
+                                "parts", List.of(
+                                        Map.of("text", prompt),
+                                        Map.of(
+                                                "inline_data", Map.of(
+                                                        "mime_type", mimeType,
+                                                        "data", base64Image
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            String response = restTemplate.postForObject(url, entity, String.class);
+            return extractText(response); // JSON formati qeyd edilən teksti çıxarır
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @Override
+    public String suggestPrice(String carDetailsJson, String marketConditions) {
+        if (apiKey == null || apiKey.isBlank()) {
+            return "{\"error\":\"API_KEY_MISSING\"}";
+        }
+
+        String prompt = "Sən bir avtomobil icarəsi mütəxəssisisən. Verilmiş avtomobil xüsusiyyətlərinə və bazar vəziyyətinə uyğun optimal günlük icarə qiyməti (AZN ilə) məsləhət gör. " +
+                        "Mövcud avtomobil: " + carDetailsJson + ". Bazar şərtləri: " + marketConditions + ". Yalnızca tövsiyə edilən qiyməti və qısaca səbəbini (JSON formatında) qaytar: {\"suggested_price\": 50, \"reason\": \"Yay mövsümü və SUV tələbatı...\"}";
+
+        String url = String.format("%s/%s:generateContent?key=%s", baseUrl, model, apiKey);
+        Map<String, Object> body = Map.of(
+                "contents", List.of(
+                        Map.of("role", "user", "parts", List.of(Map.of("text", prompt)))
+                )
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            String response = restTemplate.postForObject(url, entity, String.class);
+            return extractText(response);
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @Override
     public String extractText(String geminiRawJson) {
         try {
             JsonNode root = objectMapper.readTree(geminiRawJson);
