@@ -34,4 +34,5 @@ build/
 .env
 .idea/
 .mvn/
+.gemini/
 uploads/
