@@ -18,7 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
-
+aws-acar.pem
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

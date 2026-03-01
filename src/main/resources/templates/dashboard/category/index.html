@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kateqoriyalar</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+
+        <!-- Page Header -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-list-ul mr-2 text-primary"></i>Kateqoriyalar
+            </h1>
+            <a th:href="@{/dashboard/category/create}" class="btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-plus-circle mr-2"></i> Yeni Kateqoriya
+            </a>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="card shadow mb-4 border-left-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Kateqoriya adını axtar...">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block" onclick="filterTable()">
+                            <i class="fas fa-search mr-2"></i>Axtar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div th:if="${session.successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span th:text="${session.successMessage}"></span>
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <div th:if="${session.errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span th:text="${session.errorMessage}"></span>
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-white border-left-primary">
+                <h6 class="m-0 font-weight-bold text-primary text-uppercase small">
+                    <i class="fas fa-table mr-2"></i>Kateqoriyaların Siyahısı
+                </h6>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(categories)}" class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                    <p class="text-gray-600 font-weight-bold">Heç bir kateqoriya tapılmadı.</p>
+                    <a th:href="@{/dashboard/category/create}" class="btn btn-primary btn-sm mt-3">
+                        <i class="fas fa-plus mr-2"></i>Yeni Kateqoriya Yaratmaq
+                    </a>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(categories)}" class="table-responsive">
+                    <table class="table table-bordered table-hover" id="categoriesTable">
+                        <thead class="bg-light">
+                        <tr>
+                            <th style="width: 5%">#</th>
+                            <th style="width: 70%">Adı</th>
+                            <th style="width: 25%" class="text-center">Əməliyyatlar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="category, iter : ${categories}">
+                            <td class="align-middle">
+                                <span class="badge badge-primary" th:text="${iter.count}"></span>
+                            </td>
+                            <td class="align-middle font-weight-bold" th:text="${category.name}"></td>
+                            <td class="align-middle text-center">
+                                <div class="btn-group" role="group">
+                                    <a th:href="@{/dashboard/category/edit/{id}(id=${category.id})}"
+                                       class="btn btn-sm btn-info text-white"
+                                       title="Redaktə Et">
+                                        <i class="fas fa-edit"></i> Redaktə Et
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            data-toggle="modal"
+                                            data-target="#deleteModal"
+                                            th:data-id="${category.id}"
+                                            th:data-name="${category.name}"
+                                            onclick="setDeleteData(this)"
+                                            title="Sil">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-left-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Kateqoriyanı Sil
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Siz <strong id="categoryNameToDelete"></strong> kateqoriyasını silmək istəyirsiniz?</p>
+                    <p class="text-muted small mb-0">Bu əməliyyat geri döndürülə bilməz.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Ləğv Et
+                    </button>
+                    <a id="deleteLink" href="#" class="btn btn-danger">
+                        <i class="fas fa-trash mr-2"></i>Sil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Set delete modal data
+    function setDeleteData(button) {
+        const categoryId = button.getAttribute('data-id');
+        const categoryName = button.getAttribute('data-name');
+
+        document.getElementById('categoryNameToDelete').textContent = categoryName;
+        document.getElementById('deleteLink').href = '/dashboard/category/delete/' + categoryId;
+    }
+
+    // Search/Filter function
+    function filterTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('categoriesTable');
+
+        if (!table) return;
+
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            const nameCell = cells[1]; // Name is in second column
+
+            if (nameCell) {
+                const text = nameCell.textContent || nameCell.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Enable search on Enter key
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            filterTable();
+        }
+    });
+
+    // Auto-dismiss alerts after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+</script>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .btn-group {
+        gap: 5px;
+    }
+
+    .btn-group .btn {
+        border-radius: 4px;
+    }
+
+    .badge {
+        padding: 0.35em 0.65em;
+    }
+</style>
+
+</body>
+</html>

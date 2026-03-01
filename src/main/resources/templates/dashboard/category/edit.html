@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{dashboard/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kateqoriyanı Redaktə Et</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+
+        <!-- Page Header -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-edit mr-2 text-primary"></i>Kateqoriyanı Redaktə Et
+            </h1>
+            <a th:href="@{/dashboard/category/index}" class="btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left"></i> Siyahıya Qayıt
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card shadow mb-4 border-left-primary">
+                    <div class="card-header py-3 bg-white">
+                        <h6 class="m-0 font-weight-bold text-primary text-uppercase small">
+                            <i class="fas fa-info-circle mr-2"></i>Kateqoriya Məlumatları
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/dashboard/category/edit/{id}(id=${category.id})}"
+                              th:object="${category}"
+                              method="post"
+                              novalidate>
+
+                            <!-- Category ID (Hidden) -->
+                            <input type="hidden" name="id" th:value="${category.id}">
+
+                            <!-- Category Name Field -->
+                            <div class="form-group mb-4">
+                                <label for="nameInput" class="form-label font-weight-bold">
+                                    Kateqoriya Adı <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       id="nameInput"
+                                       name="name"
+                                       th:value="${category.name}"
+                                       placeholder="Məs: SUV, Sedan, Minivan..."
+                                       required>
+                                <small class="form-text text-muted mt-2">
+                                    <i class="fas fa-info-circle"></i> Kateqoriyanın adını daxil edin
+                                </small>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-lg btn-block font-weight-bold shadow">
+                                    <i class="fas fa-save mr-2"></i>Dəyişiklikləri Yadda Saxla
+                                </button>
+                                <button type="reset" class="btn btn-light btn-block mt-2">
+                                    <i class="fas fa-redo mr-2"></i>Formu Təmizlə
+                                </button>
+                                <a th:href="@{/dashboard/category/index}" class="btn btn-secondary btn-block mt-2">
+                                    <i class="fas fa-times mr-2"></i>Ləğv Et
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone Card -->
+                <div class="card shadow border-left-danger mt-4">
+                    <div class="card-header py-3 bg-white">
+                        <h6 class="m-0 font-weight-bold text-danger text-uppercase small">
+                            <i class="fas fa-trash mr-2"></i>Təhlükəli Bölgə
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Bu kateqoriyanı silmək istəyirsinizsə, aşağıdakı düyməni basın.
+                        </p>
+                        <button type="button"
+                                class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#deleteConfirmModal">
+                            <i class="fas fa-trash mr-2"></i>Kateqoriyanı Sil
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="card shadow border-left-info mt-4">
+                    <div class="card-header py-3 bg-white">
+                        <h6 class="m-0 font-weight-bold text-info text-uppercase small">
+                            <i class="fas fa-question-circle mr-2"></i>Kömək
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kateqoriya Adı:</strong> Avtomobil kateqoriyasının adı (Məs: Ekonomi, Komfort, Lüks)</p>
+                        <p><strong>Təsvir:</strong> Bu kateqoriyanın xüsusiyyətləri və hansı avtomobillərin daxil olduğu haqqında qısa məlumat</p>
+                        <hr>
+                        <p class="mb-0 text-muted small"><i class="fas fa-lightbulb"></i> Məsləhət: Aydın və təsviri adlar istifadə edin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-left-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Kateqoriyanı Sil
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Siz <strong th:text="${category.name}"></strong> kateqoriyasını silmək istəyirsiniz?</p>
+                    <p class="text-muted small mb-0">
+                        <i class="fas fa-warning mr-2"></i>
+                        Bu əməliyyat geri döndürülə bilməz. Bu kateqoriyadakı bütün avtomobillər təsirlənəcəkdir.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Ləğv Et
+                    </button>
+                    <a th:href="@{/dashboard/category/delete/{id}(id=${category.id})}" class="btn btn-danger">
+                        <i class="fas fa-trash mr-2"></i>Sil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(e) {
+            // Check if name field is empty
+            const nameInput = document.getElementById('nameInput');
+            if (!nameInput.value.trim()) {
+                e.preventDefault();
+                alert('Zəhmət olmasa kateqoriyanın adını daxil edin!');
+                nameInput.focus();
+                return false;
+            }
+        });
+
+        // Character counter for description
+        const descriptionInput = document.getElementById('descriptionInput');
+        if (descriptionInput) {
+            descriptionInput.addEventListener('input', function() {
+                if (this.value.length > 500) {
+                    this.value = this.value.substring(0, 500);
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .form-control-lg {
+        height: calc(1.5em + 1.5rem + 2px);
+        font-size: 1.1rem;
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .form-label {
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .form-text {
+        font-size: 0.85rem;
+    }
+
+    .alert {
+        border-radius: 8px;
+    }
+</style>
+
+</body>
+</html>
