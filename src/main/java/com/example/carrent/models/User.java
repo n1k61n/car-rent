@@ -44,8 +44,8 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired ;
     private boolean accountNonLocked;
 
-    @OneToOne(mappedBy = "user")
-    private Car car;
+    @OneToMany(mappedBy = "user")
+    private List<Car> cars;
 
     @Enumerated(EnumType.STRING)
     private Role role;

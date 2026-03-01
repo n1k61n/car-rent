@@ -16,7 +16,6 @@ public class UserProfileDto {
     private Role role;
     private String phoneNumber;
     private List<BookingOrdersDto> bookings;
-    private CarDto car;
 
 
     public String getFullName() {
