@@ -22,6 +22,13 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category")
     List<Car> cars = new ArrayList<>();
+
+    @PreRemove
+    private void preRemove() {
+        for (Car car : cars) {
+            car.setCategory(null);
+        }
+    }
 }
