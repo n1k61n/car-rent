@@ -5,7 +5,6 @@ import com.example.carrent.models.Category;
 import com.example.carrent.repositories.CategoryRepository;
 import com.example.carrent.services.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.codehaus.groovy.runtime.GroovyCategorySupport;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
