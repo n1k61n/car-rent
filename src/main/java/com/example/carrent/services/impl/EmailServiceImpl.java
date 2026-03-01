@@ -14,6 +14,15 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    public void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@carrent.com");
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
+
     @Async
     public void sendOtpEmail(String toEmail, String otp) {
         log.info("Sending OTP email to: {}", toEmail);
