@@ -9,7 +9,7 @@ public class KeepAliveServiceImpl {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Scheduled(fixedRate = 600000)
+//    @Scheduled(fixedRate = 600000)
     public void keepServerAlive() {
         try {
             // Render-dəki saytınızın URL-ni bura yazın

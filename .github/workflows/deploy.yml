@@ -36,22 +36,32 @@ jobs:
       - name: Deploy to AWS via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ubuntu
-          key: ${{ secrets.AWS_SSH_KEY }}
-          script: |
-            sudo docker pull eminelxanoglu971/spring-app:latest
-            sudo docker rm -f app || true
-            sudo docker run -d --name app \
-              --network car-rent-net \
-              -p 8080:8080 \
-              -e SPRING_DATASOURCE_URL="jdbc:postgresql://db:5432/cardb" \
-              -e SPRING_DATASOURCE_USERNAME="postgres" \
-              -e SPRING_DATASOURCE_PASSWORD="12345" \
-              -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" \
-              -e SPRING_MAIL_USERNAME="${{ secrets.SPRING_MAIL_USERNAME }}" \
-              -e SPRING_MAIL_PASSWORD="${{ secrets.SPRING_MAIL_PASSWORD }}" \
-              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
-              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
-              -e GOOGLE_API_KEY="${{ secrets.GOOGLE_API_KEY }}" \
-              eminelxanoglu971/spring-app:latest
+            host: ${{ secrets.AWS_HOST }}
+            username: ubuntu
+            key: ${{ secrets.AWS_SSH_KEY }}
+            command_timeout: 5m  # 5 dəqiqədən çox çəksə avtomatik dayansın
+            script: |
+              # Köhnə imicləri silərək yer açın
+              sudo docker image prune -f
+              
+              # Yeni imici çəkin
+              sudo docker pull eminelxanoglu971/spring-app:latest
+              
+              # Köhnə konteyneri dayandırın və silin
+              sudo docker rm -f app || true
+              
+              # Yeni konteyneri başladın
+              sudo docker run -d --name app \
+                --network car-rent-net \
+                -p 8080:8080 \
+                --restart unless-stopped \
+                -e SPRING_DATASOURCE_URL="jdbc:postgresql://db:5432/cardb" \
+                -e SPRING_DATASOURCE_USERNAME="postgres" \
+                -e SPRING_DATASOURCE_PASSWORD="12345" \
+                -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" \
+                -e SPRING_MAIL_USERNAME="${{ secrets.SPRING_MAIL_USERNAME }}" \
+                -e SPRING_MAIL_PASSWORD="${{ secrets.SPRING_MAIL_PASSWORD }}" \
+                -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+                -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+                -e GOOGLE_API_KEY="${{ secrets.GOOGLE_API_KEY }}" \
+                eminelxanoglu971/spring-app:latest
