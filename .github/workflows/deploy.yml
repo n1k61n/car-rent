@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]  # Kod hansı branch-a push olunanda işləsin
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -45,4 +45,13 @@ jobs:
             sudo docker run -d --name app \
               --network car-rent-net \
               -p 8080:8080 \
+              -e SPRING_DATASOURCE_URL="jdbc:postgresql://db:5432/cardb" \
+              -e SPRING_DATASOURCE_USERNAME="postgres" \
+              -e SPRING_DATASOURCE_PASSWORD="12345" \
+              -e SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}" \
+              -e SPRING_MAIL_USERNAME="${{ secrets.SPRING_MAIL_USERNAME }}" \
+              -e SPRING_MAIL_PASSWORD="${{ secrets.SPRING_MAIL_PASSWORD }}" \
+              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+              -e GOOGLE_API_KEY="${{ secrets.GOOGLE_API_KEY }}" \
               eminelxanoglu971/spring-app:latest
