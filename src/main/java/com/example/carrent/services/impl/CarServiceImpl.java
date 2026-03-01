@@ -126,6 +126,7 @@ public class CarServiceImpl implements CarService {
                 .orElseThrow(() -> new ResourceNotFoundException("Avtomobil tapılmadı: " + id));
 
         modelMapper.map(carUpdateDto, existCar);
+        existCar.setId(id); // Restore ID because modelMapper overwrites it if carUpdateDto.id is null
 
         // Obyektin ID-sini dəyişməyin, Hibernate id-ni idarə edir
         if (carUpdateDto.getCategoryId() != null) {
