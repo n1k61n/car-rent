@@ -4,7 +4,6 @@ import com.example.carrent.models.Otp;
 import com.example.carrent.repositories.OtpRepository;
 import com.example.carrent.services.EmailService;
 import com.example.carrent.services.OtpService;
-import com.example.carrent.services.SendGridEmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ public class OtpServiceImpl implements OtpService {
 
     private final OtpRepository otpRepository;
     private final EmailService emailService;
-    private final SendGridEmailService sendGridEmailService;
 
 
     public boolean verifyOtp(String email, String code) {
@@ -69,6 +67,6 @@ public class OtpServiceImpl implements OtpService {
         otp.setExpiresAt(LocalDateTime.now().plusMinutes(2));
         otpRepository.save(otp);
         String subject = "Doğrulama Kodu (OTP)";
-        sendGridEmailService.sendOtpEmail(email, subject, code);
+        emailService.sendEmail(email, subject, code);
     }
 }
