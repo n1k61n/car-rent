@@ -53,7 +53,8 @@ public class EmailServiceImpl implements EmailService {
                     "</div>" +
                     "</body></html>";
 
-            helper.setFrom("noreply@carrent.com");
+//            helper.setFrom("noreply@carrent.com");
+            helper.setFrom("eminelxanoglu@gmail.com");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
