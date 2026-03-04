@@ -7,6 +7,12 @@ services:
       POSTGRES_PASSWORD: 12345
     ports:
       - "5432:5432"
+  mailhog:
+    image: mailhog/mailhog
+    container_name: car_rent_mailhog
+    ports:
+      - "1025:1025" # SMTP (Tətbiqin qoşulması üçün)
+      - "8025:8025" # Web UI (Sənin brauzerdən baxmağın üçün)
 
   app:
     image: car-rent
@@ -18,5 +24,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: 12345
       SPRING_PROFILES_ACTIVE: dev
       SENDGRID_ENABLED: "false"
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
     depends_on:
       - db
+      - mailhog

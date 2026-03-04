@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private final OtpService otpService;
     private final EmailService emailService;
     private final NotificationService notificationService;
-    private final SendGridEmailService sendGridEmailService;
+
 
 
     @Override
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
             newUser.setRole(userRole);
 
             String otp = otpService.generateOTP();
-            sendGridEmailService.sendOtpEmail(normalizedEmail, "Doğrulama Kodu (OTP)", otp);
+            emailService.sendEmail(normalizedEmail, "Doğrulama Kodu (OTP)", otp);
             log.info("OTP sent to email: {} {}", normalizedEmail, otp);
 
             Otp otpEntity = new Otp(normalizedEmail, otp);
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        sendGridEmailService.sendOtpEmail(email, "Yeni Şifrəniz", newPassword);
+        emailService.sendEmail(email, "Yeni Şifrəniz", newPassword);
         log.info("Password reset email sent to: {} - New password: {}", email, newPassword);
     }
 
