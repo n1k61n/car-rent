@@ -6,10 +6,12 @@ import com.example.carrent.services.EmailService;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,36 +30,38 @@ public class EmailServiceImpl implements EmailService {
 
 
     public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-        String htmlBody = "<html><body style='font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;'>" +
-                "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0;'>" +
-                // Header (Brend rəngi - tünd göy/qara)
-                "<div style='background-color: #1a1a1a; padding: 20px; text-align: center;'>" +
-                "<h2 style='color: #ffffff; margin: 0; text-transform: uppercase; letter-spacing: 2px;'>Car Rent Service</h2>" +
-                "</div>" +
-                // Content
-                "<div style='padding: 30px; text-align: center;'>" +
-                "<img src='https://cdn-icons-png.flaticon.com/512/2983/2983787.png' width='50' style='margin-bottom: 20px;' alt='icon'>" +
-                "<h3 style='color: #333; margin-bottom: 15px;'>" + subject + "</h3>" +
-                "<div style='background-color: #f4f4f4; padding: 20px; border-radius: 5px; border-left: 4px solid #1a1a1a; margin-bottom: 20px;'>" +
-                "<p style='font-size: 18px; color: #333; margin: 0; font-weight: bold; line-height: 1.5;'>" + body + "</p>" +
-                "</div>" +
-                "<p style='color: #666; font-size: 14px;'>Hər hansı bir sualınız yaranarsa, dəstək komandamızla əlaqə saxlaya bilərsiniz.</p>" +
-                "</div>" +
-                // Footer
-                "<div style='background-color: #f1f1f1; padding: 15px; text-align: center; border-top: 1px solid #eeeeee;'>" +
-                "<p style='color: #999; font-size: 12px; margin: 0;'>Bu avtomatik göndərilən bildirişdir. Zəhmət olmasa cavab verməyin.</p>" +
-                "</div>" +
-                "</div>" +
-                "</body></html>";
-        Content content = new Content("text/html", htmlBody);
+            String htmlBody = "<html><body style='font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;'>" +
+                    "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0;'>" +
+                    "<div style='background-color: #1a1a1a; padding: 20px; text-align: center;'>" +
+                    "<h2 style='color: #ffffff; margin: 0; text-transform: uppercase; letter-spacing: 2px;'>Car Rent Service</h2>" +
+                    "</div>" +
+                    "<div style='padding: 30px; text-align: center;'>" +
+                    "<img src='https://cdn-icons-png.flaticon.com/512/2983/2983787.png' width='50' style='margin-bottom: 20px;' alt='icon'>" +
+                    "<h3 style='color: #333; margin-bottom: 15px;'>" + subject + "</h3>" +
+                    "<div style='background-color: #f4f4f4; padding: 20px; border-radius: 5px; border-left: 4px solid #1a1a1a; margin-bottom: 20px;'>" +
+                    "<p style='font-size: 18px; color: #333; margin: 0; font-weight: bold; line-height: 1.5;'>" + body + "</p>" +
+                    "</div>" +
+                    "<p style='color: #666; font-size: 14px;'>Hər hansı bir sualınız yaranarsa, dəstək komandamızla əlaqə saxlaya bilərsiniz.</p>" +
+                    "</div>" +
+                    "<div style='background-color: #f1f1f1; padding: 15px; text-align: center; border-top: 1px solid #eeeeee;'>" +
+                    "<p style='color: #999; font-size: 12px; margin: 0;'>Bu avtomatik göndərilən bildirişdir. Zəhmət olmasa cavab verməyin.</p>" +
+                    "</div>" +
+                    "</div>" +
+                    "</body></html>";
 
-        message.setFrom("noreply@carrent.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(content.toString());
-        mailSender.send(message);
+            helper.setFrom("noreply@carrent.com");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+
+            mailSender.send(mimeMessage);
+        } catch (Exception e) {
+            throw new RuntimeException("E-poçt göndərilərkən xəta baş verdi: " + e.getMessage());
+        }
     }
 
     @Async
